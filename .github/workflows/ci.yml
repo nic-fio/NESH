@@ -103,7 +103,7 @@ jobs:
           \`LICENSE\` and \`NOTICE.md\`: free to use, to copy and to modify,
           not to sell. Source-available, not OSI open source.
 
-          Documentation: https://nic-fio.github.io/NG-EFI_SHELL/
+          Documentation: https://nic-fio.github.io/NESH/
           EOF
           gh release create "$GITHUB_REF_NAME" dist/nesh.efi dist/SHA256SUMS \
             LICENSE NOTICE.md \

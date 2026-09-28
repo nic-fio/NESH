@@ -7,9 +7,9 @@ in a repository. Read the manuals in one of these two ways.
 
 | Document | Link |
 |---|---|
-| User manual | https://nic-fio.github.io/NG-EFI_SHELL/user-manual.html |
-| Developer manual | https://nic-fio.github.io/NG-EFI_SHELL/developer-manual.html |
-| Start page | https://nic-fio.github.io/NG-EFI_SHELL/ |
+| User manual | https://nic-fio.github.io/NESH/user-manual.html |
+| Developer manual | https://nic-fio.github.io/NESH/developer-manual.html |
+| Start page | https://nic-fio.github.io/NESH/ |
 
 **Offline**: clone the repository and open `docs/user-manual.html` in a browser.
 Everything the pages need (style, scripts, diagrams) is in `docs/assets`, so

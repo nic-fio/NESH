@@ -1,8 +1,8 @@
 # NESH — New EFI Shell
 
-[![CI](https://github.com/nic-fio/NG-EFI_SHELL/actions/workflows/ci.yml/badge.svg)](https://github.com/nic-fio/NG-EFI_SHELL/actions/workflows/ci.yml)
+[![CI](https://github.com/nic-fio/NESH/actions/workflows/ci.yml/badge.svg)](https://github.com/nic-fio/NESH/actions/workflows/ci.yml)
 [![Licence: Apache 2.0 with the Commons Clause](https://img.shields.io/badge/licence-Apache%202.0%20with%20Commons%20Clause-blue)](LICENSE)
-[Documentation](https://nic-fio.github.io/NG-EFI_SHELL/) · [Download](https://github.com/nic-fio/NG-EFI_SHELL/releases/latest)
+[Documentation](https://nic-fio.github.io/NESH/) · [Download](https://github.com/nic-fio/NESH/releases/latest)
 
 A modern command shell for UEFI firmware, with a real scripting language.
 One file, `nesh.efi`: nothing to install, one signature for Secure Boot, no
@@ -41,12 +41,12 @@ fs0:\> n = RECORDS(RUN$("map -data"), v$()) : PRINT n; " volumes and disks"
 
 | Document | For |
 |---|---|
-| [User manual](https://nic-fio.github.io/NG-EFI_SHELL/user-manual.html) | Using NESH and writing scripts: every command and function, with examples. |
-| [Developer manual](https://nic-fio.github.io/NG-EFI_SHELL/developer-manual.html) | Architecture, build, internals, testing, how to extend NESH. |
+| [User manual](https://nic-fio.github.io/NESH/user-manual.html) | Using NESH and writing scripts: every command and function, with examples. |
+| [Developer manual](https://nic-fio.github.io/NESH/developer-manual.html) | Architecture, build, internals, testing, how to extend NESH. |
 | [Design decisions and history](docs/decisions-and-history.md) | Why NESH is the way it is. |
 
 The manuals are HTML pages, so GitHub shows them as source code: read them
-online at **https://nic-fio.github.io/NG-EFI_SHELL/**, or open
+online at **https://nic-fio.github.io/NESH/**, or open
 `docs/user-manual.html` in a browser from a clone (they work offline). Inside
 NESH, `help` and `help NAME` show the same command reference.
 
@@ -57,8 +57,8 @@ image is in this repository: a clone plus a handful of Debian packages is the
 whole development environment.
 
 ```
-git clone https://github.com/nic-fio/NG-EFI_SHELL.git
-cd NG-EFI_SHELL
+git clone https://github.com/nic-fio/NESH.git
+cd NESH
 tools/setup-dev.sh --install    # packages (asks for sudo) and the git identity
 make && make test && make qemu-test
 ```
@@ -87,7 +87,7 @@ make usb             # build/nesh-usb.img, a bootable disk image (needs mtools)
 ## Install
 
 The quickest way is the ready-made disk image from the
-[latest release](https://github.com/nic-fio/NG-EFI_SHELL/releases/latest)
+[latest release](https://github.com/nic-fio/NESH/releases/latest)
 (`nesh-usb.img`, also `make usb`): write it to a USB stick and boot it.
 
 ```
@@ -108,7 +108,7 @@ where the prompt came up, `dir` listed the files and NESH booted Linux. What
 AMI, Insyde or Phoenix firmware makes of the rest is the project's main open
 question, and the one thing that cannot be settled here. If you start NESH on a
 real machine, please say how it went — a machine where everything worked is as
-useful a report as one where nothing did: [open a hardware report](https://github.com/nic-fio/NG-EFI_SHELL/issues/new?template=hardware-report.yml).
+useful a report as one where nothing did: [open a hardware report](https://github.com/nic-fio/NESH/issues/new?template=hardware-report.yml).
 
 Four commands collect most of what the report asks, and NESH can write them to
 the stick you booted from:
@@ -132,7 +132,7 @@ with the [Commons Clause](LICENSE)**: use it for anything, at home or at work,
 free of charge; copy it, modify it and share it, keeping the notices and saying
 what you changed. What you may not do is **sell** it, or sell a product or
 service whose value comes substantially from it — that needs a commercial
-licence ([open an issue](https://github.com/nic-fio/NG-EFI_SHELL/issues) to ask
+licence ([open an issue](https://github.com/nic-fio/NESH/issues) to ask
 for one).
 
 Using NESH as a tool in paid work is fine; making money from NESH itself is

@@ -21,12 +21,12 @@ NESH itself**.
 
 **Want to sell it, or include it in a product you sell?** That needs a separate,
 commercial licence: open an issue at
-https://github.com/nic-fio/NG-EFI_SHELL/issues and ask.
+https://github.com/nic-fio/NESH/issues and ask.
 
 Suggested attribution for a modified version:
 
 > Based on NESH — the New EFI Shell by nic-fio
-> (https://github.com/nic-fio/NG-EFI_SHELL), Apache 2.0 with Commons Clause.
+> (https://github.com/nic-fio/NESH), Apache 2.0 with Commons Clause.
 > Changes were made.
 
 ## Third-party components in this repository

@@ -371,6 +371,7 @@ All work took place in one long working session (2026-09-19), in phases.
 | **10. Secure Boot** | Tested for real in QEMU with own test keys enrolled in OVMF (`make qemu-sbtest`, part of CI): unsigned images refused by the firmware, hardware writes refused, clock/serial allowed, keys unchangeable. One defect found and fixed: refusals were reported as a bare "access denied". |
 | **11. Publication** | Repository published on GitHub as `NG-EFI_SHELL`, public (owner's request); provisional all-rights-reserved license; manuals online with GitHub Pages; GitHub Actions builds and tests every push and publishes a Release with `nesh.efi` for each version tag (binaries are distributed as Releases, not committed to the repository). |
 | **12. Readability** | NESH starts in a text mode of 100 columns when the firmware has one, and restores the previous mode on leaving (D16d). |
+| **13. Name** | Repository renamed from `NG-EFI_SHELL` to `NESH` (2026-09-28, owner's request), so that it carries the name of the program. GitHub redirects the old repository address; the manuals moved to https://nic-fio.github.io/NESH/, and the old Pages address no longer works. |
 
 ### The original plan and what came of it
 

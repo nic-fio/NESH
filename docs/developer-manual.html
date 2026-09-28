@@ -287,8 +287,8 @@ object, and converted to a PE32+ EFI application by a small Python tool.</p>
 <p>The repository is self-contained: the sources, the tests with their binary fixtures, the documentation and the
 tools that generate it are all committed, and nothing is fetched at build time. A clone plus the packages below is
 the whole development environment; <code>build/</code> holds only products and is not committed.</p>
-<pre class="terminal">$ git clone https://github.com/nic-fio/NG-EFI_SHELL.git
-$ cd NG-EFI_SHELL
+<pre class="terminal">$ git clone https://github.com/nic-fio/NESH.git
+$ cd NESH
 $ tools/setup-dev.sh --install</pre>
 <table>
   <thead><tr><th>Package (Debian, Ubuntu)</th><th>Needed for</th></tr></thead>
@@ -1027,7 +1027,7 @@ Secure Boot OVMF build the target prints why it is skipped and succeeds.</p>
 
 <h3 id="decisions-log">Recording decisions</h3>
 <p>Design decisions — what was chosen, the alternatives and why — are recorded in
-<a href="https://github.com/nic-fio/NG-EFI_SHELL/blob/main/docs/decisions-and-history.md">docs/decisions-and-history.md</a>. Read it before changing a behavior that looks
+<a href="https://github.com/nic-fio/NESH/blob/main/docs/decisions-and-history.md">docs/decisions-and-history.md</a>. Read it before changing a behavior that looks
 arbitrary: there is usually a reason.</p>
 
 <!-- ===================================================================== -->
@@ -1147,9 +1147,9 @@ captured.</p>
 
 <footer class="doc-footer">
   NESH Developer Manual — for NESH 0.2.1. See also the <a href="user-manual.html">user manual</a> and the
-  <a href="https://github.com/nic-fio/NG-EFI_SHELL/blob/main/docs/decisions-and-history.md">design decisions and project history</a>.
+  <a href="https://github.com/nic-fio/NESH/blob/main/docs/decisions-and-history.md">design decisions and project history</a>.
   <br>Copyright (c) 2026 nic-fio, licensed
-  <a href="https://github.com/nic-fio/NG-EFI_SHELL/blob/main/LICENSE">Apache 2.0 with the Commons
+  <a href="https://github.com/nic-fio/NESH/blob/main/LICENSE">Apache 2.0 with the Commons
   Clause</a>: free to use and to share, selling it needs a commercial licence.
 </footer>
 

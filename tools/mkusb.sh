@@ -80,10 +80,10 @@ it worked or not. These four lines write a report to this stick:
       fs0:\> smbiosview -t 1 >> fs0:\report.txt
 
 Attach report.txt to a hardware report at
-https://github.com/nic-fio/NG-EFI_SHELL/issues/new?template=hardware-report.yml
+https://github.com/nic-fio/NESH/issues/new?template=hardware-report.yml
 
-Documentation: https://nic-fio.github.io/NG-EFI_SHELL/
-Project:       https://github.com/nic-fio/NG-EFI_SHELL
+Documentation: https://nic-fio.github.io/NESH/
+Project:       https://github.com/nic-fio/NESH
 
 Licence
 -------
