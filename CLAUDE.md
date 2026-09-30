@@ -44,15 +44,22 @@ user brings them up. The reasoning for each is in
 |---|---|
 | `src/core`, `src/basic`, `src/cmd` | Shell core, the BASIC interpreter, the commands. |
 | `src/pal`, `src/platform` | The platform layer: `pal_efi.c` for firmware, `pal_host.c` for the Linux test build. |
-| `tools/` | `elf2efi.py` (ELF &rarr; PE32+), `gen-docs.py`, `check-doc-examples.py`, `run-qemu.sh`, `mkusb.sh`, `record-demo.py`, `setup-dev.sh`. |
+| `tools/` | `elf2efi.py` (ELF &rarr; PE32+), `gen-docs.py`, `check-doc-examples.py`, `run-qemu.sh`, `mkusb.sh`, `record-demo.py`, `setup-dev.sh`, `backup.sh`. |
 | `tests/` | Host tests, QEMU scripts (`tests/efi/*.nsb`) and binary fixtures (EDK2 applications, network drivers). |
 | `docs/` | The two HTML manuals, the decisions log, the assets. Published with GitHub Pages. |
 | `examples/` | The `.nsb` scripts shipped with NESH and shown in the manual. |
 | `build/` | Products only, never committed. |
 
+The repository follows the standard layout shared by the seven projects (AMS,
+EFI_PARTITION_MANAGER, HOSTER, MTERM, NESH, PHONESTRA, SCRAPER): `src/`,
+`tests/`, `tools/`, `docs/` (with `index.html`, the two manuals, `README.md`,
+`decisions-and-history.md`), `NOTICE.md`, and the common `make` targets
+`all`, `test`, `docs-check`, `clean`.
+
 ## Before committing
 
-1. `make test` — host tests, and the documentation checks: every command and
+1. `make test` — host tests, and the documentation checks (`make docs-check`
+   runs only those): every command and
    every BASIC function must be documented, help lines stay within 78 columns,
    and the examples in the manual are run and compared against their printed
    output. **This fails if the manual is out of date**; `make docs` regenerates

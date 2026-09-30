@@ -68,6 +68,11 @@ test: $(BUILD)/nesh-host
 	@$(PYTHON) tools/gen-docs.py --check
 	@$(PYTHON) tools/check-doc-examples.py $(BUILD)/nesh-host
 
+# only the documentation checks (also part of make test)
+docs-check: $(BUILD)/nesh-host
+	@$(PYTHON) tools/gen-docs.py --check
+	@$(PYTHON) tools/check-doc-examples.py $(BUILD)/nesh-host
+
 # regenerate the command reference of the user manual from the help texts
 docs:
 	@$(PYTHON) tools/gen-docs.py
@@ -103,6 +108,6 @@ qemu-sbtest: $(BUILD)/nesh.efi
 clean:
 	rm -rf $(BUILD)
 
-.PHONY: all test docs usb qemu qemu-test qemu-nettest qemu-sbtest clean
+.PHONY: all test docs-check docs usb qemu qemu-test qemu-nettest qemu-sbtest clean
 
 -include $(EFI_OBJ:.o=.d) $(HOST_OBJ:.o=.d)
