@@ -42,7 +42,7 @@ fs0:\> n = RECORDS(RUN$("map -data"), v$()) : PRINT n; " volumes and disks"
 | Document | For |
 |---|---|
 | [User manual](https://nic-fio.github.io/NESH/User%20Manual.html) | Using NESH and writing scripts: every command and function, with examples. |
-| [Developer manual](https://nic-fio.github.io/NESH/Technical%20Manual.html) | Architecture, build, internals, testing, how to extend NESH. |
+| [Technical manual](https://nic-fio.github.io/NESH/Technical%20Manual.html) | Architecture, build, internals, testing, how to extend NESH. |
 | [Design decisions and history](docs/decisions-and-history.md) | Why NESH is the way it is. |
 
 The manuals are HTML pages, so GitHub shows them as source code: read them

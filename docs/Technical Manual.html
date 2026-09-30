@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NESH Developer Manual</title>
-<meta name="description" content="Developer manual of NESH, the New EFI Shell: architecture, build, platform layer, shell core, BASIC interpreter, UEFI modules, testing and conventions.">
+<title>NESH Technical Manual</title>
+<meta name="description" content="Technical manual of NESH, the New EFI Shell: architecture, build, platform layer, shell core, BASIC interpreter, UEFI modules, testing and conventions.">
 <link rel="stylesheet" href="assets/docs.css">
 </head>
 <body>
 <div class="topbar">
   <button class="btn menu-btn" type="button" aria-label="Open the table of contents">&#9776; Contents</button>
-  <strong>NESH Developer Manual</strong>
+  <strong>NESH Technical Manual</strong>
 </div>
 <div class="layout">
 <nav class="sidebar" aria-label="Table of contents">
   <div class="brand">
     <div class="brand-logo">{ }</div>
-    <div class="brand-text"><strong>NESH Developer Manual</strong><span>New EFI Shell 0.2.1</span></div>
+    <div class="brand-text"><strong>NESH Technical Manual</strong><span>New EFI Shell 0.2.1</span></div>
   </div>
   <div class="search">
     <input type="search" placeholder="Search  ( / )" aria-label="Search">
@@ -32,7 +32,7 @@
 <main>
 
 <header class="titlepage">
-  <div class="kicker">Developer manual</div>
+  <div class="kicker">Technical manual</div>
   <h1>Inside NESH</h1>
   <p class="lead">Everything a programmer needs to understand, build, test and extend NESH: architecture, build
   pipeline, platform layer, shell core, the BASIC interpreter, the UEFI modules and the project's conventions.</p>
@@ -758,7 +758,7 @@ and tested as shown.</p>
 <code>-q</code> option and <code>-data</code> support. It only uses the PAL through the core, so it is portable: it goes in
 <code>src/cmd</code> and works in both builds.</p>
 <p><strong>1. Write the command</strong> in a new file <code>src/cmd/cmd_sum.c</code>:</p>
-<pre class="code" data-lang="c" data-title="src/cmd/cmd_sum.c">/* sum: size and 16-bit checksum of files (tutorial example of the developer manual). */
+<pre class="code" data-lang="c" data-title="src/cmd/cmd_sum.c">/* sum: size and 16-bit checksum of files (tutorial example of the technical manual). */
 #include "../core/shell.h"
 
 static int cmd_sum(int argc, char **argv)
@@ -1146,7 +1146,7 @@ captured.</p>
 <div id="index-list"></div>
 
 <footer class="doc-footer">
-  NESH Developer Manual — for NESH 0.2.1. See also the <a href="User%20Manual.html">user manual</a> and the
+  NESH Technical Manual — for NESH 0.2.1. See also the <a href="User%20Manual.html">user manual</a> and the
   <a href="https://github.com/nic-fio/NESH/blob/main/docs/decisions-and-history.md">design decisions and project history</a>.
   <br>Copyright (c) 2026 nic-fio, licensed
   <a href="https://github.com/nic-fio/NESH/blob/main/LICENSE">Apache 2.0 with the Commons

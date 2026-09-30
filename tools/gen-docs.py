@@ -2,7 +2,7 @@
 """Generates from the sources the parts of the manuals that describe them: the
 command reference of the user manual (from the command tables, so that the
 manual and the built-in 'help' never disagree) and the line counts of the
-developer manual (so that its source map cannot drift away from the tree).
+technical manual (so that its source map cannot drift away from the tree).
 
   tools/gen-docs.py           rewrite the generated parts of the two manuals
   tools/gen-docs.py --check   fail if a manual is out of date, if a command has
@@ -150,7 +150,7 @@ def lines_of(path):
 
 
 def source_files():
-    """The files the source map of the developer manual lists: the headers, the
+    """The files the source map of the technical manual lists: the headers, the
     C sources of NESH, the tools and the two test programs."""
     files = set((ROOT / "include").glob("*.h"))
     files |= {p for p in (ROOT / "src").rglob("*") if p.suffix in (".c", ".h")}
@@ -178,7 +178,7 @@ AREA_ROW = re.compile(r"(<tr><td>[^<]*</td><td>)((?:<code>[^<]+</code>(?:, )?)+)
 
 
 def count_lines(text, problems):
-    """Rewrites the line counts of the developer manual: the source map row by
+    """Rewrites the line counts of the technical manual: the source map row by
     row, then the totals of the area table."""
     listed = []
 

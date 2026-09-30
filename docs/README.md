@@ -8,7 +8,7 @@ in a repository. Read the manuals in one of these two ways.
 | Document | Link |
 |---|---|
 | User manual | https://nic-fio.github.io/NESH/User%20Manual.html |
-| Developer manual | https://nic-fio.github.io/NESH/Technical%20Manual.html |
+| Technical manual | https://nic-fio.github.io/NESH/Technical%20Manual.html |
 | Start page | https://nic-fio.github.io/NESH/ |
 
 **Offline**: clone the repository and open `docs/User Manual.html` in a browser.

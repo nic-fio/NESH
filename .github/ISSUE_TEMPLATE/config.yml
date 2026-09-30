@@ -3,6 +3,6 @@ contact_links:
   - name: User manual
     url: https://nic-fio.github.io/NESH/User%20Manual.html
     about: Every command and function, with examples. Worth a look before reporting a command that does not do what you expect.
-  - name: Developer manual
+  - name: Technical manual
     url: https://nic-fio.github.io/NESH/Technical%20Manual.html
     about: Architecture, build, internals and tests, for changing NESH itself.
