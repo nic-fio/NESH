@@ -28,7 +28,7 @@ def main():
         print(__doc__, file=sys.stderr)
         return 2
     nesh = os.path.abspath(sys.argv[1])
-    manual = pathlib.Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / "docs" / "user-manual.html"
+    manual = pathlib.Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / "docs" / "User Manual.html"
     text = manual.read_text()
     examples = {}
     for m in re.finditer(r'<pre[^>]*\bdata-example="([\w-]+)"[^>]*>(.*?)</pre>', text, re.S):

@@ -3,8 +3,8 @@
 This document records **why** NESH is the way it is: the decisions taken while
 designing and building it, the alternatives that were considered, and the
 history of the project. It complements the
-[user manual](user-manual.html) (what NESH does) and the
-[developer manual](developer-manual.html) (how it is built).
+[user manual](User%20Manual.html) (what NESH does) and the
+[developer manual](Technical%20Manual.html) (how it is built).
 
 Decisions were discussed with the project owner one at a time, in Italian;
 where a decision came from the owner, the original words are quoted.

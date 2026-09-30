@@ -25,7 +25,7 @@
   <div class="toc"></div>
   <div class="side-tools">
     <button class="btn print-btn" type="button">Print / PDF</button>
-    <a class="btn" href="user-manual.html">User manual</a>
+    <a class="btn" href="User%20Manual.html">User manual</a>
   </div>
 </nav>
 
@@ -56,7 +56,7 @@
 <p class="chapter-intro">What NESH is from the inside, the principles that shaped it, and a map of this manual.</p>
 
 <h3 id="what-you-learn">What this manual covers</h3>
-<p>The <a href="user-manual.html">user manual</a> explains what NESH does. This manual explains <em>how</em>. After reading
+<p>The <a href="User%20Manual.html">user manual</a> explains what NESH does. This manual explains <em>how</em>. After reading
 it you should be able to find your way in every source file, build and test the shell, add commands and BASIC
 functions, and change the firmware-facing parts without breaking the others. It assumes you know C; UEFI concepts are
 explained where they are needed, and the <a href="#glossary">glossary</a> summarizes them.</p>
@@ -870,7 +870,7 @@ FN(f_reverse)
 <pre class="code" data-lang="c">    { "reverse$", 1, 1, "s", f_reverse },</pre>
 <p>That is all: the parser needs no change, because any <code>name(args)</code> is resolved at run time.
 <code>PRINT REVERSE$("NESH è bello")</code> prints <code>olleb è HSEN</code>. Then document the function in the
-<a href="user-manual.html#function-reference">function reference</a> of the user manual (a <code>&lt;dt id="fn-…"&gt;</code> entry):
+<a href="User%20Manual.html#function-reference">function reference</a> of the user manual (a <code>&lt;dt id="fn-…"&gt;</code> entry):
 <code>make test</code> fails for a built-in function without an entry.</p>
 <div class="callout"><span class="callout-title">Rules for built-ins</span>
 <ul>
@@ -977,11 +977,11 @@ Secure Boot OVMF build the target prints why it is skipped and succeeds.</p>
 <ul>
   <li><strong>Command reference</strong>: <code>tools/gen-docs.py</code> reads every <code>static const Cmd …[]</code> table in the
       sources (a small C tokenizer joins adjacent string literals and expands <code>NESH_VERSION</code>/<code>SCRIPT_EXT</code>) and
-      rewrites the part of <code>docs/user-manual.html</code> between the <code>BEGIN GENERATED</code>/<code>END GENERATED</code> markers.
+      rewrites the part of <code>docs/User Manual.html</code> between the <code>BEGIN GENERATED</code>/<code>END GENERATED</code> markers.
       <code>--check</code> fails when the manual is out of date, when a command has no category, when a help line is longer
       than 78 columns, or when a BASIC function has no entry in the function reference.</li>
   <li><strong>Line counts</strong>: the same tool counts the files of the <a href="#file-map">source map</a> and the
-      totals of the area table and writes them into <code>docs/developer-manual.html</code>, so the numbers cannot drift
+      totals of the area table and writes them into <code>docs/Technical Manual.html</code>, so the numbers cannot drift
       away from the tree. <code>--check</code> fails when they are stale, when the map lists a file that does not exist
       and when a source file has no row at all: adding a file to <code>src</code>, <code>include</code>,
       <code>tools</code> or <code>tests/apps</code> therefore means adding a line to the map.</li>
@@ -1146,7 +1146,7 @@ captured.</p>
 <div id="index-list"></div>
 
 <footer class="doc-footer">
-  NESH Developer Manual — for NESH 0.2.1. See also the <a href="user-manual.html">user manual</a> and the
+  NESH Developer Manual — for NESH 0.2.1. See also the <a href="User%20Manual.html">user manual</a> and the
   <a href="https://github.com/nic-fio/NESH/blob/main/docs/decisions-and-history.md">design decisions and project history</a>.
   <br>Copyright (c) 2026 nic-fio, licensed
   <a href="https://github.com/nic-fio/NESH/blob/main/LICENSE">Apache 2.0 with the Commons

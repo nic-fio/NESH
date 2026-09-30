@@ -2,7 +2,7 @@
 #
 #   make            build build/nesh.efi (UEFI x86_64) and build/nesh-host (Linux test build)
 #   make test       run the language/command tests with the host build, check the docs
-#   make docs       regenerate the command reference of docs/user-manual.html
+#   make docs       regenerate the command reference of docs/User Manual.html
 #   make usb        build/nesh-usb.img, a bootable disk image (dd it to a USB stick)
 #   make qemu       boot build/nesh.efi in QEMU/OVMF (interactive, serial console)
 #   make qemu-test  run the automated tests inside QEMU

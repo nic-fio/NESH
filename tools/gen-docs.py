@@ -16,8 +16,8 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-MANUAL = ROOT / "docs" / "user-manual.html"
-DEVMANUAL = ROOT / "docs" / "developer-manual.html"
+MANUAL = ROOT / "docs" / "User Manual.html"
+DEVMANUAL = ROOT / "docs" / "Technical Manual.html"
 BEGIN = "<!-- BEGIN GENERATED: command-reference (tools/gen-docs.py) -->"
 END = "<!-- END GENERATED: command-reference -->"
 
