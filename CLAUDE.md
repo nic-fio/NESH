@@ -47,6 +47,7 @@ user brings them up. The reasoning for each is in
 | `tools/` | `elf2efi.py` (ELF &rarr; PE32+), `gen-docs.py`, `check-doc-examples.py`, `run-qemu.sh`, `mkusb.sh`, `record-demo.py`, `setup-dev.sh`, `backup.sh`. |
 | `tests/` | Host tests, QEMU scripts (`tests/efi/*.nsb`) and binary fixtures (EDK2 applications, network drivers). |
 | `docs/` | The two HTML manuals, the decisions log, the assets. Published with GitHub Pages. |
+| `logos/` | `nesh-logo.png`, the logo (PNG, 2172×724, white background). Not used by the manuals. |
 | `examples/` | The `.nsb` scripts shipped with NESH and shown in the manual. |
 | `build/` | Products only, never committed. |
 
