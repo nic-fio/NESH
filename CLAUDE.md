@@ -35,7 +35,7 @@ user brings them up. The reasoning for each is in
 | **`msr` stays out** | Reading MSRs hangs with #GP on the firmware; the user decided against it. |
 | **No legacy EDK1 shell interface** | User: *"lasciamo riposare in pace il vecchiume"*. |
 | **Secure Boot: reads yes, writes no** | Low-level hardware writes (`mm` on I/O and PCI config, `hexedit -m`) are refused while Secure Boot is active. The **clock and the serial port stay allowed** — the user ruled they are not a security risk. |
-| **Light documentation only** | No dark themes, no dark-mode media queries, no theme toggle. The code blocks are dark: that comes with the common style of the manuals, which the user approved in October 2026. |
+| **Light documentation only** | No dark themes, no dark-mode media queries, no theme toggle. The code blocks are dark: that comes with the common style of the manuals, and the owner confirmed it on 1 October 2026 together with the common style. |
 | **Apache 2.0 + Commons Clause** | Free to use and share, selling it needs a commercial licence, asked for by opening an issue. Not OSI open source, and the project says so up front. |
 
 ## The repository
