@@ -2,7 +2,7 @@
 #
 #   make            build build/nesh.efi (UEFI x86_64) and build/nesh-host (Linux test build)
 #   make test       run the language/command tests with the host build, check the docs
-#   make docs       regenerate the command reference of docs/User Manual.html
+#   make docs       regenerate the generated parts of the two manuals (tools/gen-docs.py)
 #   make usb        build/nesh-usb.img, a bootable disk image (dd it to a USB stick)
 #   make qemu       boot build/nesh.efi in QEMU/OVMF (interactive, serial console)
 #   make qemu-test  run the automated tests inside QEMU
@@ -73,7 +73,7 @@ docs-check: $(BUILD)/nesh-host
 	@$(PYTHON) tools/gen-docs.py --check
 	@$(PYTHON) tools/check-doc-examples.py $(BUILD)/nesh-host
 
-# regenerate the command reference of the user manual from the help texts
+# regenerate the generated parts of the manuals: command reference, numbers, contents, line counts
 docs:
 	@$(PYTHON) tools/gen-docs.py
 

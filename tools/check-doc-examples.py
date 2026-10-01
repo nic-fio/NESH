@@ -5,7 +5,9 @@ compares their output with the output printed in the manual.
   tools/check-doc-examples.py NESH_HOST [MANUAL]
 
 In the HTML, an example is  <pre ... data-example="NAME" ...>code</pre>  and its
-output  <pre ... data-example-output="NAME">fs0:\\> COMMAND\\noutput</pre>.
+output  <pre ... data-example-output="NAME">fs0:\\> COMMAND\\noutput</pre>. Inside
+them, tags only add colour (<span class="k">, <span class="p">...): they are
+removed before the text is used, then the entities are decoded.
 All examples are written to one directory as NAME.nsb and syntax-checked
 (nesh -k); the ones with an output block run in page order in that directory,
 like one session. Examples marked data-platform="efi" need the firmware and
@@ -23,6 +25,11 @@ import tempfile
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 
+def text_of(block):
+    """The text of a <pre>: without the colouring tags, entities decoded."""
+    return html.unescape(re.sub(r"<[^>]+>", "", block))
+
+
 def main():
     if len(sys.argv) < 2:
         print(__doc__, file=sys.stderr)
@@ -32,8 +39,8 @@ def main():
     text = manual.read_text()
     examples = {}
     for m in re.finditer(r'<pre[^>]*\bdata-example="([\w-]+)"[^>]*>(.*?)</pre>', text, re.S):
-        examples[m.group(1)] = html.unescape(m.group(2))
-    outputs = [(m.group(1), html.unescape(m.group(2)))
+        examples[m.group(1)] = text_of(m.group(2))
+    outputs = [(m.group(1), text_of(m.group(2)))
                for m in re.finditer(r'<pre[^>]*\bdata-example-output="([\w-]+)"[^>]*>(.*?)</pre>', text, re.S)]
     failures = 0
     with tempfile.TemporaryDirectory() as work:

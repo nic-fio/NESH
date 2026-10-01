@@ -5,80 +5,264 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NESH Technical Manual</title>
 <meta name="description" content="Technical manual of NESH, the New EFI Shell: architecture, build, platform layer, shell core, BASIC interpreter, UEFI modules, testing and conventions.">
-<link rel="stylesheet" href="assets/docs.css">
+<style>/* Stile comune dei manuali dei 7 progetti (nic-fio). Uguale byte per byte in tutti i manuali: non modificare in un solo progetto. */
+/* Base: style.css di AMS */
+*{box-sizing:border-box} html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#e9edf2;color:#111827;font-family:Outfit,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:15px;line-height:1.62}
+.doc{max-width:1320px;margin:0 auto;background:#fff;box-shadow:0 1px 30px rgba(15,23,42,.10)}
+a{color:#0050C0;text-decoration:none}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;background:#eef2f7;padding:.08em .38em;border-radius:4px;color:#003a90}
+/* Cover */
+.cover{position:relative;padding:64px 56px;min-height:56vh;background:linear-gradient(135deg,#0050C0 0%,#003a90 100%);color:#fff;overflow:hidden}
+.cover-logo{margin-bottom:38px;position:relative;z-index:2}
+.cover-kicker{text-transform:uppercase;letter-spacing:.24em;font-size:12px;font-weight:700;color:#9dc0ff;margin-bottom:14px;position:relative;z-index:2}
+.cover-title{font-size:56px;line-height:1.02;margin:0 0 12px;font-weight:800;letter-spacing:-.02em;position:relative;z-index:2}
+.cover-sub{font-size:19px;color:#cfe0ff;max-width:32em;margin-bottom:44px;position:relative;z-index:2}
+.cover-meta{display:flex;gap:36px;position:relative;z-index:2}
+.cover-meta div{display:flex;flex-direction:column} .cover-meta span{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#9dc0ff}
+.cover-meta b{font-size:16px;color:#fff}
+.cover-swoosh{position:absolute;right:-90px;bottom:-140px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,#3b82f655,transparent 70%);z-index:1}
+/* Layout */
+.with-side{display:flex;align-items:flex-start}
+.side{width:290px;flex:0 0 290px;background:#f8fafc;border-right:1px solid #e5e7eb;align-self:stretch}
+.side-inner{position:sticky;top:0;padding:32px 24px;max-height:100vh;overflow:auto}
+.main{flex:1;padding:48px 64px;min-width:0}
+/* TOC */
+.toc-head{font-size:14px;text-transform:uppercase;letter-spacing:.14em;color:#003a90;margin:0 0 14px;font-weight:800}
+.toc-list{list-style:none;margin:0;padding:0}
+.toc-list a{display:flex;gap:9px;align-items:baseline;padding:4px 0;color:#334155}
+.toc-list a:hover{color:#0050C0}
+.toc-ch{font-weight:700;margin-top:6px} .toc-ch a{color:#0f172a}
+.toc-se a{font-size:13px;color:#64748b;padding-left:8px}
+.toc-n{flex:0 0 30px;color:#0050C0;font-weight:700;font-variant-numeric:tabular-nums}
+.toc-se .toc-n{flex-basis:36px;font-weight:600}
+/* Chapters */
+.chapter{margin-bottom:20px}
+.ch-head{border-bottom:3px solid #0050C0;padding-bottom:10px;margin:8px 0 22px}
+.ch-kick{text-transform:uppercase;letter-spacing:.16em;font-size:11.5px;font-weight:700;color:#0050C0}
+.h-ch{font-size:34px;font-weight:800;letter-spacing:-.02em;color:#003a90;margin:4px 0 0}
+.h-sec{font-size:21px;font-weight:700;color:#003a90;margin:30px 0 10px;padding-left:12px;border-left:4px solid #3b82f6}
+.main h4{font-size:16px;color:#0f172a;margin:20px 0 6px}
+.lead{font-size:17px;color:#334155}
+.main p{margin:10px 0} .ul,.ol{margin:10px 0;padding-left:22px} .ul li,.ol li{margin:4px 0}
+/* Figure/table */
+.fig{margin:20px 0;padding:18px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;text-align:center}
+.fig svg{max-width:100%;height:auto}
+.cap{font-size:12.5px;color:#64748b;margin-top:10px;text-align:center}
+.tbl-wrap{margin:18px 0} .tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{text-align:left;padding:10px 12px;background:#f1f5f9;color:#0f172a;font-weight:700;border-bottom:2px solid #0050C0}
+.tbl td{padding:9px 12px;border-bottom:1px solid #e5e7eb;vertical-align:top}
+.tbl tr:nth-child(even) td{background:#f8fafc}
+/* callout */
+.callout{display:flex;gap:14px;align-items:flex-start;margin:18px 0;padding:14px 18px;border-radius:8px;font-size:14.5px}
+.callout-i{flex:0 0 26px;height:26px;border-radius:50%;color:#fff;font-weight:800;text-align:center;line-height:26px;font-style:italic}
+.c-info{background:#eff6ff;border-left:4px solid #0050C0} .c-info .callout-i{background:#0050C0}
+.c-warn{background:#fffbeb;border-left:4px solid #d97706} .c-warn .callout-i{background:#d97706;font-style:normal}
+.c-ok{background:#f0fdf4;border-left:4px solid #16a34a} .c-ok .callout-i{background:#16a34a;font-style:normal}
+/* code */
+.code{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.8px;line-height:1.55;overflow-x:auto;margin:14px 0}
+.code code{background:none;padding:0;border-radius:0;color:inherit;font-size:inherit}
+.code .k{color:#c084fc;font-weight:600} .code .cm{color:#64748b;font-style:italic} .code .st{color:#86efac}
+/* deflist */
+.deflist{margin:12px 0} .deflist dt{font-weight:700;color:#003a90;font-family:ui-monospace,Menlo,monospace;font-size:13.5px;margin-top:10px}
+.deflist dd{margin:2px 0 0;color:#334155;font-size:14px}
+.doc-foot{padding:20px 52px;border-top:1px solid #e5e7eb;color:#94a3b8;font-size:12px;text-align:center}
+/* print */
+@page{size:A4;margin:16mm 15mm 18mm;@bottom-center{content:counter(page)}}
+@media print{
+ body{background:#fff} .doc{box-shadow:none;max-width:none}
+ .with-side{display:block} .side{display:none} .main{padding:0}
+ .cover{min-height:auto;page-break-after:always}
+ .chapter{page-break-before:always} .sec,.fig,.tbl-wrap,.callout,.code{page-break-inside:avoid}
+ a{color:inherit}
+}
+
+/* Aggiunte comuni */
+/* Manuale utente: etichette dell'interfaccia e procedure */
+.ui{font-weight:600;color:#003a90;background:#eff6ff;border:1px solid #bfdbfe;border-radius:5px;padding:.02em .4em;font-size:.93em;white-space:nowrap}
+.steps{counter-reset:st;list-style:none;margin:14px 0;padding:0}
+.steps>li{counter-increment:st;position:relative;padding:8px 0 8px 44px;margin:0;border-left:2px solid #dbeafe;margin-left:15px}
+.steps>li:before{content:counter(st);position:absolute;left:-16px;top:6px;width:30px;height:30px;border-radius:50%;background:#0050C0;color:#fff;font-weight:800;text-align:center;line-height:30px;font-size:14px}
+.steps>li:last-child{border-left-color:transparent}
+
+/* tasti, etichette, codice */
+kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.82em;background:#fff;border:1px solid #cbd5e1;border-bottom-width:2px;border-radius:5px;padding:.05em .4em;color:#0f172a;white-space:nowrap}
+.code .p{color:#64748b;user-select:none}
+.badge{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#fff;background:#16a34a;border-radius:4px;padding:1px 7px;margin-right:6px}
+.deflist .dt-t{font-family:Outfit,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:15px}
+.deflist dt[id]{scroll-margin-top:16px} .sec{scroll-margin-top:12px}
+/* ricerca nella barra laterale */
+.srch{margin:0 0 26px}
+.srch .toc-head{display:block}
+.srch-q{width:100%;font:inherit;font-size:14px;padding:8px 11px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:#0f172a;outline:none}
+.srch-q:focus{border-color:#0050C0;box-shadow:0 0 0 3px #dbeafe}
+.srch-info{font-size:12px;color:#64748b;margin:6px 2px 0;min-height:1em}
+.srch-res{list-style:none;margin:8px 0 0;padding:0}
+.srch-res li{margin:0}
+.srch-res a{display:block;padding:7px 9px;border-radius:7px;border-left:3px solid transparent;color:#334155}
+.srch-res a:hover,.srch-res a.on{background:#eff6ff;border-left-color:#0050C0}
+.srch-res .r-t{display:flex;gap:8px;font-weight:700;font-size:13px;color:#0f172a}
+.srch-res .r-t .toc-n{flex:0 0 auto}
+.srch-res .r-s{display:block;font-size:12px;color:#64748b;line-height:1.45;margin-top:2px}
+.srch-res mark,mark.hit{background:#fde68a;color:inherit;border-radius:2px;padding:0 1px}
+.toc-list.filtering li{opacity:.35} .toc-list.filtering li.toc-hit{opacity:1}
+.toc-list.filtering li.toc-hit a{color:#0050C0}
+.sec.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%{background:#eff6ff}100%{background:transparent}}
+/* indice analitico */
+.idx{columns:2 300px;column-gap:40px;margin-top:18px}
+.idx-g{break-inside:avoid;margin:0 0 18px}
+.idx-l{font-size:14px;text-transform:uppercase;letter-spacing:.14em;color:#003a90;font-weight:800;margin:0 0 6px;padding-bottom:4px;border-bottom:2px solid #0050C0}
+.idx-ul{list-style:none;margin:0;padding:0}
+.idx-ul li{margin:3px 0;font-size:14px;color:#334155;break-inside:avoid}
+.idx-t{font-weight:700;color:#0f172a}
+.idx-t code{font-weight:600}
+.idx-ul a{font-size:13px;white-space:nowrap}
+/* schermi stretti */
+@media (max-width:900px){
+ .with-side{display:block} .side{width:auto;border-right:0;border-bottom:1px solid #e5e7eb}
+ .side-inner{position:static;max-height:none;padding:24px 16px}
+ .main{padding:28px 16px}
+ .tbl-wrap{overflow-x:auto}
+}
+@media print{ .srch{display:none} mark.hit{background:none} .idx{columns:2} }
+
+/* ---- Stile comune dei manuali: copertina (variante 3) ---- */
+.cover.cover-w{background:#fff;color:#0b2a5b;border-bottom:4px solid #0050C0;padding:44px 56px 46px;min-height:auto}
+.cover-w .cover-logo{margin-bottom:30px}
+.cover-w .cover-logo img{height:76px;width:auto;display:block}
+.cover-w .cover-title{color:#003a90}
+.cover-w .cover-meta{margin-top:30px}
+.cover-w .cover-meta span{color:#5a6f93}
+.cover-w .cover-meta b{color:#0b2a5b}
+/* ---- Stile comune: pulsante Copy sui blocchi di comandi ---- */
+.code-w{position:relative;margin:14px 0}
+.code-w>.code{margin:0;padding-right:78px}
+.copy{position:absolute;top:9px;right:9px;font:600 11px/1 Outfit,-apple-system,Segoe UI,Roboto,Arial,sans-serif;letter-spacing:.04em;color:#cbd5e1;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:5px 9px;cursor:pointer}
+.copy:after{content:attr(data-l)}
+.copy:hover,.copy:focus-visible{color:#fff;border-color:#64748b;outline:none}
+.copy.ok{color:#86efac;border-color:#16a34a}
+/* ---- Stile comune: schermi stretti ---- */
+@media (max-width:900px){
+ .cover.cover-w{padding:32px 16px 34px}
+ .cover-w .cover-logo{margin-bottom:22px}
+ .cover-w .cover-logo img{height:60px}
+ .cover-w .cover-title{font-size:42px}
+ .cover-w .cover-meta{margin-top:22px;gap:28px}
+ .doc-foot{padding:18px 16px}
+}
+@media print{ .copy{display:none} .code-w>.code{padding-right:18px} }
+
+/* Solo per NESH: il titolo dei blocchi di codice (Console, NESH BASIC, nome del file) e i diagrammi Mermaid */
+.code[data-title]:before{content:attr(data-title);display:block;margin:-2px 0 8px;font:600 11px/1.4 Outfit,-apple-system,Segoe UI,Roboto,Arial,sans-serif;letter-spacing:.04em;color:#94a3b8}
+.fig .mermaid{margin:0;font-family:inherit;white-space:pre-wrap}
+</style>
 </head>
 <body>
-<div class="topbar">
-  <button class="btn menu-btn" type="button" aria-label="Open the table of contents">&#9776; Contents</button>
-  <strong>NESH Technical Manual</strong>
-</div>
-<div class="layout">
-<nav class="sidebar" aria-label="Table of contents">
-  <div class="brand">
-    <div class="brand-logo">{ }</div>
-    <div class="brand-text"><strong>NESH Technical Manual</strong><span>New EFI Shell 0.2.1</span></div>
-  </div>
-  <div class="search">
-    <input type="search" placeholder="Search  ( / )" aria-label="Search">
-    <div class="search-results" role="listbox"></div>
-  </div>
-  <div class="toc"></div>
-  <div class="side-tools">
-    <button class="btn print-btn" type="button">Print / PDF</button>
-    <a class="btn" href="User%20Manual.html">User manual</a>
-  </div>
-</nav>
+<div class="doc">
+  <section class="cover cover-w">
+    <div class="cover-logo"><img src="data:image/png;base64,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" alt="NESH"></div>
+    <h1 class="cover-title">Technical Manual</h1>
+    <div class="cover-meta">
+      <div><span>Version</span><b>0.2.1</b></div>
+      <div><span>Date</span><b>September 2026</b></div>
+    </div>
+  </section>
+  <div class="with-side">
+    <aside class="side"><div class="side-inner"><div class="srch" id="srch" hidden><label class="toc-head" for="srch-q">Search</label><input type="search" id="srch-q" class="srch-q" placeholder="A word, a file…  ( / )" autocomplete="off" spellcheck="false"><div class="srch-info" id="srch-info" aria-live="polite"></div><ol class="srch-res" id="srch-res"></ol></div><h2 class="toc-head">Contents</h2>
+<!-- BEGIN GENERATED: contents (tools/gen-docs.py) -->
+<ul class="toc-list" id="toc">
+<li class="toc-ch"><a href="#overview"><span class="toc-n">1</span><span class="toc-t">Overview</span></a></li>
+<li class="toc-se"><a href="#what-you-learn"><span class="toc-n">1.1</span><span class="toc-t">What this manual covers</span></a></li>
+<li class="toc-se"><a href="#principles"><span class="toc-n">1.2</span><span class="toc-t">Design principles</span></a></li>
+<li class="toc-se"><a href="#numbers"><span class="toc-n">1.3</span><span class="toc-t">The project in numbers</span></a></li>
+<li class="toc-ch"><a href="#getting-the-source"><span class="toc-n">2</span><span class="toc-t">Source tree and tools</span></a></li>
+<li class="toc-se"><a href="#layout"><span class="toc-n">2.1</span><span class="toc-t">Repository layout</span></a></li>
+<li class="toc-se"><a href="#tools-needed"><span class="toc-n">2.2</span><span class="toc-t">Tools needed</span></a></li>
+<li class="toc-se"><a href="#make-targets"><span class="toc-n">2.3</span><span class="toc-t">Make targets</span></a></li>
+<li class="toc-ch"><a href="#architecture"><span class="toc-n">3</span><span class="toc-t">Architecture</span></a></li>
+<li class="toc-se"><a href="#layers"><span class="toc-n">3.1</span><span class="toc-t">Layers</span></a></li>
+<li class="toc-se"><a href="#startup"><span class="toc-n">3.2</span><span class="toc-t">Start-up sequence</span></a></li>
+<li class="toc-se"><a href="#command-flow"><span class="toc-n">3.3</span><span class="toc-t">Life of a command line</span></a></li>
+<li class="toc-ch"><a href="#build"><span class="toc-n">4</span><span class="toc-t">The build</span></a></li>
+<li class="toc-se"><a href="#setup"><span class="toc-n">4.1</span><span class="toc-t">Setting up a machine</span></a></li>
+<li class="toc-se"><a href="#pipeline"><span class="toc-n">4.2</span><span class="toc-t">Pipeline</span></a></li>
+<li class="toc-se"><a href="#cflags"><span class="toc-n">4.3</span><span class="toc-t">Compiler flags and why</span></a></li>
+<li class="toc-se"><a href="#linker-script"><span class="toc-n">4.4</span><span class="toc-t">The linker script</span></a></li>
+<li class="toc-se"><a href="#elf2efi"><span class="toc-n">4.5</span><span class="toc-t">elf2efi.py</span></a></li>
+<li class="toc-se"><a href="#freestanding"><span class="toc-n">4.6</span><span class="toc-t">The freestanding runtime</span></a></li>
+<li class="toc-ch"><a href="#pal"><span class="toc-n">5</span><span class="toc-t">The platform layer (PAL)</span></a></li>
+<li class="toc-se"><a href="#pal-contract"><span class="toc-n">5.1</span><span class="toc-t">The contract</span></a></li>
+<li class="toc-se"><a href="#pal-efi"><span class="toc-n">5.2</span><span class="toc-t">pal_efi.c</span></a></li>
+<li class="toc-se"><a href="#pal-host"><span class="toc-n">5.3</span><span class="toc-t">pal_host.c and host.c</span></a></li>
+<li class="toc-ch"><a href="#core"><span class="toc-n">6</span><span class="toc-t">The shell core</span></a></li>
+<li class="toc-se"><a href="#registry"><span class="toc-n">6.1</span><span class="toc-t">Commands and the registry</span></a></li>
+<li class="toc-se"><a href="#line-splitting"><span class="toc-n">6.2</span><span class="toc-t">Splitting and redirection</span></a></li>
+<li class="toc-se"><a href="#sinks"><span class="toc-n">6.3</span><span class="toc-t">Output sinks</span></a></li>
+<li class="toc-se"><a href="#paths-impl"><span class="toc-n">6.4</span><span class="toc-t">Paths</span></a></li>
+<li class="toc-se"><a href="#env-impl"><span class="toc-n">6.5</span><span class="toc-t">Environment variables and aliases</span></a></li>
+<li class="toc-se"><a href="#prompt-impl"><span class="toc-n">6.6</span><span class="toc-t">Prompt, line editor, history and Ctrl-C</span></a></li>
+<li class="toc-ch"><a href="#interpreter"><span class="toc-n">7</span><span class="toc-t">The BASIC interpreter</span></a></li>
+<li class="toc-se"><a href="#lexer"><span class="toc-n">7.1</span><span class="toc-t">Lexer</span></a></li>
+<li class="toc-se"><a href="#parser"><span class="toc-n">7.2</span><span class="toc-t">Parser and AST</span></a></li>
+<li class="toc-se"><a href="#values"><span class="toc-n">7.3</span><span class="toc-t">Values, strings and variables</span></a></li>
+<li class="toc-se"><a href="#execution"><span class="toc-n">7.4</span><span class="toc-t">Execution and control flow</span></a></li>
+<li class="toc-se"><a href="#run-impl"><span class="toc-n">7.5</span><span class="toc-t">RUN, RUN$ and exit</span></a></li>
+<li class="toc-se"><a href="#interactive"><span class="toc-n">7.6</span><span class="toc-t">Interactive mode</span></a></li>
+<li class="toc-se"><a href="#builtins"><span class="toc-n">7.7</span><span class="toc-t">Built-in functions</span></a></li>
+<li class="toc-ch"><a href="#efi-modules"><span class="toc-n">8</span><span class="toc-t">UEFI modules</span></a></li>
+<li class="toc-se"><a href="#handles"><span class="toc-n">8.1</span><span class="toc-t">Handle numbers</span></a></li>
+<li class="toc-se"><a href="#running-images"><span class="toc-n">8.2</span><span class="toc-t">Running images</span></a></li>
+<li class="toc-se"><a href="#shell-protocol"><span class="toc-n">8.3</span><span class="toc-t">EFI_SHELL_PROTOCOL</span></a></li>
+<li class="toc-se"><a href="#variables-impl"><span class="toc-n">8.4</span><span class="toc-t">UEFI variables and boot entries</span></a></li>
+<li class="toc-se"><a href="#network-impl"><span class="toc-n">8.5</span><span class="toc-t">Network</span></a></li>
+<li class="toc-se"><a href="#compression"><span class="toc-n">8.6</span><span class="toc-t">UEFI compression</span></a></li>
+<li class="toc-se"><a href="#secure-boot-impl"><span class="toc-n">8.7</span><span class="toc-t">Secure Boot guard</span></a></li>
+<li class="toc-ch"><a href="#extending"><span class="toc-n">9</span><span class="toc-t">Extending NESH</span></a></li>
+<li class="toc-se"><a href="#add-command"><span class="toc-n">9.1</span><span class="toc-t">Tutorial: adding a command</span></a></li>
+<li class="toc-se"><a href="#add-function"><span class="toc-n">9.2</span><span class="toc-t">Tutorial: adding a BASIC function</span></a></li>
+<li class="toc-ch"><a href="#testing"><span class="toc-n">10</span><span class="toc-t">Testing</span></a></li>
+<li class="toc-se"><a href="#host-tests"><span class="toc-n">10.1</span><span class="toc-t">Host tests</span></a></li>
+<li class="toc-se"><a href="#qemu-tests"><span class="toc-n">10.2</span><span class="toc-t">QEMU tests</span></a></li>
+<li class="toc-se"><a href="#ci"><span class="toc-n">10.3</span><span class="toc-t">Continuous integration and releases</span></a></li>
+<li class="toc-se"><a href="#sbtest"><span class="toc-n">10.4</span><span class="toc-t">Secure Boot tests</span></a></li>
+<li class="toc-se"><a href="#fixtures"><span class="toc-n">10.5</span><span class="toc-t">Fixtures</span></a></li>
+<li class="toc-se"><a href="#docs-system"><span class="toc-n">10.6</span><span class="toc-t">The documentation system</span></a></li>
+<li class="toc-ch"><a href="#conventions"><span class="toc-n">11</span><span class="toc-t">Conventions</span></a></li>
+<li class="toc-se"><a href="#code-style"><span class="toc-n">11.1</span><span class="toc-t">Code style</span></a></li>
+<li class="toc-se"><a href="#help-rules"><span class="toc-n">11.2</span><span class="toc-t">Help text rules</span></a></li>
+<li class="toc-se"><a href="#decisions-log"><span class="toc-n">11.3</span><span class="toc-t">Recording decisions</span></a></li>
+<li class="toc-ch"><a href="#debugging"><span class="toc-n">12</span><span class="toc-t">Debugging</span></a></li>
+<li class="toc-ch"><a href="#file-map"><span class="toc-n">13</span><span class="toc-t">Source file map</span></a></li>
+<li class="toc-ch"><a href="#glossary"><span class="toc-n">14</span><span class="toc-t">Glossary</span></a></li>
+<li class="toc-ch"><a href="#index"><span class="toc-n">15</span><span class="toc-t">Index</span></a></li>
+</ul>
+<!-- END GENERATED: contents -->
+</div></aside>
+    <main class="main">
+<section class="chapter" id="overview"><div class="ch-head"><span class="ch-kick">Chapter 1</span><h2 class="h-ch">Overview</h2></div>
+<p class="lead">What NESH is from the inside, the principles that shaped it, and a map of this manual.</p>
 
-<main>
-
-<header class="titlepage">
-  <div class="kicker">Technical manual</div>
-  <h1>Inside NESH</h1>
-  <p class="lead">Everything a programmer needs to understand, build, test and extend NESH: architecture, build
-  pipeline, platform layer, shell core, the BASIC interpreter, the UEFI modules and the project's conventions.</p>
-  <div class="meta">
-    <span><b>Version</b> 0.2.1</span>
-    <span><b>Language</b> C (gnu11), Python 3 tools</span>
-    <span><b>Size</b> ~23,400 lines of C</span>
-    <span><b>Target</b> UEFI x86-64 · Linux host build for tests</span>
-  </div>
-</header>
-
-<section class="unnumbered no-toc">
-  <h2 class="unnumbered" id="contents">Contents</h2>
-  <div class="toc-print" id="contents-list"></div>
-  <p>Press <kbd>/</kbd> to search. The <a href="#index">index</a> lists files, functions and topics.</p>
-</section>
-
-<!-- ===================================================================== -->
-<h2 id="overview">Overview</h2>
-
-<p class="chapter-intro">What NESH is from the inside, the principles that shaped it, and a map of this manual.</p>
-
-<h3 id="what-you-learn">What this manual covers</h3>
+<section class="sec" id="what-you-learn"><h3 class="h-sec">1.1 · What this manual covers</h3>
 <p>The <a href="User%20Manual.html">user manual</a> explains what NESH does. This manual explains <em>how</em>. After reading
 it you should be able to find your way in every source file, build and test the shell, add commands and BASIC
 functions, and change the firmware-facing parts without breaking the others. It assumes you know C; UEFI concepts are
 explained where they are needed, and the <a href="#glossary">glossary</a> summarizes them.</p>
+</section>
 
-<h3 id="principles">Design principles</h3>
-<div class="cards">
-  <div class="card"><div class="icon">1</div><h4>One file</h4>
-    <p>The whole shell is one PE32+ image, <code>nesh.efi</code>: nothing to install, one signature for Secure Boot.</p></div>
-  <div class="card"><div class="icon">0</div><h4>No EDK2 code</h4>
-    <p>No EDK2 libraries or headers. UEFI definitions, libc, printf, compression and the UEFI Shell commands are written from scratch.</p></div>
-  <div class="card"><div class="icon">&#8646;</div><h4>Portable core</h4>
-    <p>The shell and the interpreter only talk to a small platform layer (PAL). The same core builds for UEFI and for Linux.</p></div>
-  <div class="card"><div class="icon">&#10003;</div><h4>Test on Linux first</h4>
-    <p>The Linux build runs the language and command tests in seconds; QEMU with OVMF firmware tests the UEFI parts.</p></div>
-  <div class="card"><div class="icon">&#8801;</div><h4>Compatible, not a copy</h4>
-    <p>UEFI Shell command names, options, variables and the EFI_SHELL_PROTOCOL are honored, so existing tools and habits keep working.</p></div>
-  <div class="card"><div class="icon">?</div><h4>Docs are code</h4>
-    <p>The command reference is generated from the help texts, and the manual's examples are run by the test suite.</p></div>
-</div>
+<section class="sec" id="principles"><h3 class="h-sec">1.2 · Design principles</h3>
+<figure class="tbl-wrap"><table class="tbl"><tbody>
+<tr><td><b>One file</b></td><td>The whole shell is one PE32+ image, <code>nesh.efi</code>: nothing to install, one signature for Secure Boot.</td></tr>
+<tr><td><b>No EDK2 code</b></td><td>No EDK2 libraries or headers. UEFI definitions, libc, printf, compression and the UEFI Shell commands are written from scratch.</td></tr>
+<tr><td><b>Portable core</b></td><td>The shell and the interpreter only talk to a small platform layer (PAL). The same core builds for UEFI and for Linux.</td></tr>
+<tr><td><b>Test on Linux first</b></td><td>The Linux build runs the language and command tests in seconds; QEMU with OVMF firmware tests the UEFI parts.</td></tr>
+<tr><td><b>Compatible, not a copy</b></td><td>UEFI Shell command names, options, variables and the EFI_SHELL_PROTOCOL are honored, so existing tools and habits keep working.</td></tr>
+<tr><td><b>Docs are code</b></td><td>The command reference is generated from the help texts, and the manual's examples are run by the test suite.</td></tr>
+</tbody></table><figcaption class="cap">Table 1.1 — Design principles</figcaption></figure>
+</section>
 
-<h3 id="numbers">The project in numbers</h3>
-<table>
+<section class="sec" id="numbers"><h3 class="h-sec">1.3 · The project in numbers</h3>
+<figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>Area</th><th>Directory</th><th>Lines</th><th>Content</th></tr></thead>
   <tbody>
     <tr><td>Runtime library</td><td><code>src/lib</code></td><td>1,523</td><td>libc subset, printf, string buffer, UTF-8, UEFI compression</td></tr>
@@ -88,19 +272,20 @@ explained where they are needed, and the <a href="#glossary">glossary</a> summar
     <tr><td>Portable commands</td><td><code>src/cmd</code></td><td>3,336</td><td>files, text, utilities, editors</td></tr>
     <tr><td>UEFI modules</td><td><code>src/platform/efi</code></td><td>10,218</td><td>shell protocol, variables, boot, drivers, disks, hardware, network</td></tr>
     <tr><td>UEFI definitions</td><td><code>include</code></td><td>724</td><td>UEFI types and protocols used by NESH</td></tr>
-    <tr><td>Tools and tests</td><td><code>tools</code>, <code>tests</code></td><td>3,104</td><td>ELF→PE converter, QEMU runner, doc generators, test scripts</td></tr>
+    <tr><td>Tools and tests</td><td><code>tools</code>, <code>tests</code></td><td>3,209</td><td>ELF→PE converter, QEMU runner, doc generators, test scripts</td></tr>
   </tbody>
-</table>
+</table><figcaption class="cap">Table 1.2 — The project in numbers</figcaption></figure>
 <p>The resulting <code>nesh.efi</code> is about 360 KB. The line counts here and in the
 <a href="#file-map">source file map</a> are not typed by hand: <code>make docs</code> counts the files and writes
 them into this page, and <code>make test</code> fails when they no longer match the tree &mdash; a new source file
 without a row in the map fails as well.</p>
+</section>
+</section>
 
-<!-- ===================================================================== -->
-<h2 id="getting-the-source">Source tree and tools</h2>
+<section class="chapter" id="getting-the-source"><div class="ch-head"><span class="ch-kick">Chapter 2</span><h2 class="h-ch">Source tree and tools</h2></div>
 
-<h3 id="layout">Repository layout</h3>
-<table>
+<section class="sec" id="layout"><h3 class="h-sec">2.1 · Repository layout</h3>
+<figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>Path</th><th>Content</th></tr></thead>
   <tbody>
     <tr><td><code>Makefile</code></td><td>All build and test targets.</td></tr>
@@ -120,12 +305,13 @@ without a row in the map fails as well.</p>
     <tr><td><code>tests/</code></td><td><code>host/*.nsb</code> + <code>.out</code> (Linux tests), <code>efi/*.nsb</code> (QEMU tests), <code>apps/shelltest.c</code>,
         <code>fixtures/</code> (EDK2 test binaries).</td></tr>
     <tr><td><code>examples/</code></td><td>Example scripts shipped with NESH.</td></tr>
-    <tr><td><code>docs/</code></td><td>This manual, the user manual, <code>decisions-and-history.md</code>, <code>assets/</code> (CSS, JS, Mermaid).</td></tr>
+    <tr><td><code>docs/</code></td><td>This manual, the user manual, <code>decisions-and-history.md</code>, <code>assets/</code> (Mermaid, the demo animation).</td></tr>
   </tbody>
-</table>
+</table><figcaption class="cap">Table 2.1 — Repository layout</figcaption></figure>
+</section>
 
-<h3 id="tools-needed">Tools needed</h3>
-<table>
+<section class="sec" id="tools-needed"><h3 class="h-sec">2.2 · Tools needed</h3>
+<figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>Tool</th><th>Used for</th></tr></thead>
   <tbody>
     <tr><td>GCC (x86-64) and GNU ld</td><td>Both builds. No cross-compiler is needed: the EFI image is linked as an ELF shared object and converted.</td></tr>
@@ -133,10 +319,11 @@ without a row in the map fails as well.</p>
     <tr><td>QEMU (<code>qemu-system-x86_64</code>) and OVMF</td><td>UEFI tests. <code>OVMF=</code> selects the firmware image, a single-file <code>OVMF.fd</code> (default: the first of <code>/usr/share/ovmf/OVMF.fd</code> and <code>/usr/share/OVMF/OVMF.fd</code> that exists).</td></tr>
     <tr><td><code>mkfs.fat</code> (dosfstools)</td><td>The writable test disk of the QEMU runs.</td></tr>
   </tbody>
-</table>
+</table><figcaption class="cap">Table 2.2 — Tools needed</figcaption></figure>
+</section>
 
-<h3 id="make-targets">Make targets</h3>
-<table>
+<section class="sec" id="make-targets"><h3 class="h-sec">2.3 · Make targets</h3>
+<figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>Target</th><th>Does</th></tr></thead>
   <tbody>
     <tr><td><code>make</code></td><td>Builds <code>build/nesh.efi</code> and <code>build/nesh-host</code> (Linux build with AddressSanitizer and UBSan).</td></tr>
@@ -148,20 +335,18 @@ without a row in the map fails as well.</p>
     <tr><td><code>make docs</code></td><td>Regenerates the command reference of the user manual from the help texts.</td></tr>
     <tr><td><code>make clean</code></td><td>Removes <code>build/</code>.</td></tr>
   </tbody>
-</table>
-<div class="callout tip"><span class="callout-title">Daily loop</span>
-<p>Change code → <code>make test</code> (seconds) → <code>make qemu-test</code> when the change touches UEFI code (about a
-minute) → <code>make qemu-nettest</code> when it touches the network.</p></div>
+</table><figcaption class="cap">Table 2.3 — Make targets</figcaption></figure>
+<div class="callout c-ok"><div class="callout-i">+</div><div><b>Daily loop.</b> Change code → <code>make test</code> (seconds) → <code>make qemu-test</code> when the change touches UEFI code (about a
+minute) → <code>make qemu-nettest</code> when it touches the network.</div></div>
+</section>
+</section>
 
-<!-- ===================================================================== -->
-<h2 id="architecture">Architecture</h2>
-
-<p class="chapter-intro">NESH is a stack of layers. Each layer only calls the layers below it, and everything that
+<section class="chapter" id="architecture"><div class="ch-head"><span class="ch-kick">Chapter 3</span><h2 class="h-ch">Architecture</h2></div>
+<p class="lead">NESH is a stack of layers. Each layer only calls the layers below it, and everything that
 depends on the firmware is kept out of the portable core.</p>
 
-<h3 id="layers">Layers</h3>
-<figure>
-<pre class="mermaid">
+<section class="sec" id="layers"><h3 class="h-sec">3.1 · Layers</h3>
+<figure class="fig"><pre class="mermaid">
 flowchart TB
   subgraph Portable["Portable (UEFI and Linux builds)"]
     CMD["Portable commands&lt;br/&gt;src/cmd"]
@@ -184,10 +369,8 @@ flowchart TB
   PAL --> PALH
   CORE --> LIB
   PALE --> FW["UEFI firmware services"]
-</pre>
-<figcaption>Layers and dependencies</figcaption>
-</figure>
-<ul>
+</pre><figcaption class="cap">Figure 3.1 — Layers and dependencies</figcaption></figure>
+<ul class="ul">
   <li><strong>Runtime library</strong> — the C functions everybody uses. In the UEFI build they are implemented by NESH
       (<code>libc.c</code>, <code>fmt.c</code>); in the Linux build <code>rt.h</code> includes the system headers instead.</li>
   <li><strong>PAL</strong> (<code>pal.h</code>) — console, time, files, volumes, reset. The only way the portable code reaches
@@ -199,10 +382,10 @@ flowchart TB
       (<code>platform_run_image</code>, <code>platform_env_store</code>, <code>secure_boot_active</code>…). In the Linux build
       <code>src/platform/host.c</code> implements the same hooks as stubs.</li>
 </ul>
+</section>
 
-<h3 id="startup">Start-up sequence</h3>
-<figure>
-<pre class="mermaid">
+<section class="sec" id="startup"><h3 class="h-sec">3.2 · Start-up sequence</h3>
+<figure class="fig"><pre class="mermaid">
 sequenceDiagram
   participant FW as UEFI firmware
   participant EM as efi_main (pal_efi.c)
@@ -221,9 +404,7 @@ sequenceDiagram
   NM-->>EM: exit code
   EM->>EM: efi_exit_hook: uninstall the shell protocol
   EM-->>FW: EFI status
-</pre>
-<figcaption>From the firmware to the prompt</figcaption>
-</figure>
+</pre><figcaption class="cap">Figure 3.2 — From the firmware to the prompt</figcaption></figure>
 <p>Two details matter. First, UEFI only guarantees 128 KiB of stack and the interpreter is recursive, so
 <code>efi_main</code> allocates 1 MiB of pages and calls <code>nesh_main</code> on that stack (<code>call_on_stack</code>).
 Second, when NESH exits nothing may keep pointing into its image: <code>efi_exit_hook</code> uninstalls (or restores) the
@@ -236,23 +417,23 @@ found in <code>start_mode</code>; <code>restore_text_mode</code> puts it back bo
 {
     gImage = image;
     gST = st;
-    gBS = st->BootServices;
-    gRT = st->RuntimeServices;
-    gBS->SetWatchdogTimer(0, 0, 0, NULL);
+    gBS = st-&gt;BootServices;
+    gRT = st-&gt;RuntimeServices;
+    gBS-&gt;SetWatchdogTimer(0, 0, 0, <span class="k">NULL</span>);
     ...
-    /* The interpreter is recursive: run on a private 1 MiB stack instead of
-     * the firmware stack (UEFI only guarantees 128 KiB). */
-    if (gBS->AllocatePages(AllocateAnyPages, EfiLoaderData, STACK_PAGES, &stack) == EFI_SUCCESS) {
-        call_on_stack(main_on_stack, (void *)(uintptr_t)(stack + STACK_PAGES * 4096));
+    <span class="cm">/* The interpreter is recursive: run on a private 1 MiB stack instead of
+     * the firmware stack (UEFI only guarantees 128 KiB). */</span>
+    <span class="k">if</span> (gBS-&gt;AllocatePages(AllocateAnyPages, EfiLoaderData, STACK_PAGES, &amp;stack) == EFI_SUCCESS) {
+        call_on_stack(main_on_stack, (<span class="k">void</span> *)(uintptr_t)(stack + STACK_PAGES * 4096));
         ...
-    if (efi_exit_hook)
-        efi_exit_hook(); /* nothing may point into this image after it exits */
-    return rc ? EFIERR(rc &amp; 0xFF) : EFI_SUCCESS;
+    <span class="k">if</span> (efi_exit_hook)
+        efi_exit_hook(); <span class="cm">/* nothing may point into this image after it exits */</span>
+    <span class="k">return</span> rc ? EFIERR(rc &amp; 0xFF) : EFI_SUCCESS;
 }</pre>
+</section>
 
-<h3 id="command-flow">Life of a command line</h3>
-<figure>
-<pre class="mermaid">
+<section class="sec" id="command-flow"><h3 class="h-sec">3.3 · Life of a command line</h3>
+<figure class="fig"><pre class="mermaid">
 flowchart TD
   L["line typed at the prompt"] --> B{"interp_is_basic_line?"}
   B -- yes --> I["interp_exec_interactive&lt;br/&gt;(may ask for more lines)"]
@@ -271,26 +452,24 @@ flowchart TD
   F --> K{".nsb?"}
   K -- yes --> BR["basic_run_file"]
   K -- no --> EI["platform_run_image&lt;br/&gt;(efi_start_image)"]
-</pre>
-<figcaption>What happens to a line</figcaption>
-</figure>
+</pre><figcaption class="cap">Figure 3.3 — What happens to a line</figcaption></figure>
 <p>Scripts take the same route: <code>RUN "cmd"</code> calls <code>shell_exec_line</code>, <code>RUN "cmd", a$</code> calls
 <code>shell_exec_argv</code> directly (no word splitting), and <code>RUN$</code> does the same inside a capture sink.</p>
+</section>
+</section>
 
-<!-- ===================================================================== -->
-<h2 id="build">The build</h2>
-
-<p class="chapter-intro">NESH is built with the ordinary Linux GCC, linked as a position-independent ELF shared
+<section class="chapter" id="build"><div class="ch-head"><span class="ch-kick">Chapter 4</span><h2 class="h-ch">The build</h2></div>
+<p class="lead">NESH is built with the ordinary Linux GCC, linked as a position-independent ELF shared
 object, and converted to a PE32+ EFI application by a small Python tool.</p>
 
-<h3 id="setup">Setting up a machine</h3>
+<section class="sec" id="setup"><h3 class="h-sec">4.1 · Setting up a machine</h3>
 <p>The repository is self-contained: the sources, the tests with their binary fixtures, the documentation and the
 tools that generate it are all committed, and nothing is fetched at build time. A clone plus the packages below is
 the whole development environment; <code>build/</code> holds only products and is not committed.</p>
-<pre class="terminal">$ git clone https://github.com/nic-fio/NESH.git
-$ cd NESH
-$ tools/setup-dev.sh --install</pre>
-<table>
+<pre class="code" data-lang="terminal" data-title="Console"><span class="p">$</span> git clone https://github.com/nic-fio/NESH.git
+<span class="p">$</span> cd NESH
+<span class="p">$</span> tools/setup-dev.sh --install</pre>
+<figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>Package (Debian, Ubuntu)</th><th>Needed for</th></tr></thead>
   <tbody>
     <tr><td><code>build-essential</code>, <code>python3</code></td><td>The build itself: GCC, GNU ld,
@@ -305,34 +484,32 @@ $ tools/setup-dev.sh --install</pre>
         signing the image and enrolling the test keys into OVMF.</td></tr>
     <tr><td><code>ffmpeg</code></td><td><code>tools/record-demo.py</code>, the animation of the README. Optional.</td></tr>
   </tbody>
-</table>
+</table><figcaption class="cap">Table 4.1 — Setting up a machine</figcaption></figure>
 <p>How the project is worked on &mdash; the agreements with its author, the decisions that are settled, what to
 check before a commit and where the project stands &mdash; is in <code>CLAUDE.md</code> at the root of the
 repository. <code>tools/backup.sh</code> writes the whole repository, history and tags included, into a single
 bundle file that clones back without a network.</p>
 
-<div class="callout note"><span class="callout-title">What a clone does not carry</span>
-<p>Two things live outside the repository and have to be set again on a new machine. The first is the git identity
+<div class="callout c-info"><div class="callout-i">i</div><div><b>What a clone does not carry.</b> Two things live outside the repository and have to be set again on a new machine. The first is the git identity
 used for the public history, which is kept in <code>.git/config</code>: <code>tools/setup-dev.sh</code> sets it
 (<code>NESH_GIT_NAME</code> and <code>NESH_GIT_EMAIL</code> override the default). The second is anything stored on
 GitHub rather than in the tree &mdash; releases with their <code>nesh.efi</code> and <code>nesh-usb.img</code>, the
 Pages site, the Actions settings &mdash; all of which are rebuilt by <code>make</code> or by the workflow in
-<code>.github/workflows/ci.yml</code> anyway.</p></div>
+<code>.github/workflows/ci.yml</code> anyway.</div></div>
+</section>
 
-<h3 id="pipeline">Pipeline</h3>
-<figure>
-<pre class="mermaid">
+<section class="sec" id="pipeline"><h3 class="h-sec">4.2 · Pipeline</h3>
+<figure class="fig"><pre class="mermaid">
 flowchart LR
   C["*.c"] -- "gcc -ffreestanding -fPIC&lt;br/&gt;-mno-red-zone -fshort-wchar" --> O["*.o"]
   O -- "ld -shared -Bsymbolic&lt;br/&gt;-T tools/efi.lds" --> SO["nesh.so&lt;br/&gt;(ELF, base 0)"]
   SO -- "tools/elf2efi.py" --> EFI["nesh.efi&lt;br/&gt;(PE32+, subsystem 10)"]
   C -- "gcc -DNESH_HOST&lt;br/&gt;-fsanitize=address,undefined" --> H["nesh-host&lt;br/&gt;(Linux)"]
-</pre>
-<figcaption>From sources to the two executables</figcaption>
-</figure>
+</pre><figcaption class="cap">Figure 4.1 — From sources to the two executables</figcaption></figure>
+</section>
 
-<h3 id="cflags">Compiler flags and why</h3>
-<table>
+<section class="sec" id="cflags"><h3 class="h-sec">4.3 · Compiler flags and why</h3>
+<figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>Flag</th><th>Reason</th></tr></thead>
   <tbody>
     <tr><td><code>-ffreestanding -fno-builtin</code></td><td>No hosted C library; GCC must not assume one.</td></tr>
@@ -346,19 +523,21 @@ flowchart LR
     <tr><td><code>-fno-tree-loop-distribute-patterns</code></td><td>Stops GCC from turning the loops of <code>memset</code>/<code>memcpy</code> into calls to themselves.</td></tr>
     <tr><td><code>-fno-strict-aliasing</code></td><td>UEFI structures are often reinterpreted through casts.</td></tr>
   </tbody>
-</table>
+</table><figcaption class="cap">Table 4.2 — Compiler flags and why</figcaption></figure>
 <p>Warnings: <code>-Wall -Wextra</code> without <code>-Wunused-parameter</code> and <code>-Wmissing-field-initializers</code>. A clean build has
 no warnings; keep it that way.</p>
+</section>
 
-<h3 id="linker-script">The linker script</h3>
+<section class="sec" id="linker-script"><h3 class="h-sec">4.4 · The linker script</h3>
 <p><code>tools/efi.lds</code> links at base address 0 with page-aligned <code>.text</code>, <code>.rodata</code>, <code>.data</code> (with the GOT)
 and <code>.bss</code>, and discards notes, comments and unwind tables. Base 0 makes ELF virtual addresses equal to PE relative
 virtual addresses, which keeps the conversion trivial. Page alignment gives each PE section its own memory
 protection (code read+execute, data read+write, never both).</p>
+</section>
 
-<h3 id="elf2efi">elf2efi.py</h3>
+<section class="sec" id="elf2efi"><h3 class="h-sec">4.5 · elf2efi.py</h3>
 <p>The converter reads the ELF sections and writes a PE32+ image:</p>
-<ol>
+<ol class="ol">
   <li>keeps <code>.text</code>, <code>.rodata</code> (as <code>.rdata</code>), <code>.data</code> and <code>.bss</code>, checking page alignment;</li>
   <li>for every <code>R_X86_64_RELATIVE</code> relocation writes the addend into the section data and records a
       <code>DIR64</code> fixup; <strong>any other relocation type is a build error</strong> (it means a symbol escaped the hidden
@@ -369,9 +548,10 @@ protection (code read+execute, data read+write, never both).</p>
 </ol>
 <p>Why not <code>objcopy --target=efi-app-x86_64</code>? It was tried first: it dropped sections and produced corrupted
 relocations with this layout. The converter is 170 lines, easy to audit, and fails loudly.</p>
+</section>
 
-<h3 id="freestanding">The freestanding runtime</h3>
-<ul>
+<section class="sec" id="freestanding"><h3 class="h-sec">4.6 · The freestanding runtime</h3>
+<ul class="ul">
   <li><strong>Memory</strong>: <code>malloc</code> uses <code>AllocatePool</code> with a small header that stores the size (needed by
       <code>realloc</code>). Code calls the <code>x</code> wrappers (<code>xmalloc</code>, <code>xstrdup</code>, <code>xasprintf</code>…), which
       stop the shell with <code>rt_fatal</code> on out-of-memory, so callers never check for NULL.</li>
@@ -380,15 +560,15 @@ relocations with this layout. The converter is 170 lines, easy to audit, and fai
   <li><strong>Strings</strong>: <code>libc.c</code> has the usual <code>mem*</code>/<code>str*</code> functions, <code>strto*</code> and <code>qsort</code>;
       <code>rt.h</code> has inline <code>ctype</code> functions (ASCII only).</li>
 </ul>
+</section>
+</section>
 
-<!-- ===================================================================== -->
-<h2 id="pal">The platform layer (PAL)</h2>
-
-<p class="chapter-intro"><code>src/pal/pal.h</code> is the contract between the portable code and the machine.
+<section class="chapter" id="pal"><div class="ch-head"><span class="ch-kick">Chapter 5</span><h2 class="h-ch">The platform layer (PAL)</h2></div>
+<p class="lead"><code>src/pal/pal.h</code> is the contract between the portable code and the machine.
 Everything in it has two implementations: <code>pal_efi.c</code> and <code>pal_host.c</code>.</p>
 
-<h3 id="pal-contract">The contract</h3>
-<table>
+<section class="sec" id="pal-contract"><h3 class="h-sec">5.1 · The contract</h3>
+<figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>Group</th><th>Functions</th><th>Notes</th></tr></thead>
   <tbody>
     <tr><td>Errors</td><td><code>PAL_OK</code>, <code>PAL_ENOENT</code>… <code>pal_strerror</code></td><td>Negative codes; <code>efi_to_pal</code> maps EFI_STATUS.</td></tr>
@@ -402,10 +582,11 @@ Everything in it has two implementations: <code>pal_efi.c</code> and <code>pal_h
         name, label, device path text, size, free, read-only, removable.</td></tr>
     <tr><td>System</td><td><code>pal_reset</code>, <code>pal_exit</code>, <code>pal_platform_name</code>, <code>pal_argc/argv</code></td><td></td></tr>
   </tbody>
-</table>
+</table><figcaption class="cap">Table 5.1 — The contract</figcaption></figure>
+</section>
 
-<h3 id="pal-efi">pal_efi.c</h3>
-<ul>
+<section class="sec" id="pal-efi"><h3 class="h-sec">5.2 · pal_efi.c</h3>
+<ul class="ul">
   <li><strong>Console</strong>: output converts UTF-8 to UCS-2 and calls <code>ConOut-&gt;OutputString</code> (turning
       <code>\n</code> into <code>\r\n</code>); input uses <code>SimpleTextInputEx</code> when available (modifier keys) and
       <code>WaitForEvent</code> with a timer for timeouts. <code>pal_con_ansi()</code> is false: the editor and the menus position
@@ -418,46 +599,47 @@ Everything in it has two implementations: <code>pal_efi.c</code> and <code>pal_h
   <li><strong>Extras for EFI modules</strong> (<code>efi_glue.h</code>): the globals <code>gST</code>, <code>gBS</code>, <code>gRT</code>, <code>gImage</code>,
       device path helpers, <code>efi_volume_handle</code>, <code>efi_file_devpath</code>.</li>
 </ul>
+</section>
 
-<h3 id="pal-host">pal_host.c and host.c</h3>
+<section class="sec" id="pal-host"><h3 class="h-sec">5.3 · pal_host.c and host.c</h3>
 <p>The Linux build maps volumes to directories: <code>NESH_FS="dir1;dir2"</code> gives <code>fs0:</code> and <code>fs1:</code> (default: the
 current directory). The console uses termios raw mode when stdin is a terminal and plain line reading otherwise, which
 is what the tests use. Other environment variables of the host build:</p>
-<table>
+<figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>Variable</th><th>Effect</th></tr></thead>
   <tbody>
     <tr><td><code>NESH_FS</code></td><td>Directories exposed as volumes.</td></tr>
     <tr><td><code>NESH_HISTORY</code></td><td>History file (no history file when unset).</td></tr>
     <tr><td><code>NESH_SECUREBOOT</code></td><td>When set, <code>secure_boot_active()</code> returns true, to test the read-only mode.</td></tr>
   </tbody>
-</table>
+</table><figcaption class="cap">Table 5.2 — pal_host.c and host.c</figcaption></figure>
 <p><code>src/platform/host.c</code> implements the platform hooks with stubs: running <code>.efi</code> files fails, UEFI variables
 do not exist, only a minimal set of platform commands is registered.</p>
+</section>
+</section>
 
-<!-- ===================================================================== -->
-<h2 id="core">The shell core</h2>
-
-<p class="chapter-intro"><code>src/core</code> turns lines into actions: it keeps the command registry, splits and executes
+<section class="chapter" id="core"><div class="ch-head"><span class="ch-kick">Chapter 6</span><h2 class="h-ch">The shell core</h2></div>
+<p class="lead"><code>src/core</code> turns lines into actions: it keeps the command registry, splits and executes
 command lines, manages output, the environment, aliases and the prompt.</p>
 
-<h3 id="registry">Commands and the registry</h3>
+<section class="sec" id="registry"><h3 class="h-sec">6.1 · Commands and the registry</h3>
 <p>A command is a C function <code>int fn(int argc, char **argv)</code> described by a <code>Cmd</code> entry. Modules keep a
 static table and register it at start-up with <code>shell_register</code>; the registry is a sorted array of pointers,
 searched case-insensitively by <code>shell_find_cmd</code>.</p>
-<pre class="code" data-lang="c" data-title="src/core/shell.h">typedef int (*CmdFn)(int argc, char **argv);
+<pre class="code" data-lang="c" data-title="src/core/shell.h"><span class="k">typedef</span> <span class="k">int</span> (*CmdFn)(<span class="k">int</span> argc, <span class="k">char</span> **argv);
 
-typedef struct {
-    const char *name;
+<span class="k">typedef</span> <span class="k">struct</span> {
+    <span class="k">const</span> <span class="k">char</span> *name;
     CmdFn fn;
-    const char *usage;   /* "cp [-r] SRC... DST" */
-    const char *summary; /* one line */
-    const char *help;    /* detailed help, may be NULL */
-    int flags;           /* CMD_* */
+    <span class="k">const</span> <span class="k">char</span> *usage;   <span class="cm">/* "cp [-r] SRC... DST" */</span>
+    <span class="k">const</span> <span class="k">char</span> *summary; <span class="cm">/* one line */</span>
+    <span class="k">const</span> <span class="k">char</span> *help;    <span class="cm">/* detailed help, may be NULL */</span>
+    <span class="k">int</span> flags;           <span class="cm">/* CMD_* */</span>
 } Cmd;
 
-#define CMD_KEEP_QUOTES 1 /* arguments keep their double quotes (setvar "text" vs L"text") */
-#define CMD_DATA 2        /* supports "-data" (key=value records, see out_data_mode) */</pre>
-<ul>
+<span class="k">#define</span> CMD_KEEP_QUOTES 1 <span class="cm">/* arguments keep their double quotes (setvar "text" vs L"text") */</span>
+<span class="k">#define</span> CMD_DATA 2        <span class="cm">/* supports "-data" (key=value records, see out_data_mode) */</span></pre>
+<ul class="ul">
   <li><code>argv[0]</code> is the command name; the strings belong to the caller.</li>
   <li>The return value is the exit code: <code>RC_OK</code> 0, <code>RC_FAIL</code> 1, <code>RC_USAGE</code> 2, <code>RC_NOTFOUND</code> 127,
       <code>RC_BREAK</code> 130.</li>
@@ -470,25 +652,24 @@ typedef struct {
 <code>RC_FAIL</code>; <code>cmd_perr</code> formats a PAL error for a path; <code>cmd_usage</code> prints the usage line and returns
 <code>RC_USAGE</code>; <code>getopts(argc, argv, "lr", flags)</code> parses single-letter options that may appear anywhere and
 returns the index of the first operand.</p>
+</section>
 
-<h3 id="line-splitting">Splitting and redirection</h3>
+<section class="sec" id="line-splitting"><h3 class="h-sec">6.2 · Splitting and redirection</h3>
 <p><code>split_ex</code> in <code>shell.c</code> splits a line at spaces and tabs. Double quotes group words and <code>""</code> inside
 quotes is a literal quote; with <code>CMD_KEEP_QUOTES</code> the quotes are kept, because <code>setvar</code> distinguishes
 <code>"text"</code> from <code>L"text"</code>. An unquoted <code>&gt; file</code> or <code>&gt;&gt; file</code> is removed from the words and
 becomes a file sink around the command. There is no variable expansion and no pipe.</p>
+</section>
 
-<h3 id="sinks">Output sinks</h3>
-<figure>
-<pre class="mermaid">
+<section class="sec" id="sinks"><h3 class="h-sec">6.3 · Output sinks</h3>
+<figure class="fig"><pre class="mermaid">
 flowchart LR
   W["out_write / out_printf"] --> T{"top of the sink stack"}
   T -- "none" --> C["console (pal_con_write)"]
   T -- "capture" --> B["Sbuf (RUN$)"]
   T -- "file" --> F["PalFile (&gt; file, RUN … TO)"]
   E["err_printf"] --> C
-</pre>
-<figcaption>Where output goes</figcaption>
-</figure>
+</pre><figcaption class="cap">Figure 6.1 — Where output goes</figcaption></figure>
 <p><code>con.c</code> keeps a stack of up to 16 sinks. Normal output goes to the innermost one, so nested
 <code>RUN$</code> captures and redirections compose naturally; error messages always go to the console. Colors are only
 applied when the output is the console (<code>out_is_console</code>). The <code>-data</code> helpers live here too:
@@ -498,23 +679,26 @@ writes one line (newlines in values become spaces), and <code>info_line</code> p
 <p>UEFI applications started by NESH write to the firmware console directly. When the output is not the console,
 <code>efi_start_image</code> swaps <code>gST-&gt;ConOut</code> for a proxy that forwards text to the current sink; see
 <a href="#running-images">Running images</a>.</p>
+</section>
 
-<h3 id="paths-impl">Paths</h3>
+<section class="sec" id="paths-impl"><h3 class="h-sec">6.4 · Paths</h3>
 <p>Inside NESH every path is <em>canonical</em> before it reaches the PAL: <code>fsN:\dir\file</code>, backslashes, no
 <code>.</code> or <code>..</code>. <code>path_resolve</code> does the conversion: it resolves map aliases (<code>usb:</code>), relative paths
 against the current directory, <code>/</code> separators, and returns NULL if the volume does not exist. Wildcards are expanded
 by <code>path_glob</code> (one directory level, sorted, case-insensitive match); commands decide whether to accept them.</p>
+</section>
 
-<h3 id="env-impl">Environment variables and aliases</h3>
+<section class="sec" id="env-impl"><h3 class="h-sec">6.5 · Environment variables and aliases</h3>
 <p><code>env.c</code> keeps variables in memory; non-volatile ones are also written through the platform hook
 <code>platform_env_store</code>, which stores them as UEFI variables with the EDK2 shell environment GUID, exactly like the
 UEFI Shell (so both shells share them). A few names are computed on read (<code>cwd</code>, <code>lasterror</code>, versions).
 The <em>overlay</em> (<code>env_overlay_push/pop</code>) temporarily hides or replaces variables without touching the firmware; it
 implements the environment parameter of <code>EFI_SHELL_PROTOCOL.Execute</code>. Aliases (<code>alias.c</code>) work the same way
 with the shell alias GUID.</p>
+</section>
 
-<h3 id="prompt-impl">Prompt, line editor, history and Ctrl-C</h3>
-<ul>
+<section class="sec" id="prompt-impl"><h3 class="h-sec">6.6 · Prompt, line editor, history and Ctrl-C</h3>
+<ul class="ul">
   <li>The REPL (<code>repl()</code> in <code>shell.c</code>) reads a line with <code>lineedit_read</code>, asks the interpreter whether
       it is BASIC (<code>interp_is_basic_line</code>) and otherwise runs it as a command. An incomplete BASIC block is
       accumulated until the parser accepts it, with a <code>...</code> prompt.</li>
@@ -525,32 +709,30 @@ with the shell alias GUID.</p>
       Ctrl-C; on UEFI a key notification registered by the shell protocol module catches it even while an application
       runs. Long loops call <code>con_break()</code>; the interpreter checks it before every statement.</li>
 </ul>
+</section>
+</section>
 
-<!-- ===================================================================== -->
-<h2 id="interpreter">The BASIC interpreter</h2>
-
-<p class="chapter-intro">NESH BASIC is implemented as a classic pipeline: a lexer produces tokens, a recursive-descent
+<section class="chapter" id="interpreter"><div class="ch-head"><span class="ch-kick">Chapter 7</span><h2 class="h-ch">The BASIC interpreter</h2></div>
+<p class="lead">NESH BASIC is implemented as a classic pipeline: a lexer produces tokens, a recursive-descent
 parser builds an abstract syntax tree, and a tree-walking interpreter executes it.</p>
-<figure>
-<pre class="mermaid">
+<figure class="fig"><pre class="mermaid">
 flowchart LR
   SRC["source text"] --> LEX["lexer.c&lt;br/&gt;tokens"]
   LEX --> PAR["parser.c&lt;br/&gt;Program: Block + Procs"]
   PAR --> INT["interp.c&lt;br/&gt;exec_block / eval"]
   INT --> BF["built-ins&lt;br/&gt;bfuncs.c, efi_var.c, efi_boot.c"]
   INT --> SH["shell core&lt;br/&gt;RUN / RUN$"]
-</pre>
-<figcaption>From text to execution</figcaption>
-</figure>
+</pre><figcaption class="cap">Figure 7.1 — From text to execution</figcaption></figure>
 
-<h3 id="lexer">Lexer</h3>
+<section class="sec" id="lexer"><h3 class="h-sec">7.1 · Lexer</h3>
 <p><code>lex_next</code> produces one <code>Token</code> at a time: numbers (decimal, <code>0x</code>, <code>0b</code>, <code>&amp;H</code>, <code>&amp;B</code>,
 <code>&amp;O</code>, with <code>_</code> separators; overflow is an error), strings (<code>""</code> escape, no newline inside), identifiers
 (a trailing <code>$</code> is part of the name), keywords (matched case-insensitively from a table), punctuation and newlines.
 Comments (<code>'</code>, <code>REM</code>) and the line continuation <code> _</code> are skipped here, so the parser never sees them. A
 UTF-8 BOM and a <code>#!</code> first line are ignored. Errors are sticky: after <code>T_ERROR</code> the lexer stops.</p>
+</section>
 
-<h3 id="parser">Parser and AST</h3>
+<section class="sec" id="parser"><h3 class="h-sec">7.2 · Parser and AST</h3>
 <p>The parser keeps one token of look-ahead. Expressions follow this precedence (lowest first): <code>OR</code>/<code>XOR</code> →
 <code>AND</code> → <code>NOT</code> → comparisons → <code>SHL</code>/<code>SHR</code> → <code>+ -</code> → <code>* / \ MOD</code> → unary sign → <code>^</code>
 (right-associative) → primary. Depth is limited (64 levels) to protect the stack.</p>
@@ -562,7 +744,7 @@ statement. <code>SUB</code>/<code>FUNCTION</code> definitions are only allowed a
 <code>Program.procs</code>.</p>
 <p>When the parse fails because the input ended inside an open block, <code>Program.incomplete</code> is set: the REPL uses it
 to ask for more lines instead of reporting an error.</p>
-<table>
+<figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>Node kind</th><th>Used for</th></tr></thead>
   <tbody>
     <tr><td><code>E_NUM</code>, <code>E_STR</code>, <code>E_VAR</code></td><td>Literals and variables (names are lower-cased by the parser).</td></tr>
@@ -573,9 +755,10 @@ to ask for more lines instead of reporting an error.</p>
     <tr><td><code>S_EXIT</code>, <code>S_CONTINUE</code>, <code>S_GOTO</code>, <code>S_RETURN</code>, <code>S_END</code></td><td>Jumps.</td></tr>
     <tr><td><code>S_CALL</code>, <code>S_DIM</code>, <code>S_LOCAL</code>, <code>S_RUN</code>, <code>S_CLS</code>, <code>S_COLOR</code>, <code>S_LOCATE</code>, <code>S_SLEEP</code>, <code>S_PAUSE</code></td><td>Other statements.</td></tr>
   </tbody>
-</table>
+</table><figcaption class="cap">Table 7.1 — Parser and AST</figcaption></figure>
+</section>
 
-<h3 id="values">Values, strings and variables</h3>
+<section class="sec" id="values"><h3 class="h-sec">7.3 · Values, strings and variables</h3>
 <p>A <code>Value</code> is either a 64-bit integer or a pointer to a reference-counted <code>Str</code> (length + bytes, always
 NUL-terminated). Copying a string value only increments the count (<code>v_copy</code>); <code>v_free</code> releases it.
 Arithmetic wraps around (it is done on unsigned integers to avoid undefined behavior); division by zero is a run-time
@@ -584,11 +767,12 @@ error.</p>
 a <code>Frame</code> with the local table; lookup checks the current frame's locals, then the globals — never the caller's
 locals. A variable is created on first assignment; reading an unknown variable gives 0 or <code>""</code>. Arrays are the same
 <code>Var</code> with <code>is_array</code> set and a vector of values.</p>
+</section>
 
-<h3 id="execution">Execution and control flow</h3>
+<section class="sec" id="execution"><h3 class="h-sec">7.4 · Execution and control flow</h3>
 <p><code>exec_block</code> runs statements in order and returns an <code>Exec</code> code that tells the enclosing constructs what
 happened:</p>
-<table>
+<figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>Exec</th><th>Produced by</th><th>Handled by</th></tr></thead>
   <tbody>
     <tr><td><code>X_OK</code></td><td>normal completion</td><td>—</td></tr>
@@ -599,43 +783,46 @@ happened:</p>
     <tr><td><code>X_END</code></td><td><code>END</code>, <code>EXIT n</code>, <code>exit</code> commands</td><td>everybody unwinds to the top</td></tr>
     <tr><td><code>X_ERROR</code></td><td>run-time error (<code>rt_err</code>)</td><td><code>finish_exec</code> prints it</td></tr>
   </tbody>
-</table>
+</table><figcaption class="cap">Table 7.2 — Execution and control flow</figcaption></figure>
 <p>This explains the GOTO rule: a block that does not contain the label returns <code>X_GOTO</code> to its parent, so a jump can
 leave loops but never enter them. <code>rt_err</code> records the first error with its line and returns false; every
 evaluation function propagates false upward, and <code>finish_exec</code> prints <code>file:line: error: message</code>.</p>
 <p>Procedures: <code>call_proc</code> evaluates the arguments in the caller's context, type-checks them against the
 parameter names, creates a <code>Frame</code>, runs the body and converts <code>X_RETURN</code> into the return value. The call depth
 is limited to 200.</p>
+</section>
 
-<h3 id="run-impl">RUN, RUN$ and exit</h3>
+<section class="sec" id="run-impl"><h3 class="h-sec">7.5 · RUN, RUN$ and exit</h3>
 <p><code>basic_run_command</code> implements both: with one argument it calls <code>shell_exec_line</code>, with several it builds
 an <code>argv</code> and calls <code>shell_exec_argv</code>; <code>RUN$</code> pushes a capture sink first and strips the final newlines.
 The exit code goes to <code>in-&gt;err</code> (the <code>ERR</code> function). After the command it checks two flags set by the
 <code>exit</code> command:</p>
-<ul>
+<ul class="ul">
   <li><code>shell_exit_requested</code> (<code>exit CODE</code>): the script ends like <code>END CODE</code>; every calling script sees the
       same flag after its own <code>RUN</code> and ends too, and finally the REPL loop stops.</li>
   <li><code>shell_script_exit_requested</code> (<code>exit /b CODE</code>): the innermost script clears the flag and ends with
       <code>CODE</code>, which its caller receives in <code>ERR</code>.</li>
 </ul>
+</section>
 
-<h3 id="interactive">Interactive mode</h3>
+<section class="sec" id="interactive"><h3 class="h-sec">7.6 · Interactive mode</h3>
 <p>The REPL keeps one long-lived interpreter, so variables and SUBs defined at the prompt persist; programs that define
 procedures are kept alive (<code>in-&gt;progs</code>) because the procedures point into their AST. Scripts, instead, each get a
 fresh interpreter from <code>basic_run_file</code>. <code>interp_is_basic_line</code> decides whether a prompt line is BASIC: it
 is if it starts with a statement keyword (but a lone <code>exit</code> is the shell command), assigns (<code>x =</code>,
 <code>a(1) =</code>) or calls a SUB defined earlier.</p>
+</section>
 
-<h3 id="builtins">Built-in functions</h3>
+<section class="sec" id="builtins"><h3 class="h-sec">7.7 · Built-in functions</h3>
 <p>Built-ins are C functions registered in tables of <code>BFunc</code>:</p>
-<pre class="code" data-lang="c" data-title="src/basic/interp_int.h">/* Built-in functions. Argument type letters: 's' string, 'n' number,
+<pre class="code" data-lang="c" data-title="src/basic/interp_int.h"><span class="cm">/* Built-in functions. Argument type letters: 's' string, 'n' number,
  * '?' any, 'a' array (passed unevaluated, see interp_array_arg).
- * The last letter repeats for extra arguments. */
-typedef bool (*BFn)(Interp *in, Node *call, Value *args, int nargs, Value *out);
-typedef struct {
-    const char *name; /* lower case, with '$' for string results */
-    int minargs, maxargs;
-    const char *types;
+ * The last letter repeats for extra arguments. */</span>
+<span class="k">typedef</span> <span class="k">bool</span> (*BFn)(Interp *in, Node *call, Value *args, <span class="k">int</span> nargs, Value *out);
+<span class="k">typedef</span> <span class="k">struct</span> {
+    <span class="k">const</span> <span class="k">char</span> *name; <span class="cm">/* lower case, with '$' for string results */</span>
+    <span class="k">int</span> minargs, maxargs;
+    <span class="k">const</span> <span class="k">char</span> *types;
     BFn fn;
 } BFunc;</pre>
 <p><code>call_builtin</code> checks the number of arguments, evaluates and type-checks them according to <code>types</code>, calls the
@@ -644,13 +831,13 @@ functions that can fail softly (files, variables) set <code>in-&gt;err</code> in
 must match the name: a name ending in <code>$</code> returns a string. Array arguments (<code>'a'</code>) are not evaluated; the
 function gets the variable with <code>interp_array_arg</code>. Portable functions are in <code>bfuncs.c</code>
 (<code>basic_core_funcs_init</code>); UEFI ones are registered by <code>efi_var.c</code> and <code>efi_boot.c</code>.</p>
+</section>
+</section>
 
-<!-- ===================================================================== -->
-<h2 id="efi-modules">UEFI modules</h2>
-
-<p class="chapter-intro">Everything that needs the firmware lives in <code>src/platform/efi</code>. The modules register
+<section class="chapter" id="efi-modules"><div class="ch-head"><span class="ch-kick">Chapter 8</span><h2 class="h-ch">UEFI modules</h2></div>
+<p class="lead">Everything that needs the firmware lives in <code>src/platform/efi</code>. The modules register
 their commands and BASIC functions from <code>platform_cmds_init</code>.</p>
-<table>
+<figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>File</th><th>Content</th></tr></thead>
   <tbody>
     <tr><td><code>efi_platform.c</code></td><td>Starting images, output capture proxy, Secure Boot state, <code>ver</code>, <code>reset</code>, <code>memmap</code>, <code>sysinfo</code>, <code>platform_cmds_init</code>.</td></tr>
@@ -663,15 +850,16 @@ their commands and BASIC functions from <code>platform_cmds_init</code>.</p>
     <tr><td><code>efi_net.c</code>, <code>efi_net6.c</code>, <code>efi_net.h</code></td><td>IPv4 and IPv6: <code>ifconfig</code>, <code>ifconfig6</code>, <code>ping</code>, <code>ping6</code>, <code>tftp</code>, <code>http</code>.</td></tr>
     <tr><td><code>efi_guids.c</code></td><td>Names of well-known protocol GUIDs (for <code>dh</code> and the shell protocol).</td></tr>
   </tbody>
-</table>
+</table><figcaption class="cap">Table 8.1 — UEFI modules</figcaption></figure>
 
-<h3 id="handles">Handle numbers</h3>
+<section class="sec" id="handles"><h3 class="h-sec">8.1 · Handle numbers</h3>
 <p>UEFI handles are opaque pointers. <code>efi_drivers.c</code> keeps a list of every handle ever seen
 (<code>hdb</code>); a handle's number is its position in that list, printed in hex. The list only grows, so a number keeps its
 meaning for the whole session, even after other handles disappear. <code>efi_handle_index</code> and
 <code>efi_parse_handle</code> convert in both directions.</p>
+</section>
 
-<h3 id="running-images">Running images</h3>
+<section class="sec" id="running-images"><h3 class="h-sec">8.2 · Running images</h3>
 <p><code>efi_start_image</code> runs applications (<code>load</code> and <code>loadpcirom</code> start drivers with <code>LoadImage</code>/<code>StartImage</code> directly, without shell parameters):</p>
 <ol class="steps">
   <li>Read the file and call <code>LoadImage</code> with its device path (the firmware checks the Secure Boot signature here).</li>
@@ -682,11 +870,12 @@ meaning for the whole session, even after other handles disappear. <code>efi_han
       CRC); the proxy's <code>OutputString</code> writes into the current sink.</li>
   <li><code>StartImage</code>; then restore everything, print the exit data if any, and map the status to an exit code.</li>
 </ol>
+</section>
 
-<h3 id="shell-protocol">EFI_SHELL_PROTOCOL</h3>
+<section class="sec" id="shell-protocol"><h3 class="h-sec">8.3 · EFI_SHELL_PROTOCOL</h3>
 <p>Programs built with the EDK2 ShellLib locate <code>EFI_SHELL_PROTOCOL</code> and call it for files, environment, current
 directory, mappings and to run commands. NESH implements all of version 2.2 (<code>efi_shellproto.c</code>).</p>
-<ul>
+<ul class="ul">
   <li><strong>Installation</strong>: if another shell's protocol exists (NESH started from the UEFI Shell), NESH replaces it
       with <code>ReinstallProtocolInterface</code> and restores it on exit; otherwise it installs its own on its image handle.</li>
   <li><strong>File handles</strong>: a <code>SHELL_FILE_HANDLE</code> is a <code>NeshFile</code> whose first member is an
@@ -699,21 +888,22 @@ directory, mappings and to run commands. NESH implements all of version 2.2 (<co
       caller passes an environment.</li>
 </ul>
 <p><code>tests/apps/shelltest.c</code> exercises every function of the protocol and is run by <code>make qemu-test</code>.</p>
+</section>
 
-<h3 id="variables-impl">UEFI variables and boot entries</h3>
+<section class="sec" id="variables-impl"><h3 class="h-sec">8.4 · UEFI variables and boot entries</h3>
 <p><code>efi_var_read</code> / <code>efi_var_write</code> wrap <code>GetVariable</code>/<code>SetVariable</code> with UTF-8 names. GUID names
 (<code>global</code>, <code>security</code>, <code>shell</code>…) are resolved by <code>guid_parse</code>. <code>efi_boot.c</code> parses
 <code>EFI_LOAD_OPTION</code> structures (attributes, description, device path list, optional data) and never writes a
 variable directly: changes are collected in a <em>plan</em>.</p>
 <pre class="code" data-lang="c" data-title="src/platform/efi/efi_boot.c (outline)">Plan p = { .dry = a-&gt;n, .yes = a-&gt;y, .nobackup = a-&gt;B };
-plan_add(&amp;p, "BootOrder", data, size, xstrdup("new boot order ..."));
-int rc = plan_apply(&amp;p); /* show; stop if dry run; confirm; back up; write */
+plan_add(&amp;p, <span class="st">"BootOrder"</span>, data, size, xstrdup(<span class="st">"new boot order ..."</span>));
+<span class="k">int</span> rc = plan_apply(&amp;p); <span class="cm">/* show; stop if dry run; confirm; back up; write */</span>
 plan_free(&amp;p);</pre>
 <p>This one function gives every <code>bootmgr</code> subcommand the same dry run, confirmation and backup behavior.</p>
+</section>
 
-<h3 id="network-impl">Network</h3>
-<figure>
-<pre class="mermaid">
+<section class="sec" id="network-impl"><h3 class="h-sec">8.5 · Network</h3>
+<figure class="fig"><pre class="mermaid">
 flowchart BT
   SNP["SimpleNetwork (NIC driver)"] --> MNP["MNP"]
   MNP --> IP4["IP4 / IP4Config2"]
@@ -725,9 +915,7 @@ flowchart BT
   TCP --> HTTP["HTTP → http"]
   IP4 --> PING4["ICMP → ping"]
   IP6 --> PING6["ICMPv6 → ping6"]
-</pre>
-<figcaption>Firmware network protocols used by NESH</figcaption>
-</figure>
+</pre><figcaption class="cap">Figure 8.1 — Firmware network protocols used by NESH</figcaption></figure>
 <p>NESH uses the firmware's protocols through their <em>service binding</em>: <code>CreateChild</code> gives a private instance,
 which is configured, used and destroyed. Configuration commands talk to <code>IP4Config2</code> and <code>IP6Config</code>. Ping builds
 ICMP echo packets itself and sends them through a raw IP instance; for ICMPv6 NESH also computes the checksum over the
@@ -735,85 +923,87 @@ IPv6 pseudo-header. <code>net6_prepare</code> picks the IPv6 source address that
 <code>fe80::</code>, otherwise a global one) and waits up to 10 s for router autoconfiguration. <code>tftp</code> uses MTFTP4 or
 MTFTP6, which have the same function table and token, so only the configuration differs; <code>http</code> selects the IPv6
 access point when the URL host is in brackets.</p>
+</section>
 
-<h3 id="compression">UEFI compression</h3>
+<section class="sec" id="compression"><h3 class="h-sec">8.6 · UEFI compression</h3>
 <p><code>src/lib/eficomp.c</code> implements the EFI 1.1 compression format used by option ROMs and firmware volumes, both
 directions: LZ77 with an 8 KiB window, blocks with three canonical Huffman trees (NT = 19 for code lengths, NC = 510
 for literals and match lengths, NP = 14 for position classes), bits written most significant first. The output is
 verified against the firmware's own decompressor in the QEMU tests.</p>
+</section>
 
-<h3 id="secure-boot-impl">Secure Boot guard</h3>
+<section class="sec" id="secure-boot-impl"><h3 class="h-sec">8.7 · Secure Boot guard</h3>
 <p><code>secure_boot_active()</code> reads the <code>SecureBoot</code> variable. Low-level writes call
 <code>hw_write_allowed("cmd")</code> first, which prints the standard message and returns false while Secure Boot is active:
 today <code>mm</code> writes and <code>hexedit -m</code> saves. A new command that writes memory, I/O ports or PCI registers must use it.</p>
+</section>
+</section>
 
-<!-- ===================================================================== -->
-<h2 id="extending">Extending NESH</h2>
-
-<p class="chapter-intro">Two complete walkthroughs: a new command and a new BASIC function. The code below is compiled
+<section class="chapter" id="extending"><div class="ch-head"><span class="ch-kick">Chapter 9</span><h2 class="h-ch">Extending NESH</h2></div>
+<p class="lead">Two complete walkthroughs: a new command and a new BASIC function. The code below is compiled
 and tested as shown.</p>
 
-<h3 id="add-command">Tutorial: adding a command</h3>
+<section class="sec" id="add-command"><h3 class="h-sec">9.1 · Tutorial: adding a command</h3>
 <p>We add <code>sum</code>, which prints the size and a 16-bit checksum (the BSD <code>sum</code> algorithm) of files, with a
 <code>-q</code> option and <code>-data</code> support. It only uses the PAL through the core, so it is portable: it goes in
 <code>src/cmd</code> and works in both builds.</p>
 <p><strong>1. Write the command</strong> in a new file <code>src/cmd/cmd_sum.c</code>:</p>
-<pre class="code" data-lang="c" data-title="src/cmd/cmd_sum.c">/* sum: size and 16-bit checksum of files (tutorial example of the technical manual). */
-#include "../core/shell.h"
+<pre class="code" data-lang="c" data-title="src/cmd/cmd_sum.c"><span class="cm">/* sum: size and 16-bit checksum of files (tutorial example of the technical manual). */</span>
+<span class="k">#include</span> <span class="st">"../core/shell.h"</span>
 
-static int cmd_sum(int argc, char **argv)
+<span class="k">static</span> <span class="k">int</span> cmd_sum(<span class="k">int</span> argc, <span class="k">char</span> **argv)
 {
-    bool f[1];
-    int first = getopts(argc, argv, "q", f); /* -q: only the checksum */
-    if (first &lt; 0)
-        return RC_USAGE;
-    if (first == argc)
-        return cmd_usage("sum");
-    int rc = RC_OK;
-    for (int i = first; i &lt; argc; i++) {
-        char *path = path_resolve(argv[i]);
-        char *data;
-        size_t len;
-        int e = path ? file_read_all(path, &amp;data, &amp;len) : PAL_ENOENT;
-        if (e) {
-            rc = cmd_perr("sum", argv[i], e);
+    <span class="k">bool</span> f[1];
+    <span class="k">int</span> first = getopts(argc, argv, <span class="st">"q"</span>, f); <span class="cm">/* -q: only the checksum */</span>
+    <span class="k">if</span> (first &lt; 0)
+        <span class="k">return</span> RC_USAGE;
+    <span class="k">if</span> (first == argc)
+        <span class="k">return</span> cmd_usage(<span class="st">"sum"</span>);
+    <span class="k">int</span> rc = RC_OK;
+    <span class="k">for</span> (<span class="k">int</span> i = first; i &lt; argc; i++) {
+        <span class="k">char</span> *path = path_resolve(argv[i]);
+        <span class="k">char</span> *data;
+        <span class="k">size_t</span> len;
+        <span class="k">int</span> e = path ? file_read_all(path, &amp;data, &amp;len) : PAL_ENOENT;
+        <span class="k">if</span> (e) {
+            rc = cmd_perr(<span class="st">"sum"</span>, argv[i], e);
             free(path);
-            continue;
+            <span class="k">continue</span>;
         }
-        unsigned s = 0;
-        for (size_t k = 0; k &lt; len; k++) {
-            s = (s &gt;&gt; 1) | ((s &amp; 1) &lt;&lt; 15); /* BSD sum: rotate right, then add */
-            s = (s + (uint8_t)data[k]) &amp; 0xFFFF;
+        <span class="k">unsigned</span> s = 0;
+        <span class="k">for</span> (<span class="k">size_t</span> k = 0; k &lt; len; k++) {
+            s = (s &gt;&gt; 1) | ((s &amp; 1) &lt;&lt; 15); <span class="cm">/* BSD sum: rotate right, then add */</span>
+            s = (s + (<span class="k">uint8_t</span>)data[k]) &amp; 0xFFFF;
         }
-        if (out_data_mode()) {
+        <span class="k">if</span> (out_data_mode()) {
             data_record();
-            data_field("path", "%s", path);
-            data_field("size", "%zu", len);
-            data_field("sum", "%04X", s);
-        } else if (f[0]) {
-            out_printf("%04X\n", s);
-        } else {
-            out_printf("%04X %8zu  %s\n", s, len, path);
+            data_field(<span class="st">"path"</span>, <span class="st">"%s"</span>, path);
+            data_field(<span class="st">"size"</span>, <span class="st">"%zu"</span>, len);
+            data_field(<span class="st">"sum"</span>, <span class="st">"%04X"</span>, s);
+        } <span class="k">else</span> <span class="k">if</span> (f[0]) {
+            out_printf(<span class="st">"%04X\n"</span>, s);
+        } <span class="k">else</span> {
+            out_printf(<span class="st">"%04X %8zu  %s\n"</span>, s, len, path);
         }
         free(data);
         free(path);
     }
-    return rc;
+    <span class="k">return</span> rc;
 }
 
-static const Cmd sum_cmds[] = {
-    { "sum", cmd_sum, "sum [-q] FILE...", "Show the size and a 16-bit checksum of files",
-      "  -q        print only the checksum\n"
-      "  sum *.efi              one line per file: checksum, size, path\n"
-      "With -data: path, size, sum.\n", CMD_DATA },
+<span class="k">static</span> <span class="k">const</span> Cmd sum_cmds[] = {
+    { <span class="st">"sum"</span>, cmd_sum, <span class="st">"sum [-q] FILE..."</span>, <span class="st">"Show the size and a 16-bit checksum of files"</span>,
+      <span class="st">"  -q        print only the checksum\n"</span>
+      <span class="st">"  sum *.efi              one line per file: checksum, size, path\n"</span>
+      <span class="st">"With -data: path, size, sum.\n"</span>, CMD_DATA },
 };
 
-void cmds_sum_init(void)
+<span class="k">void</span> cmds_sum_init(<span class="k">void</span>)
 {
     shell_register(sum_cmds, ARRAY_SIZE(sum_cmds));
 }</pre>
 <p>Points to notice:</p>
-<ul>
+<ul class="ul">
   <li><code>getopts</code> handles <code>-q</code> anywhere on the line and returns the first operand.</li>
   <li>Paths are made canonical with <code>path_resolve</code> before any file function.</li>
   <li>Errors are reported with <code>cmd_perr</code>/<code>cmd_err</code> and the loop continues with the next file; the exit code
@@ -831,63 +1021,63 @@ command goes in <code>src/platform/efi</code> instead: add its table to one of t
 <code>tools/gen-docs.py</code> (for example “Text and data”) and run <code>make docs</code>. <code>make test</code> fails until this is
 done, so a command can never be left out of the manual.</p>
 <p><strong>4. Test it.</strong> Add a host test, e.g. <code>tests/host/sum.nsb</code>, and generate its expected output:</p>
-<pre class="code" data-lang="basic" data-title="tests/host/sum.nsb">WRITEFILE "a.txt", "hello" + CHR$(10)
-RUN "sum a.txt"
-RUN "sum -q a.txt"
-PRINT FIELD$(RUN$("sum -data a.txt"), "size")
-RUN "sum missing.txt"
-PRINT "ERR="; ERR</pre>
-<pre class="terminal">$ make build/nesh-host
-$ UPDATE=1 tests/run-host-tests.sh build/nesh-host   # writes tests/host/sum.out
-$ cat tests/host/sum.out                              # check it by hand once
-$ make test</pre>
+<pre class="code" data-lang="basic" data-title="tests/host/sum.nsb">WRITEFILE <span class="st">"a.txt"</span>, <span class="st">"hello"</span> + CHR$(10)
+<span class="k">RUN</span> <span class="st">"sum a.txt"</span>
+<span class="k">RUN</span> <span class="st">"sum -q a.txt"</span>
+<span class="k">PRINT</span> FIELD$(RUN$(<span class="st">"sum -data a.txt"</span>), <span class="st">"size"</span>)
+<span class="k">RUN</span> <span class="st">"sum missing.txt"</span>
+<span class="k">PRINT</span> <span class="st">"ERR="</span>; ERR</pre>
+<pre class="code" data-lang="terminal" data-title="Console"><span class="p">$</span> make build/nesh-host
+<span class="p">$</span> UPDATE=1 tests/run-host-tests.sh build/nesh-host   # writes tests/host/sum.out
+<span class="p">$</span> cat tests/host/sum.out                              # check it by hand once
+<span class="p">$</span> make test</pre>
 <p>The expected output is <code>9073        6  fs0:\a.txt</code>, then <code>9073</code>, then <code>6</code>, then the error message and
 <code>ERR=1</code> (0x9073 = 36979, the same value the Unix <code>sum</code> command prints). If the command uses firmware services,
 also add checks to <code>tests/efi/run.nsb</code> and run <code>make qemu-test</code>.</p>
+</section>
 
-<h3 id="add-function">Tutorial: adding a BASIC function</h3>
+<section class="sec" id="add-function"><h3 class="h-sec">9.2 · Tutorial: adding a BASIC function</h3>
 <p>We add <code>REVERSE$(s$)</code>, which reverses a string character by character (not byte by byte: UTF-8 characters
 must stay intact). Portable functions go in <code>src/basic/bfuncs.c</code>:</p>
-<pre class="code" data-lang="c" data-title="src/basic/bfuncs.c">/* REVERSE$(s$): the characters of s$ in reverse order. */
+<pre class="code" data-lang="c" data-title="src/basic/bfuncs.c"><span class="cm">/* REVERSE$(s$): the characters of s$ in reverse order. */</span>
 FN(f_reverse)
 {
     UNUSED;
-    const Str *s = a[0].s;
+    <span class="k">const</span> Str *s = a[0].s;
     Sbuf b;
     sb_init(&amp;b);
-    for (size_t i = s-&gt;len; i &gt; 0;) {
-        size_t start = i - 1;
-        while (start &gt; 0 &amp;&amp; ((uint8_t)s-&gt;s[start] &amp; 0xC0) == 0x80) /* UTF-8 continuation byte */
+    <span class="k">for</span> (<span class="k">size_t</span> i = s-&gt;len; i &gt; 0;) {
+        <span class="k">size_t</span> start = i - 1;
+        <span class="k">while</span> (start &gt; 0 &amp;&amp; ((<span class="k">uint8_t</span>)s-&gt;s[start] &amp; 0xC0) == 0x80) <span class="cm">/* UTF-8 continuation byte */</span>
             start--;
         sb_add(&amp;b, s-&gt;s + start, i - start);
         i = start;
     }
     *out = v_str(str_take_sb(&amp;b));
-    return true;
+    <span class="k">return</span> <span class="k">true</span>;
 }</pre>
 <p>and one line in the <code>core_funcs</code> table (name in lower case with the <code>$</code>, one argument, type letter
 <code>s</code>):</p>
-<pre class="code" data-lang="c">    { "reverse$", 1, 1, "s", f_reverse },</pre>
+<pre class="code" data-lang="c" data-title="C">    { <span class="st">"reverse$"</span>, 1, 1, <span class="st">"s"</span>, f_reverse },</pre>
 <p>That is all: the parser needs no change, because any <code>name(args)</code> is resolved at run time.
 <code>PRINT REVERSE$("NESH è bello")</code> prints <code>olleb è HSEN</code>. Then document the function in the
 <a href="User%20Manual.html#function-reference">function reference</a> of the user manual (a <code>&lt;dt id="fn-…"&gt;</code> entry):
 <code>make test</code> fails for a built-in function without an entry.</p>
-<div class="callout"><span class="callout-title">Rules for built-ins</span>
-<ul>
+<div class="callout c-info"><div class="callout-i">i</div><div><b>Rules for built-ins.</b>
+<ul class="ul">
   <li>Return <code>false</code> only after <code>rt_err</code> (a real error that stops the script). For expected failures (a missing
       file) set <code>in-&gt;err</code> and return a neutral value.</li>
   <li>Never keep pointers to <code>args</code>: they are freed after the call. Build the result with <code>v_str</code>/<code>v_int</code>.</li>
   <li>UEFI-dependent functions go in the UEFI module that owns the topic and are registered with
       <code>basic_register_funcs</code> from its init function.</li>
-</ul></div>
+</ul></div></div>
+</section>
+</section>
 
-<!-- ===================================================================== -->
-<h2 id="testing">Testing</h2>
-
-<p class="chapter-intro">Three levels of tests, all automatic: host tests for the language and portable commands,
+<section class="chapter" id="testing"><div class="ch-head"><span class="ch-kick">Chapter 10</span><h2 class="h-ch">Testing</h2></div>
+<p class="lead">Three levels of tests, all automatic: host tests for the language and portable commands,
 documentation checks, and QEMU tests for everything that needs firmware.</p>
-<figure>
-<pre class="mermaid">
+<figure class="fig"><pre class="mermaid">
 flowchart LR
   subgraph T1["make test (seconds)"]
     H["tests/host/*.nsb&lt;br/&gt;vs *.out"]
@@ -901,17 +1091,16 @@ flowchart LR
   subgraph T3["make qemu-nettest"]
     N["tests/efi/net.nsb&lt;br/&gt;IPv4 + IPv6"]
   end
-</pre>
-<figcaption>Test levels</figcaption>
-</figure>
+</pre><figcaption class="cap">Figure 10.1 — Test levels</figcaption></figure>
 
-<h3 id="host-tests">Host tests</h3>
+<section class="sec" id="host-tests"><h3 class="h-sec">10.1 · Host tests</h3>
 <p><code>tests/run-host-tests.sh</code> copies each <code>tests/host/NAME.nsb</code> into an empty temporary directory, runs it with
 <code>NESH_FS=.</code> and the arguments <code>arg1 "arg two"</code>, and compares stdout+stderr and the exit code with
 <code>NAME.out</code>. <code>UPDATE=1</code> rewrites the <code>.out</code> files — review the diff before committing. The host build uses
 AddressSanitizer and UBSan, so memory errors and undefined behavior make tests fail loudly.</p>
+</section>
 
-<h3 id="qemu-tests">QEMU tests</h3>
+<section class="sec" id="qemu-tests"><h3 class="h-sec">10.2 · QEMU tests</h3>
 <p><code>tools/run-qemu.sh --test</code> builds a virtual FAT disk (<code>build/esp</code>, read-only, becomes <code>fs0:</code>) with
 <code>nesh.efi</code> as <code>\EFI\BOOT\BOOTX64.EFI</code>, the tests, the examples and the fixtures, plus a writable FAT image
 (<code>build/work.img</code>, <code>fs1:</code>). OVMF boots NESH, which runs <code>startup.nsb</code> → <code>tests\run.nsb</code> and shuts the
@@ -919,37 +1108,39 @@ machine down. The serial output is saved in <code>build/qemu-test.log</code>. Th
 marker, the line <code>failures:0</code> and no line starting with <code>FAIL</code>.</p>
 <p>Inside the tests, a small SUB does the bookkeeping:</p>
 <pre class="code" data-lang="basic" data-title="tests/efi/run.nsb">fails = 0
-SUB check(name$, ok)
-  IF ok THEN
-    PRINT "PASS "; name$
-  ELSE
-    PRINT "FAIL "; name$
+<span class="k">SUB</span> check(name$, ok)
+  <span class="k">IF</span> ok <span class="k">THEN</span>
+    <span class="k">PRINT</span> <span class="st">"PASS "</span>; name$
+  <span class="k">ELSE</span>
+    <span class="k">PRINT</span> <span class="st">"FAIL "</span>; name$
     fails = fails + 1
-  END IF
-END SUB
+  <span class="k">END</span> <span class="k">IF</span>
+<span class="k">END</span> <span class="k">SUB</span>
 ...
-check "map lists fs0", INSTR(RUN$("map"), "fs0") &gt; 0</pre>
+check <span class="st">"map lists fs0"</span>, INSTR(RUN$(<span class="st">"map"</span>), <span class="st">"fs0"</span>) &gt; 0</pre>
 <p><code>--nettest</code> adds a virtio network card with QEMU user networking (DHCP on 10.0.2.0/24, router advertisements for
 fec0::/64, a TFTP server) and an HTTP server on the host, and loads the firmware network drivers from
 <code>tests/fixtures/netdrv</code>.</p>
+</section>
 
-<h3 id="ci">Continuous integration and releases</h3>
+<section class="sec" id="ci"><h3 class="h-sec">10.3 · Continuous integration and releases</h3>
 <p><code>.github/workflows/ci.yml</code> runs on GitHub Actions for every push to <code>main</code> and every pull request: it
 installs QEMU, OVMF, iPXE's option ROMs and dosfstools on Ubuntu, enables KVM, and runs <code>make</code>, <code>make test</code>,
 <code>make qemu-test</code> and <code>make qemu-nettest</code>; the QEMU logs and <code>nesh.efi</code> are kept as artifacts.</p>
 <p><strong>Releases</strong> are made by pushing a version tag:</p>
-<pre class="terminal">$ git tag -a v0.2.1 -m "NESH 0.2.1"
-$ git push origin v0.2.1</pre>
+<pre class="code" data-lang="terminal" data-title="Console"><span class="p">$</span> git tag -a v0.2.1 -m "NESH 0.2.1"
+<span class="p">$</span> git push origin v0.2.1</pre>
 <p>The same workflow builds and tests the tagged source, then publishes a GitHub Release with <code>nesh.efi</code> and
 <code>SHA256SUMS</code>. Update <code>NESH_VERSION</code> in <code>src/core/shell.h</code> (and the version shown in the manuals) before
 tagging.</p>
+</section>
 
-<h3 id="sbtest">Secure Boot tests</h3>
+<section class="sec" id="sbtest"><h3 class="h-sec">10.4 · Secure Boot tests</h3>
 <p><code>make qemu-sbtest</code> checks the Secure Boot behavior end to end. It creates test keys (PK, KEK, db) with
 <code>openssl</code>, enrolls them into a copy of the OVMF variable store with <code>virt-fw-vars</code>, signs
 <code>nesh.efi</code> with <code>sbsign</code> and boots the OVMF build that enforces Secure Boot
 (<code>OVMF_CODE_4M.secboot.fd</code>; <code>OVMF_SECBOOT=</code> and <code>OVMF_VARS=</code> override the paths). Two runs:</p>
-<ol>
+<ol class="ol">
   <li>the <strong>signed</strong> shell runs <code>tests/efi/secureboot.nsb</code>, which checks that NESH reports Secure Boot
       as active, that reading hardware still works, that low-level writes are refused, that clock and serial settings are
       still allowed, that unsigned applications and drivers are refused with a clear message, that ordinary UEFI
@@ -958,9 +1149,10 @@ tagging.</p>
 </ol>
 <p>The keys are generated once in <code>build/secureboot/</code>. Without <code>sbsign</code>, <code>virt-fw-vars</code> or a
 Secure Boot OVMF build the target prints why it is skipped and succeeds.</p>
+</section>
 
-<h3 id="fixtures">Fixtures</h3>
-<table>
+<section class="sec" id="fixtures"><h3 class="h-sec">10.5 · Fixtures</h3>
+<figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>Path</th><th>What and why</th></tr></thead>
   <tbody>
     <tr><td><code>tests/fixtures/edk2/*.efi</code></td><td>EDK2 UEFI Shell applications (<code>edit</code>, <code>pci</code>, <code>ping</code>, <code>tftp</code>, <code>usb</code>): run under NESH
@@ -971,10 +1163,11 @@ Secure Boot OVMF build the target prints why it is skipped and succeeds.</p>
         installation at test time (<code>QEMU_ROM=</code>, default <code>/usr/share/qemu/efi-virtio.rom</code>); the test is skipped without it.</td></tr>
     <tr><td><code>tests/apps/shelltest.c</code></td><td>Built by the Makefile with the NESH toolchain; checks every EFI_SHELL_PROTOCOL function.</td></tr>
   </tbody>
-</table>
+</table><figcaption class="cap">Table 10.1 — Fixtures</figcaption></figure>
+</section>
 
-<h3 id="docs-system">The documentation system</h3>
-<ul>
+<section class="sec" id="docs-system"><h3 class="h-sec">10.6 · The documentation system</h3>
+<ul class="ul">
   <li><strong>Command reference</strong>: <code>tools/gen-docs.py</code> reads every <code>static const Cmd …[]</code> table in the
       sources (a small C tokenizer joins adjacent string literals and expands <code>NESH_VERSION</code>/<code>SCRIPT_EXT</code>) and
       rewrites the part of <code>docs/User Manual.html</code> between the <code>BEGIN GENERATED</code>/<code>END GENERATED</code> markers.
@@ -989,19 +1182,26 @@ Secure Boot OVMF build the target prints why it is skipped and succeeds.</p>
       user manual, writes it as <code>NAME.nsb</code>, checks the syntax of all of them (<code>nesh -k</code>), then runs the ones that
       have an output block (<code>data-example-output="NAME"</code>) in page order and compares the output. Examples marked
       <code>data-platform="efi"</code> are only syntax-checked.</li>
-  <li><strong>Look</strong>: chosen by comparing ten proposals built by <code>tools/make-previews.py</code> into
-      <code>docs-preview/</code> (not published, not in the repository). Run it again to try another design: each
-      proposal is a layout plus a palette, applied to the same sample content.</li>
-  <li><strong>Pages</strong>: plain HTML with <code>assets/docs.css</code> and <code>assets/docs.js</code> (table of contents, numbering,
-      search, index, syntax colors) and a local copy of Mermaid for the diagrams, so the manuals work offline. In a
-      Mermaid block write line breaks as <code>&amp;lt;br/&amp;gt;</code>: a literal tag would be eaten by the HTML parser.</li>
+  <li><strong>Structure</strong>: the same tool numbers the chapters, sections, tables and figures of both manuals in page
+      order, writes the contents in the sidebar and the list of index terms shown as code (the parts between the other
+      <code>GENERATED</code> markers), and <code>--check</code> fails when a link points to an anchor that does not exist.</li>
+  <li><strong>Look</strong>: the common style of the manuals of the seven projects (AMS, EFI_PARTITION_MANAGER, HOSTER, MTERM,
+      NESH, PHONESTRA, SCRAPER): cover with the logo, sidebar with search and contents, numbered chapters, tables and
+      figures. It replaced the earlier look, which had been chosen by comparing ten proposals built by
+      <code>tools/make-previews.py</code> into <code>docs-preview/</code> (not published, not in the repository).</li>
+  <li><strong>Pages</strong>: each manual is one self-contained HTML file. The style sheet and the script (search,
+      index, <span class="ui">Copy</span> button) are embedded, identical in the manuals of all seven projects; only the
+      diagrams use a file next to the page, a local copy of Mermaid in <code>assets/vendor</code>, so the manuals work
+      offline. In a Mermaid block write line breaks as <code>&amp;lt;br/&amp;gt;</code>: a literal tag would be eaten by
+      the HTML parser.</li>
 </ul>
+</section>
+</section>
 
-<!-- ===================================================================== -->
-<h2 id="conventions">Conventions</h2>
+<section class="chapter" id="conventions"><div class="ch-head"><span class="ch-kick">Chapter 11</span><h2 class="h-ch">Conventions</h2></div>
 
-<h3 id="code-style">Code style</h3>
-<ul>
+<section class="sec" id="code-style"><h3 class="h-sec">11.1 · Code style</h3>
+<ul class="ul">
   <li>C11 with GNU extensions, 4-space indentation, braces on the same line, <code>snake_case</code>; file-local functions and
       data are <code>static</code>.</li>
   <li>Comments explain <em>why</em>, in English, and are short. Every file starts with a comment saying what it contains.</li>
@@ -1015,24 +1215,27 @@ Secure Boot OVMF build the target prints why it is skipped and succeeds.</p>
       specification.</li>
   <li>Keep the build free of warnings and the tests green; add a test with every fix.</li>
 </ul>
+</section>
 
-<h3 id="help-rules">Help text rules</h3>
-<ul>
+<section class="sec" id="help-rules"><h3 class="h-sec">11.2 · Help text rules</h3>
+<ul class="ul">
   <li><code>summary</code>: one line, at most 78 columns, starting with a verb (“List…”, “Show…”).</li>
   <li><code>help</code>: option lines indented by two spaces with aligned descriptions, then short notes, then 1–3 examples;
       every line at most 78 columns (checked by <code>make test</code>).</li>
   <li>Document only what the code does. Options accepted for compatibility and ignored are said to be ignored.</li>
   <li>With <code>CMD_DATA</code>, the last line lists the <code>-data</code> fields.</li>
 </ul>
+</section>
 
-<h3 id="decisions-log">Recording decisions</h3>
+<section class="sec" id="decisions-log"><h3 class="h-sec">11.3 · Recording decisions</h3>
 <p>Design decisions — what was chosen, the alternatives and why — are recorded in
 <a href="https://github.com/nic-fio/NESH/blob/main/docs/decisions-and-history.md">docs/decisions-and-history.md</a>. Read it before changing a behavior that looks
 arbitrary: there is usually a reason.</p>
+</section>
+</section>
 
-<!-- ===================================================================== -->
-<h2 id="debugging">Debugging</h2>
-<table>
+<section class="chapter sec" id="debugging"><div class="ch-head"><span class="ch-kick">Chapter 12</span><h2 class="h-ch">Debugging</h2></div>
+<figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>Symptom</th><th>Likely cause and cure</th></tr></thead>
   <tbody>
     <tr><td><code>elf2efi: unsupported relocation type</code></td><td>A symbol is not hidden or a construct needs the GOT. Check for
@@ -1051,14 +1254,14 @@ arbitrary: there is usually a reason.</p>
     <tr><td>Memory errors in portable code</td><td>Run the failing script with <code>build/nesh-host</code>: AddressSanitizer reports the exact
         line.</td></tr>
   </tbody>
-</table>
+</table><figcaption class="cap">Table 12.1 — Debugging</figcaption></figure>
 <p><code>make qemu</code> gives an interactive NESH on the serial console of your terminal; <kbd>Ctrl</kbd>+<kbd>A</kbd> <kbd>X</kbd>
 leaves QEMU. Debug output can be printed with <code>err_printf</code>, which always reaches the console even while output is
 captured.</p>
+</section>
 
-<!-- ===================================================================== -->
-<h2 id="file-map">Source file map</h2>
-<table>
+<section class="chapter sec" id="file-map"><div class="ch-head"><span class="ch-kick">Chapter 13</span><h2 class="h-ch">Source file map</h2></div>
+<figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>File</th><th>Lines</th><th>Purpose</th></tr></thead>
   <tbody>
     <tr><td><code>include/efi.h</code></td><td>569</td><td>Minimal UEFI definitions (UEFI Specification 2.10), written for NESH</td></tr>
@@ -1108,54 +1311,387 @@ captured.</p>
     <tr><td><code>src/platform/host.c</code></td><td>122</td><td>Platform-specific commands for the Linux test build: firmware features are not available, so only a minimal set is provided</td></tr>
     <tr><td><code>tests/apps/shelltest.c</code></td><td>293</td><td>Test application for NESH's EFI_SHELL_PROTOCOL implementation</td></tr>
     <tr><td><code>tests/run-host-tests.sh</code></td><td>25</td><td>Runs tests/host/*.nsb with the host build and compares the output with the .out files</td></tr>
-    <tr><td><code>tools/check-doc-examples.py</code></td><td>69</td><td>Runs the NESH BASIC examples of the user manual with the host build and compares their output with the output printed in the manual</td></tr>
+    <tr><td><code>tools/check-doc-examples.py</code></td><td>76</td><td>Runs the NESH BASIC examples of the user manual with the host build and compares their output with the output printed in the manual</td></tr>
     <tr><td><code>tools/efi.lds</code></td><td>26</td><td>Linker script for NESH: ELF image at base 0, page-aligned sections</td></tr>
     <tr><td><code>tools/elf2efi.py</code></td><td>172</td><td>Convert an x86_64 ELF shared object (linked with tools/efi.lds) into a PE32+ EFI application with native base relocations</td></tr>
-    <tr><td><code>tools/gen-docs.py</code></td><td>302</td><td>Generates the command reference of the user manual from the command tables in the C sources, and the line counts of this manual from the files themselves, so that neither can disagree with the code</td></tr>
+    <tr><td><code>tools/gen-docs.py</code></td><td>400</td><td>Generates the command reference of the user manual from the command tables in the C sources, and the line counts of this manual from the files themselves, so that neither can disagree with the code; also numbers the chapters, sections, tables and figures of both manuals and writes their contents</td></tr>
     <tr><td><code>tools/mkusb.sh</code></td><td>102</td><td>Builds build/nesh-usb.img, a bootable disk image (GPT + EFI system partition) with NESH, the examples, the licence (LICENSE.txt and NOTICE.txt) and a README on it</td></tr>
     <tr><td><code>tools/record-demo.py</code></td><td>188</td><td>Records the animation of the README: drives a QEMU session through the monitor (sendkey/screendump) and turns the frames into a GIF</td></tr>
     <tr><td><code>tools/backup.sh</code></td><td>32</td><td>Packs the repository into one git bundle, with every branch, tag and commit, for a restore without a network</td></tr>
     <tr><td><code>tools/setup-dev.sh</code></td><td>89</td><td>Checks (or installs) the packages a clone needs and sets the git identity of the working copy, which is not cloned</td></tr>
     <tr><td><code>tools/run-qemu.sh</code></td><td>158</td><td>Boots nesh.efi in QEMU/OVMF: interactive, --test and --nettest modes</td></tr>
-    <tr><td><code>tools/make-previews.py</code></td><td>636</td><td>Builds docs-preview/: the ten design proposals the look of the manuals was chosen from</td></tr>
+    <tr><td><code>tools/make-previews.py</code></td><td>636</td><td>Builds docs-preview/: the ten design proposals the earlier look of the manuals was chosen from</td></tr>
   </tbody>
-</table>
+</table><figcaption class="cap">Table 13.1 — Source file map</figcaption></figure>
+</section>
 
-<!-- ===================================================================== -->
-<h2 id="glossary">Glossary</h2>
-<dl class="defs">
-  <dt id="g-bootservices" data-kind="term" data-index="Boot services">Boot services</dt><dd>Firmware functions available until the OS takes over (<code>gBS</code>): memory, events, protocols, images.</dd>
-  <dt id="g-devicepath" data-kind="term" data-index="Device path">Device path</dt><dd>A chain of nodes describing where a device or file is, e.g. <code>PciRoot(0x0)/Pci(0x2,0x0)/HD(1,…)</code>.</dd>
-  <dt id="g-driverbinding" data-kind="term" data-index="Driver binding">Driver binding</dt><dd>The protocol through which a driver is connected to controllers.</dd>
-  <dt id="g-esp" data-kind="term" data-index="ESP">ESP</dt><dd>EFI System Partition: the FAT partition with boot loaders.</dd>
-  <dt id="g-guid" data-kind="term" data-index="GUID">GUID</dt><dd>128-bit identifier of protocols and variable namespaces.</dd>
-  <dt id="g-handle" data-kind="term" data-index="Handle">Handle</dt><dd>An object in the firmware database carrying protocols.</dd>
-  <dt id="g-loadoption" data-kind="term" data-index="Load option">Load option</dt><dd>The content of a <code>Boot####</code>/<code>Driver####</code> variable.</dd>
-  <dt id="g-ovmf" data-kind="term" data-index="OVMF">OVMF</dt><dd>The UEFI firmware for virtual machines built from EDK2; used by the tests.</dd>
-  <dt id="g-pe" data-kind="term" data-index="PE32+">PE32+</dt><dd>The executable format of UEFI images (the 64-bit Windows format).</dd>
-  <dt id="g-protocol" data-kind="term" data-index="Protocol">Protocol</dt><dd>A table of functions (and data) identified by a GUID and installed on a handle.</dd>
-  <dt id="g-runtime" data-kind="term" data-index="Runtime services">Runtime services</dt><dd>Firmware functions still available to the OS (<code>gRT</code>): variables, time, reset.</dd>
-  <dt id="g-servicebinding" data-kind="term" data-index="Service binding">Service binding</dt><dd>A protocol that creates private child instances of a network protocol.</dd>
-  <dt id="g-shelllib" data-kind="term" data-index="ShellLib">ShellLib</dt><dd>The EDK2 library that UEFI Shell applications use; it relies on EFI_SHELL_PROTOCOL.</dd>
-  <dt id="g-tpl" data-kind="term" data-index="TPL">TPL</dt><dd>Task priority level: UEFI's simple interrupt-priority mechanism for events.</dd>
-  <dt id="g-ucs2" data-kind="term" data-index="UCS-2">UCS-2</dt><dd>16-bit character encoding of UEFI strings (<code>CHAR16</code>).</dd>
+<section class="chapter sec" id="glossary"><div class="ch-head"><span class="ch-kick">Chapter 14</span><h2 class="h-ch">Glossary</h2></div>
+<dl class="deflist">
+  <dt id="g-bootservices" data-kind="term" data-index="Boot services"><span class="dt-t">Boot services</span></dt><dd>Firmware functions available until the OS takes over (<code>gBS</code>): memory, events, protocols, images.</dd>
+  <dt id="g-devicepath" data-kind="term" data-index="Device path"><span class="dt-t">Device path</span></dt><dd>A chain of nodes describing where a device or file is, e.g. <code>PciRoot(0x0)/Pci(0x2,0x0)/HD(1,…)</code>.</dd>
+  <dt id="g-driverbinding" data-kind="term" data-index="Driver binding"><span class="dt-t">Driver binding</span></dt><dd>The protocol through which a driver is connected to controllers.</dd>
+  <dt id="g-esp" data-kind="term" data-index="ESP"><span class="dt-t">ESP</span></dt><dd>EFI System Partition: the FAT partition with boot loaders.</dd>
+  <dt id="g-guid" data-kind="term" data-index="GUID"><span class="dt-t">GUID</span></dt><dd>128-bit identifier of protocols and variable namespaces.</dd>
+  <dt id="g-handle" data-kind="term" data-index="Handle"><span class="dt-t">Handle</span></dt><dd>An object in the firmware database carrying protocols.</dd>
+  <dt id="g-loadoption" data-kind="term" data-index="Load option"><span class="dt-t">Load option</span></dt><dd>The content of a <code>Boot####</code>/<code>Driver####</code> variable.</dd>
+  <dt id="g-ovmf" data-kind="term" data-index="OVMF"><span class="dt-t">OVMF</span></dt><dd>The UEFI firmware for virtual machines built from EDK2; used by the tests.</dd>
+  <dt id="g-pe" data-kind="term" data-index="PE32+"><span class="dt-t">PE32+</span></dt><dd>The executable format of UEFI images (the 64-bit Windows format).</dd>
+  <dt id="g-protocol" data-kind="term" data-index="Protocol"><span class="dt-t">Protocol</span></dt><dd>A table of functions (and data) identified by a GUID and installed on a handle.</dd>
+  <dt id="g-runtime" data-kind="term" data-index="Runtime services"><span class="dt-t">Runtime services</span></dt><dd>Firmware functions still available to the OS (<code>gRT</code>): variables, time, reset.</dd>
+  <dt id="g-servicebinding" data-kind="term" data-index="Service binding"><span class="dt-t">Service binding</span></dt><dd>A protocol that creates private child instances of a network protocol.</dd>
+  <dt id="g-shelllib" data-kind="term" data-index="ShellLib"><span class="dt-t">ShellLib</span></dt><dd>The EDK2 library that UEFI Shell applications use; it relies on EFI_SHELL_PROTOCOL.</dd>
+  <dt id="g-tpl" data-kind="term" data-index="TPL"><span class="dt-t">TPL</span></dt><dd>Task priority level: UEFI's simple interrupt-priority mechanism for events.</dd>
+  <dt id="g-ucs2" data-kind="term" data-index="UCS-2"><span class="dt-t">UCS-2</span></dt><dd>16-bit character encoding of UEFI strings (<code>CHAR16</code>).</dd>
 </dl>
+</section>
 
-<!-- ===================================================================== -->
-<h2 id="index" class="unnumbered">Index</h2>
-<div id="index-list"></div>
-
-<footer class="doc-footer">
-  NESH Technical Manual — for NESH 0.2.1. See also the <a href="User%20Manual.html">user manual</a> and the
-  <a href="https://github.com/nic-fio/NESH/blob/main/docs/decisions-and-history.md">design decisions and project history</a>.
-  <br>Copyright (c) 2026 nic-fio, licensed
-  <a href="https://github.com/nic-fio/NESH/blob/main/LICENSE">Apache 2.0 with the Commons
-  Clause</a>: free to use and to share, selling it needs a commercial licence.
-</footer>
+<section class="chapter" id="index"><div class="ch-head"><span class="ch-kick">Chapter 15</span><h2 class="h-ch">Index</h2></div>
+<div id="index-list" class="idx"><noscript><div class="callout c-info"><div class="callout-i">i</div><div><b>Note.</b> The index is built by the browser and requires JavaScript. Without it, use the chapter contents.</div></div></noscript></div>
+</section>
 
 </main>
+  </div>
+  <footer class="doc-foot">NESH · Technical Manual · Version 0.2.1 · September 2026 · © 2026 Nicola Fiorillo · Licence: Apache 2.0 with the Commons Clause</footer>
 </div>
+<!-- BEGIN GENERATED: code-terms (tools/gen-docs.py) -->
+<script>window.MANUAL_CODE_TERMS=[];</script>
+<!-- END GENERATED: code-terms -->
 <script src="assets/vendor/mermaid.min.js"></script>
-<script src="assets/docs.js"></script>
+<script>
+/* Solo per NESH: i diagrammi Mermaid (copia locale in assets/vendor), con i colori del canone. */
+(function () {
+  "use strict";
+  var nodes = document.querySelectorAll(".main .mermaid");
+  if (!window.mermaid || !nodes.length) return;
+  window.mermaid.initialize({
+    startOnLoad: false, securityLevel: "strict", theme: "base",
+    fontFamily: "Outfit, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
+    themeVariables: {
+      background: "#f8fafc", primaryColor: "#eff6ff", primaryTextColor: "#0f172a", primaryBorderColor: "#0050C0",
+      lineColor: "#64748b", secondaryColor: "#f1f5f9", tertiaryColor: "#ffffff", noteBkgColor: "#fffbeb",
+      noteTextColor: "#0f172a", actorBkg: "#eff6ff", actorTextColor: "#0f172a", actorBorder: "#0050C0",
+      signalColor: "#0f172a", signalTextColor: "#0f172a", clusterBkg: "#ffffff", clusterBorder: "#cbd5e1",
+      edgeLabelBackground: "#f8fafc", nodeTextColor: "#0f172a"
+    }
+  });
+  try { window.mermaid.run({ nodes: nodes }); } catch (e) { /* the diagrams stay as text */ }
+})();
+</script>
+<script>
+/* Script comune dei manuali dei 7 progetti: ricerca, indice analitico, pulsante Copy. Uguale in tutti i manuali. */
+/* Ricerca nella barra laterale e indice analitico. Senza dipendenze; senza
+   JavaScript il manuale resta completo (la casella di ricerca resta nascosta). */
+(function () {
+  "use strict";
+  var main = document.querySelector(".main");
+  if (!main) return;
+
+  // Minuscole e senza accenti, carattere per carattere: la lunghezza resta
+  // uguale, così le posizioni trovate valgono anche sul testo originale.
+  function fold(s) {
+    var o = "";
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charAt(i);
+      var f = c.normalize ? c.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase() : c.toLowerCase();
+      o += f.length === 1 ? f : c;
+    }
+    return o;
+  }
+  function esc(s) {
+    return s.replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+  function secTitle(sec) {
+    var h = sec && sec.querySelector("h3.h-sec, h2.h-ch");
+    return h ? h.textContent.replace(/\s+/g, " ").trim() : "";
+  }
+  function splitTitle(t) { // "5.3 · Interruzioni e ripresa" -> ["5.3", "Interruzioni e ripresa"]
+    var m = /^([\d.]+) · (.*)$/.exec(t);
+    return m ? [m[1], m[2]] : ["", t];
+  }
+
+  /* ---------------- indice analitico ---------------- */
+  var list = document.getElementById("index-list");
+  if (list) {
+    var terms = {};
+    var els = main.querySelectorAll("[data-index]");
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      var target = el.id ? el : el.closest("[id]");
+      if (!target || target.id === "index") continue;
+      var sec = el.closest(".sec") || el.closest(".chapter");
+      var label = splitTitle(secTitle(sec));
+      var names = el.getAttribute("data-index").split(";");
+      for (var j = 0; j < names.length; j++) {
+        var name = names[j].trim();
+        if (!name) continue;
+        var key = fold(name);
+        var t = terms[key] || (terms[key] = { name: name, refs: [], seen: {} });
+        if (t.seen[target.id]) continue;
+        t.seen[target.id] = true;
+        t.refs.push({ id: target.id, n: label[0], title: label[1] });
+      }
+    }
+    var sortKey = function (k) { return k.replace(/^[-.]+/, ""); };
+    var keys = Object.keys(terms).sort(function (a, b) {
+      return sortKey(a).localeCompare(sortKey(b), "en") || a.localeCompare(b, "en");
+    });
+    var groups = [], cur = null;
+    keys.forEach(function (k) {
+      var ch = sortKey(k).charAt(0).toUpperCase();
+      if (!/[A-Z]/.test(ch)) ch = "#";
+      if (!cur || cur.ch !== ch) { cur = { ch: ch, items: [] }; groups.push(cur); }
+      cur.items.push(terms[k]);
+    });
+    var out = "";
+    groups.forEach(function (g) {
+      out += '<div class="idx-g"><h3 class="idx-l">' + g.ch + '</h3><ul class="idx-ul">';
+      g.items.forEach(function (t) {
+        // Voci da mostrare come codice: nomi di file e opzioni, piu' le parole
+        // che il manuale elenca in window.MANUAL_CODE_TERMS (prima di questo script).
+        var isCode = /^[-.]|_|\.(txt|sh|example|conf|toml|json|md|py|efi|nsb)$/.test(t.name) ||
+          (window.MANUAL_CODE_TERMS || []).indexOf(t.name) >= 0;
+        var nm = isCode ? "<code>" + esc(t.name) + "</code>" : esc(t.name);
+        out += '<li><span class="idx-t">' + nm + "</span> — " + t.refs.map(function (r) {
+          return '<a href="' + '#' + r.id + '" title="' + esc(r.title) + '">' + (r.n ? r.n + " " : "") + esc(r.title) + "</a>";
+        }).join(", ") + "</li>";
+      });
+      out += "</ul></div>";
+    });
+    list.innerHTML = out;
+  }
+
+  /* ---------------- ricerca ---------------- */
+  var box = document.getElementById("srch");
+  var q = document.getElementById("srch-q");
+  var info = document.getElementById("srch-info");
+  var res = document.getElementById("srch-res");
+  var toc = document.getElementById("toc");
+  if (!box || !q) return;
+  box.hidden = false;
+
+  var secs = [];
+  var nodes = main.querySelectorAll(".sec");
+  for (var k = 0; k < nodes.length; k++) {
+    var s = nodes[k];
+    if (s.closest("#index")) continue;
+    var parts = [], w = document.createTreeWalker(s, NodeFilter.SHOW_TEXT, null), tn;
+    while ((tn = w.nextNode())) if (!tn.parentNode.closest("h3.h-sec")) parts.push(tn.data);
+    var txt = parts.join(" ").replace(/\s+/g, " ").replace(/ ([,.;:)!?»])/g, "$1").replace(/([(«]) /g, "$1").trim();
+    var tt = secTitle(s);
+    secs.push({ el: s, id: s.id, title: tt, ftitle: fold(tt), text: txt, ftext: fold(txt) });
+  }
+  var tocLinks = {};
+  if (toc) {
+    var as = toc.querySelectorAll("a");
+    for (var a = 0; a < as.length; a++) tocLinks[as[a].getAttribute("href").slice(1)] = as[a].parentNode;
+  }
+
+  function count(hay, w) {
+    var n = 0, p = hay.indexOf(w);
+    while (p >= 0) { n++; p = hay.indexOf(w, p + w.length); }
+    return n;
+  }
+  function markWords(s, fs, words) { // testo -> HTML con <mark> sulle parole cercate
+    var ranges = [];
+    words.forEach(function (w) {
+      var p = fs.indexOf(w);
+      while (p >= 0) { ranges.push([p, p + w.length]); p = fs.indexOf(w, p + w.length); }
+    });
+    ranges.sort(function (x, y) { return x[0] - y[0]; });
+    var o = "", last = 0;
+    ranges.forEach(function (r) {
+      if (r[0] < last) return;
+      o += esc(s.slice(last, r[0])) + "<mark>" + esc(s.slice(r[0], r[1])) + "</mark>";
+      last = r[1];
+    });
+    return o + esc(s.slice(last));
+  }
+
+  function clearMarks() {
+    var ms = main.querySelectorAll("mark.hit");
+    for (var i = 0; i < ms.length; i++) {
+      var m = ms[i], p = m.parentNode;
+      p.replaceChild(document.createTextNode(m.textContent), m);
+      p.normalize();
+    }
+  }
+  function highlight(root, words) {
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        return n.parentNode.closest("svg, script, style, mark") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var list = [], n;
+    while ((n = walker.nextNode())) list.push(n);
+    var first = null;
+    list.forEach(function (node) {
+      var s = node.data, fs = fold(s), ranges = [];
+      words.forEach(function (w) {
+        var p = fs.indexOf(w);
+        while (p >= 0) { ranges.push([p, p + w.length]); p = fs.indexOf(w, p + w.length); }
+      });
+      if (!ranges.length) return;
+      ranges.sort(function (x, y) { return x[0] - y[0]; });
+      var frag = document.createDocumentFragment(), last = 0;
+      ranges.forEach(function (r) {
+        if (r[0] < last) return;
+        if (r[0] > last) frag.appendChild(document.createTextNode(s.slice(last, r[0])));
+        var m = document.createElement("mark");
+        m.className = "hit";
+        m.textContent = s.slice(r[0], r[1]);
+        frag.appendChild(m);
+        if (!first) first = m;
+        last = r[1];
+      });
+      if (last < s.length) frag.appendChild(document.createTextNode(s.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+    return first;
+  }
+
+  var found = [], sel = -1, words = [];
+  function search() {
+    var v = fold(q.value.trim());
+    words = v.split(/\s+/).filter(function (w) { return w.length > 0; });
+    found = [];
+    sel = -1;
+    Object.keys(tocLinks).forEach(function (id) { tocLinks[id].classList.remove("toc-hit"); });
+    if (v.length < 2) {
+      res.innerHTML = "";
+      info.textContent = v.length ? "Type at least two letters." : "";
+      if (toc) toc.classList.remove("filtering");
+      clearMarks();
+      return;
+    }
+    secs.forEach(function (s) {
+      var score = 0;
+      for (var i = 0; i < words.length; i++) {
+        var c = count(s.ftext, words[i]);
+        var inTitle = s.ftitle.indexOf(words[i]) >= 0;
+        if (!c && !inTitle) return;
+        score += c + (inTitle ? 20 : 0);
+      }
+      found.push({ s: s, score: score });
+    });
+    found.sort(function (x, y) { return y.score - x.score; });
+    info.textContent = found.length
+      ? (found.length === 1 ? "1 section found" : found.length + " sections found") + " · Enter to open the first"
+      : "No results.";
+    var html = "";
+    found.slice(0, 15).forEach(function (f, i) {
+      var s = f.s, p = Math.max(0, s.ftext.indexOf(words[0]));
+      var a = Math.max(0, p - 50), b = Math.min(s.text.length, p + words[0].length + 70);
+      var snip = (a > 0 ? "…" : "") + markWords(s.text.slice(a, b), s.ftext.slice(a, b), words) + (b < s.text.length ? "…" : "");
+      var t = splitTitle(s.title);
+      html += '<li><a href="' + '#' + s.id + '" data-i="' + i + '"><span class="r-t"><span class="toc-n">' + t[0] +
+        "</span><span>" + esc(t[1]) + '</span></span><span class="r-s">' + snip + "</span></a></li>";
+    });
+    res.innerHTML = html;
+    if (toc) {
+      toc.classList.add("filtering");
+      found.forEach(function (f) {
+        var li = tocLinks[f.s.id];
+        if (li) li.classList.add("toc-hit");
+        var ch = f.s.el.closest(".chapter");
+        if (ch && tocLinks[ch.id]) tocLinks[ch.id].classList.add("toc-hit");
+      });
+    }
+  }
+  function go(i) {
+    var f = found[i];
+    if (!f) return;
+    clearMarks();
+    var first = highlight(f.s.el, words);
+    if (history.replaceState) history.replaceState(null, "", "#" + f.s.id);
+    (first || f.s.el).scrollIntoView({ block: first ? "center" : "start" });
+    f.s.el.classList.remove("flash");
+    void f.s.el.offsetWidth;
+    f.s.el.classList.add("flash");
+  }
+  function setSel(i) {
+    var links = res.querySelectorAll("a");
+    if (!links.length) return;
+    sel = (i + links.length) % links.length;
+    for (var k = 0; k < links.length; k++) links[k].classList.toggle("on", k === sel);
+    links[sel].scrollIntoView({ block: "nearest" });
+  }
+
+  var timer = null;
+  q.addEventListener("input", function () {
+    clearTimeout(timer);
+    timer = setTimeout(search, 120);
+  });
+  q.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); clearTimeout(timer); search(); go(sel >= 0 ? sel : 0); }
+    else if (e.key === "ArrowDown") { e.preventDefault(); setSel(sel + 1); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setSel(sel - 1); }
+    else if (e.key === "Escape") { q.value = ""; search(); q.blur(); }
+  });
+  res.addEventListener("click", function (e) {
+    var a = e.target.closest("a[data-i]");
+    if (!a) return;
+    e.preventDefault();
+    go(+a.getAttribute("data-i"));
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+    e.preventDefault();
+    q.focus();
+    q.select();
+  });
+})();
+/* Pulsante Copy sui blocchi di comandi: copia le righe che iniziano con il
+   prompt "$ ", senza il prompt. L'etichetta sta in CSS (data-l), cosi' non
+   entra nel testo della pagina ne' nella ricerca. */
+(function () {
+  "use strict";
+  var pres = document.querySelectorAll(".main pre.code");
+  for (var i = 0; i < pres.length; i++) (function (pre) {
+    var lines = pre.textContent.replace(/\s+$/, "").split("\n"), cmds = [];
+    for (var k = 0; k < lines.length; k++) {
+      var m = /^\$ (.*)$/.exec(lines[k]);
+      if (m) cmds.push(m[1]);
+    }
+    if (!cmds.length) return;              // non e' un blocco di comandi
+    var text = cmds.join("\n");
+    var wrap = document.createElement("div");
+    wrap.className = "code-w";
+    pre.parentNode.insertBefore(wrap, pre);
+    wrap.appendChild(pre);
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "copy";
+    btn.setAttribute("data-l", "Copy");
+    btn.setAttribute("aria-label", "Copy the command" + (cmds.length > 1 ? "s" : ""));
+    btn.title = "Copy the command" + (cmds.length > 1 ? "s" : "");
+    var t = null;
+    function done() {
+      btn.setAttribute("data-l", "Copied");
+      btn.classList.add("ok");
+      clearTimeout(t);
+      t = setTimeout(function () { btn.setAttribute("data-l", "Copy"); btn.classList.remove("ok"); }, 1400);
+    }
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed"; ta.style.top = "-1000px"; ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try { if (document.execCommand("copy")) done(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+    btn.addEventListener("click", function () {
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
+      else fallback();
+    });
+    wrap.appendChild(btn);
+  })(pres[i]);
+})();
+</script>
 </body>
 </html>

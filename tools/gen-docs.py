@@ -3,14 +3,20 @@
 command reference of the user manual (from the command tables, so that the
 manual and the built-in 'help' never disagree) and the line counts of the
 technical manual (so that its source map cannot drift away from the tree).
+It also keeps the structure of both manuals in order: the numbers of the
+chapters, sections, tables and figures, the contents in the sidebar and the
+list of index terms shown as code (window.MANUAL_CODE_TERMS).
 
   tools/gen-docs.py           rewrite the generated parts of the two manuals
   tools/gen-docs.py --check   fail if a manual is out of date, if a command has
                               no chapter below, if a source file has no row in
-                              the source map, or if a BASIC function is not
-                              documented in the manual (run by 'make test')
+                              the source map, if a BASIC function is not
+                              documented in the manual, or if a link inside a
+                              manual points to an id that does not exist
+                              (run by 'make test')
 """
 import html
+import json
 import pathlib
 import re
 import sys
@@ -20,6 +26,10 @@ MANUAL = ROOT / "docs" / "User Manual.html"
 DEVMANUAL = ROOT / "docs" / "Technical Manual.html"
 BEGIN = "<!-- BEGIN GENERATED: command-reference (tools/gen-docs.py) -->"
 END = "<!-- END GENERATED: command-reference -->"
+TOC_BEGIN = "<!-- BEGIN GENERATED: contents (tools/gen-docs.py) -->"
+TOC_END = "<!-- END GENERATED: contents -->"
+TERMS_BEGIN = "<!-- BEGIN GENERATED: code-terms (tools/gen-docs.py) -->"
+TERMS_END = "<!-- END GENERATED: code-terms -->"
 
 # Chapter of the reference for every command. A new command must be added here:
 # --check fails otherwise.
@@ -211,31 +221,116 @@ def esc(s):
 
 
 def render(cmds):
+    """The command reference. Its numbers (0.0) are set by renumber()."""
     out = [BEGIN, ""]
     for cid, title, names in CATEGORIES:
-        out.append('<section class="ref-group" id="%s">' % cid)
-        out.append("<h3>%s</h3>" % esc(title))
-        out.append('<table class="ref-summary"><thead><tr><th>Command</th><th>What it does</th></tr></thead><tbody>')
+        out.append('<section class="sec" id="%s"><h3 class="h-sec">0.0 · %s</h3>' % (cid, esc(title)))
+        out.append('<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>Command</th><th>What it does</th></tr></thead><tbody>')
         for n in names:
             c = cmds[n]
             badge = ' <span class="badge">-data</span>' if c["data"] else ""
             out.append('<tr><td><a href="#cmd-%s"><code>%s</code></a>%s</td><td>%s</td></tr>'
                        % (n, n, badge, esc(c["summary"])))
-        out.append("</tbody></table>")
+        out.append('</tbody></table><figcaption class="cap">Table 0.0 — %s</figcaption></figure>' % esc(title))
         for n in names:
             c = cmds[n]
             out.append('<article class="cmd" id="cmd-%s" data-index="%s">' % (n, n))
             badge = ' <span class="badge" title="supports -data output">-data</span>' if c["data"] else ""
             out.append('<h4><code>%s</code>%s</h4>' % (n, badge))
             out.append('<p class="cmd-summary">%s</p>' % esc(c["summary"]))
-            out.append('<pre class="usage">%s</pre>' % esc(c["usage"]))
-            if c["help"]:
-                out.append('<pre class="cmd-help">%s</pre>' % esc(c["help"].rstrip("\n")))
+            helptext = "\n" + esc(c["help"].rstrip("\n")) if c["help"] else ""
+            out.append('<pre class="code"><span class="k">%s</span>%s</pre>' % (esc(c["usage"]), helptext))
             out.append("</article>")
         out.append("</section>")
         out.append("")
     out.append(END)
     return "\n".join(out)
+
+
+NUMBERED = re.compile(r'(<span class="ch-kick">Chapter )\d+(</span>)|(<h3 class="h-sec">)\d+\.\d+( · )'
+                      r'|(<figcaption class="cap">)(Table|Figure) \d+\.\d+( — )')
+
+
+def renumber(text):
+    """Numbers chapters, sections, tables and figures in page order: tables
+    and figures are counted per chapter (Table 3.2, Figure 3.1)."""
+    n = {"ch": 0, "sec": 0, "Table": 0, "Figure": 0}
+
+    def sub(m):
+        if m.group(1):
+            n.update(ch=n["ch"] + 1, sec=0, Table=0, Figure=0)
+            return "%s%d%s" % (m.group(1), n["ch"], m.group(2))
+        if m.group(3):
+            n["sec"] += 1
+            return "%s%d.%d%s" % (m.group(3), n["ch"], n["sec"], m.group(4))
+        n[m.group(6)] += 1
+        return "%s%s %d.%d%s" % (m.group(5), m.group(6), n["ch"], n[m.group(6)], m.group(7))
+    return NUMBERED.sub(sub, text)
+
+
+HEADINGS = re.compile(r'<section class="chapter(?: sec)?" id="([^"]+)"[^>]*><div class="ch-head">'
+                      r'<span class="ch-kick">Chapter (\d+)</span><h2 class="h-ch">(.*?)</h2>'
+                      r'|<section class="sec" id="([^"]+)"[^>]*><h3 class="h-sec">(\d+\.\d+) · (.*?)</h3>', re.S)
+
+
+def contents(text):
+    """The contents in the sidebar, from the chapter and section headings."""
+    items = []
+    for m in HEADINGS.finditer(text):
+        kind, ident, num, title = (("ch",) + m.group(1, 2, 3)) if m.group(1) else (("se",) + m.group(4, 5, 6))
+        title = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", title)).strip()
+        items.append('<li class="toc-%s"><a href="#%s"><span class="toc-n">%s</span><span class="toc-t">%s</span></a></li>'
+                     % (kind, ident, num, title))
+    return '%s\n<ul class="toc-list" id="toc">\n%s\n</ul>\n%s' % (TOC_BEGIN, "\n".join(items), TOC_END)
+
+
+def code_terms(text):
+    """Index terms shown as code: commands, and the names of the reference
+    entries (<dt>) that are not plain terms of the glossary."""
+    terms = []
+    for m in re.finditer(r'<(article class="cmd"|dt)(\s[^>]*)?>', text):
+        attrs = m.group(2) or ""
+        if 'data-kind="term"' in attrs:
+            continue
+        ix = re.search(r'data-index="([^"]*)"', attrs)
+        for t in (ix.group(1).split(";") if ix else []):
+            t = html.unescape(t.strip())
+            if t and t not in terms:
+                terms.append(t)
+    js = json.dumps(terms, ensure_ascii=False).replace("</", "<\\/")
+    return "%s\n<script>window.MANUAL_CODE_TERMS=%s;</script>\n%s" % (TERMS_BEGIN, js, TERMS_END)
+
+
+def splice(text, begin, end, new, man, problems):
+    a, b = text.find(begin), text.find(end)
+    if a < 0 or b < 0:
+        problems.append("%s: generated-section markers not found: %s" % (man.name, begin))
+        return text
+    return text[:a] + new + text[b + len(end):]
+
+
+def structure(text, man, problems):
+    """The generated parts every manual has, and the checks on its links."""
+    text = renumber(text)
+    text = splice(text, TOC_BEGIN, TOC_END, contents(text), man, problems)
+    text = splice(text, TERMS_BEGIN, TERMS_END, code_terms(text), man, problems)
+    ids = set(re.findall(r'\bid="([^"]+)"', text))
+    for target in sorted(set(re.findall(r'href="#([^"]+)"', text))):
+        if target not in ids:
+            problems.append("%s: link to #%s, which is not an id of the page" % (man.name, target))
+    for dt in re.findall(r"<dt\b[^>]*>", text):
+        if "id=" in dt and "data-index=" not in dt:
+            problems.append("%s: %s has no data-index (the index would miss it)" % (man.name, dt))
+    return text
+
+
+def cross_links(pages, problems):
+    """Links from one manual to an anchor of the other one."""
+    for man, text in pages.items():
+        for other, target in re.findall(r'href="((?:User|Technical)%20Manual\.html)#([^"]+)"', text):
+            o = ROOT / "docs" / other.replace("%20", " ")
+            if o in pages and 'id="%s"' % target not in pages[o]:
+                problems.append("%s: link to %s#%s, which does not exist" % (man.name, o.name, target))
 
 
 def main():
@@ -266,7 +361,7 @@ def main():
         print("%s: generated-section markers not found" % MANUAL, file=sys.stderr)
         return 1
     new = text[:a] + render(cmds) + text[b + len(END):]
-    # every BASIC function must have an entry in the function reference (<dt> of a dl.defs)
+    # every BASIC function must have an entry in the function reference (<dt> of a dl.deflist)
     documented = set()
     for dt in re.findall(r"<dt[^>]*>(.*?)</dt>", new, re.S):
         for part in re.sub(r"<[^>]+>", "", html.unescape(dt)).split("\u00b7"):
@@ -278,6 +373,9 @@ def main():
             problems.append("BASIC function %s has no entry in the function reference of %s" % (f.upper(), MANUAL.name))
     devtext = DEVMANUAL.read_text()
     devnew = count_lines(devtext, problems)
+    new = structure(new, MANUAL, problems)
+    devnew = structure(devnew, DEVMANUAL, problems)
+    cross_links({MANUAL: new, DEVMANUAL: devnew}, problems)
     if check:
         for man, before, after in ((MANUAL, text, new), (DEVMANUAL, devtext, devnew)):
             if before != after:

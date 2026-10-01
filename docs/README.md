@@ -12,8 +12,9 @@ in a repository. Read the manuals in one of these two ways.
 | Start page | https://nic-fio.github.io/NESH/ |
 
 **Offline**: clone the repository and open `docs/User Manual.html` in a browser.
-Everything the pages need (style, scripts, diagrams) is in `docs/assets`, so
-they work without an internet connection.
+Each manual is one HTML file with its style and scripts inside; only the
+diagrams use `docs/assets/vendor` (a local copy of Mermaid), so the pages work
+without an internet connection.
 
 [Design decisions and history](decisions-and-history.md) is Markdown, so GitHub
 shows it formatted here.
@@ -28,4 +29,4 @@ Inside NESH itself, `help` and `help NAME` print the same command reference.
 | `User Manual.html` | Using NESH and writing scripts (the command reference is generated from the help texts in the sources by `tools/gen-docs.py`). |
 | `Technical Manual.html` | Architecture, build, internals, testing, extending NESH. |
 | `decisions-and-history.md` | Why NESH is the way it is. |
-| `assets/` | Style sheet, scripts and a local copy of Mermaid (MIT). |
+| `assets/` | A local copy of Mermaid (MIT) for the diagrams of the manuals, and the demo animation of the start page. |

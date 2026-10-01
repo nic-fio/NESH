@@ -35,7 +35,7 @@ user brings them up. The reasoning for each is in
 | **`msr` stays out** | Reading MSRs hangs with #GP on the firmware; the user decided against it. |
 | **No legacy EDK1 shell interface** | User: *"lasciamo riposare in pace il vecchiume"*. |
 | **Secure Boot: reads yes, writes no** | Low-level hardware writes (`mm` on I/O and PCI config, `hexedit -m`) are refused while Secure Boot is active. The **clock and the serial port stay allowed** — the user ruled they are not a security risk. |
-| **Light documentation only** | No dark themes, no dark-mode media queries, no theme toggle, no dark code blocks. |
+| **Light documentation only** | No dark themes, no dark-mode media queries, no theme toggle. The code blocks are dark: that comes with the common style of the manuals, which the user approved in October 2026. |
 | **Apache 2.0 + Commons Clause** | Free to use and share, selling it needs a commercial licence, asked for by opening an issue. Not OSI open source, and the project says so up front. |
 
 ## The repository
@@ -46,8 +46,8 @@ user brings them up. The reasoning for each is in
 | `src/pal`, `src/platform` | The platform layer: `pal_efi.c` for firmware, `pal_host.c` for the Linux test build. |
 | `tools/` | `elf2efi.py` (ELF &rarr; PE32+), `gen-docs.py`, `check-doc-examples.py`, `run-qemu.sh`, `mkusb.sh`, `record-demo.py`, `setup-dev.sh`, `backup.sh`. |
 | `tests/` | Host tests, QEMU scripts (`tests/efi/*.nsb`) and binary fixtures (EDK2 applications, network drivers). |
-| `docs/` | The two HTML manuals, the decisions log, the assets. Published with GitHub Pages. |
-| `logos/` | `nesh-logo.png`, the logo (PNG, 2172×724, white background). Not used by the manuals. |
+| `docs/` | The two HTML manuals, the start page, the decisions log, `assets/` (Mermaid, the demo GIF). Published with GitHub Pages. |
+| `logos/` | `nesh-logo.png`, the logo (PNG, 2172×724, white background). Never edited: the manuals carry a transparent, cropped copy (700 px) on their cover. |
 | `examples/` | The `.nsb` scripts shipped with NESH and shown in the manual. |
 | `build/` | Products only, never committed. |
 
@@ -56,6 +56,28 @@ EFI_PARTITION_MANAGER, HOSTER, MTERM, NESH, PHONESTRA, SCRAPER): `src/`,
 `tests/`, `tools/`, `docs/` (with `index.html`, the two manuals, `README.md`,
 `decisions-and-history.md`), `NOTICE.md`, and the common `make` targets
 `all`, `test`, `docs-check`, `clean`.
+
+## The manuals
+
+`docs/User Manual.html` and `docs/Technical Manual.html` use the **common style
+of the manuals of the seven projects**, identical in all of them: cover with
+the logo, «User Manual» / «Technical Manual», version and date; sidebar with
+search and contents; chapters («Chapter N»), numbered sections, tables and
+figures with captions; the callouts, the code blocks with the Copy button, the
+alphabetical index; one footer line. Each manual is **one self-contained HTML
+file**: the common style sheet and script are embedded byte for byte (do not
+change them in one project only); what only NESH needs comes after them, in a
+block marked `Solo per NESH` (code-block titles, the Mermaid diagrams, which
+load the local copy in `docs/assets/vendor`). The Copy button appears on blocks
+whose lines start with `$ `; NESH prompts (`fs0:\>`) get no button.
+
+`tools/gen-docs.py` writes the parts between the `GENERATED` markers (command
+reference, sidebar contents, index terms shown as code) and numbers chapters,
+sections, tables and figures: after adding or moving one, run `make docs`. Write
+new sections as `<section class="sec" id="..."><h3 class="h-sec">0.0 · Title</h3>`
+and new tables and figures with `<figcaption class="cap">Table 0.0 — ...` (or
+`Figure 0.0 — ...`); `make docs` fixes the numbers. Index entries come from
+`data-index` attributes.
 
 ## Before committing
 
@@ -75,7 +97,7 @@ EFI_PARTITION_MANAGER, HOSTER, MTERM, NESH, PHONESTRA, SCRAPER): `src/`,
    keeps the personal address out of the public history.
 
 Releases: bump `NESH_VERSION` in `src/core/shell.h` **and** the version strings
-in `README.md`, `docs/index.html`, both manuals (including the tested example
+in `README.md`, `docs/index.html`, both manuals (cover, footer and the tested example
 output), then tag. The annotated tag message becomes the release notes; CI
 builds `nesh.efi` and publishes it. `nesh-usb.img` is uploaded by hand
 (`make usb`, then `gh release upload`).
