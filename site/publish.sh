@@ -60,6 +60,8 @@ fi
 
 # search engines and link previews
 cp "$ROOT/site/og.png" "$OUT/og.png"
+# Google Search Console ownership proof: must stay on the site
+cp "$ROOT"/site/google*.html "$OUT/"
 cat > "$OUT/robots.txt" <<EOF
 User-agent: *
 Allow: /
