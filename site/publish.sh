@@ -27,6 +27,18 @@ cp "$ROOT/docs/User Manual.html" "$ROOT/docs/Technical Manual.html" "$OUT/"
 cp "$ROOT/docs/assets/vendor/"* "$OUT/assets/vendor/"
 python3 "$ROOT/site/licence-page.py" "$ROOT/LICENSE" > "$OUT/licence.html"
 
+# canonical URL, link preview and a search-friendly title for each page
+SEO=$ROOT/site/seo-head.py
+python3 "$SEO" "$OUT/User Manual.html" "$URL/User%20Manual.html" \
+    "NESH User Manual — commands and BASIC scripting for the UEFI shell" \
+    "Every command of NESH, the New EFI Shell, and its BASIC scripting language, with examples: files, disks, UEFI variables, boot entries, PCI, SMBIOS, ACPI, network."
+python3 "$SEO" "$OUT/Technical Manual.html" "$URL/Technical%20Manual.html" \
+    "NESH Technical Manual — architecture and internals of the UEFI shell" \
+    "How NESH, the New EFI Shell, is built: architecture, the BASIC interpreter, the UEFI platform layer, testing in QEMU and OVMF."
+python3 "$SEO" "$OUT/licence.html" "$URL/licence.html" \
+    "NESH Freeware Licence" \
+    "NESH is freeware: free to use, also at work, and to give away unchanged; not to sell, modify or include in commercial products."
+
 # downloads of the current release
 DL=$OUT/download
 if [ -f "$ROOT/build/nesh.efi" ] && [ -f "$ROOT/build/nesh-usb.img" ] && [ "${NESH_FROM_BUILD:-}" = 1 ]; then
