@@ -45,8 +45,8 @@ mcopy -i "$M" "$ROOT"/examples/*.nsb ::/examples/
 TMP=$(mktemp)
 trap 'rm -f "$TMP"' EXIT
 
-# the licence travels with the binary: Apache 2.0 asks for a copy of the
-# licence in every distribution, and the Commons Clause for its own notice.
+# the licence travels with the binary: the NESH Freeware Licence lets the
+# image be given away only together with it.
 # Everything on the stick is CRLF, so a text editor on any system reads it.
 sed 's/$/\r/' "$ROOT"/LICENSE > "$TMP"
 mcopy -i "$M" "$TMP" ::/LICENSE.txt
@@ -79,22 +79,20 @@ it worked or not. These four lines write a report to this stick:
       fs0:\> map >> fs0:\report.txt
       fs0:\> smbiosview -t 1 >> fs0:\report.txt
 
-Attach report.txt to a hardware report at
-https://github.com/nic-fio/NESH/issues/new?template=hardware-report.yml
+Send report.txt with a few words about the machine to nesh@nicfio.it.
 
-Documentation: https://nic-fio.github.io/NESH/
-Project:       https://github.com/nic-fio/NESH
+Documentation: https://nesh.nicfio.it/
 
 Licence
 -------
 
-Copyright (c) 2026 nic-fio. NESH is released under the Apache License
-2.0 with the Commons Clause: use it for anything, at home or at work,
-free of charge; copy it, modify it and share it, keeping the notices
-and saying what you changed. What you may not do is sell it, or sell a
-product or service whose value comes substantially from it - that needs
-a commercial licence, which you can ask for by opening an issue on
-GitHub. The full text is in LICENSE.txt, the summary in NOTICE.txt.
+Copyright (c) 2026 Nicola Fiorillo. NESH is freeware: use it for
+anything, at home or at work, free of charge, also as a tool in paid
+work; copy it and give it away unchanged, with this licence. What you
+may not do is sell it, include it in a product or service that is sold,
+modify it, or decompile it beyond what the law allows - that needs a
+written licence: write to nesh@nicfio.it. The full text is in
+LICENSE.txt, the summary in NOTICE.txt.
 EOF
 mcopy -i "$M" "$TMP" ::/README.txt
 

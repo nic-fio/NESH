@@ -1,8 +1,8 @@
 # NESH — New EFI Shell
 
 [![CI](https://github.com/nic-fio/NESH/actions/workflows/ci.yml/badge.svg)](https://github.com/nic-fio/NESH/actions/workflows/ci.yml)
-[![Licence: Apache 2.0 with the Commons Clause](https://img.shields.io/badge/licence-Apache%202.0%20with%20Commons%20Clause-blue)](LICENSE)
-[Documentation](https://nic-fio.github.io/NESH/) · [Download](https://github.com/nic-fio/NESH/releases/latest)
+[![Licence: freeware](https://img.shields.io/badge/licence-freeware-blue)](LICENSE)
+[Website, documentation and download](https://nesh.nicfio.it/)
 
 A modern command shell for UEFI firmware, with a real scripting language.
 One file, `nesh.efi`: nothing to install, one signature for Secure Boot, no
@@ -41,13 +41,13 @@ fs0:\> n = RECORDS(RUN$("map -data"), v$()) : PRINT n; " volumes and disks"
 
 | Document | For |
 |---|---|
-| [User manual](https://nic-fio.github.io/NESH/User%20Manual.html) | Using NESH and writing scripts: every command and function, with examples. |
-| [Technical manual](https://nic-fio.github.io/NESH/Technical%20Manual.html) | Architecture, build, internals, testing, how to extend NESH. |
+| [User manual](https://nesh.nicfio.it/User%20Manual.html) | Using NESH and writing scripts: every command and function, with examples. |
+| [Technical manual](https://nesh.nicfio.it/Technical%20Manual.html) | Architecture, build, internals, testing, how to extend NESH. |
 | [Design decisions and history](docs/decisions-and-history.md) | Why NESH is the way it is. |
 | [Logo](logos/nesh-logo.png) | The NESH logo (PNG, 2172×724, white background). |
 
 The manuals are HTML pages, so GitHub shows them as source code: read them
-online at **https://nic-fio.github.io/NESH/**, or open
+online at **https://nesh.nicfio.it/**, or open
 `docs/User Manual.html` in a browser from a clone (they work offline). Inside
 NESH, `help` and `help NAME` show the same command reference.
 
@@ -88,7 +88,7 @@ make usb             # build/nesh-usb.img, a bootable disk image (needs mtools)
 ## Install
 
 The quickest way is the ready-made disk image from the
-[latest release](https://github.com/nic-fio/NESH/releases/latest)
+[website](https://nesh.nicfio.it/#get)
 (`nesh-usb.img`, also `make usb`): write it to a USB stick and boot it.
 
 ```
@@ -109,7 +109,7 @@ where the prompt came up, `dir` listed the files and NESH booted Linux. What
 AMI, Insyde or Phoenix firmware makes of the rest is the project's main open
 question, and the one thing that cannot be settled here. If you start NESH on a
 real machine, please say how it went — a machine where everything worked is as
-useful a report as one where nothing did: [open a hardware report](https://github.com/nic-fio/NESH/issues/new?template=hardware-report.yml).
+useful a report as one where nothing did: write to **nesh@nicfio.it**.
 
 Four commands collect most of what the report asks, and NESH can write them to
 the stick you booted from:
@@ -128,18 +128,18 @@ only lists the boot entries until you ask it for a change), `edit` and
 
 ## License
 
-Copyright (c) 2026 nic-fio. NESH is released under the **Apache License 2.0
-with the [Commons Clause](LICENSE)**: use it for anything, at home or at work,
-free of charge; copy it, modify it and share it, keeping the notices and saying
-what you changed. What you may not do is **sell** it, or sell a product or
-service whose value comes substantially from it — that needs a commercial
-licence ([open an issue](https://github.com/nic-fio/NESH/issues) to ask
-for one).
+Copyright (c) 2026 Nicola Fiorillo. NESH is **freeware**, released under the
+[NESH Freeware Licence](LICENSE): use it for anything, at home or at work,
+free of charge, also as a tool in paid work; copy it and give it away
+unchanged; sign it for Secure Boot. What you may not do is **sell** it,
+include it in a product or service that is sold, modify it, or decompile it
+beyond what the law allows — that needs a written licence: write to
+**nesh@nicfio.it**. [NOTICE.md](NOTICE.md) has the summary and the
+third-party components.
 
-Using NESH as a tool in paid work is fine; making money from NESH itself is
-not. The Commons Clause means the project is not "open source" by the OSI
-definition. Third-party components keep their own licences, listed in
-[NOTICE.md](NOTICE.md).
+Versions up to and including 0.2.1 were released under the Apache License 2.0
+with the Commons Clause ([LICENSE-0.2.1-and-earlier](LICENSE-0.2.1-and-earlier)),
+and copies of those versions keep that licence.
 
 ## Status
 

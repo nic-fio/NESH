@@ -36,7 +36,7 @@ user brings them up. The reasoning for each is in
 | **No legacy EDK1 shell interface** | User: *"lasciamo riposare in pace il vecchiume"*. |
 | **Secure Boot: reads yes, writes no** | Low-level hardware writes (`mm` on I/O and PCI config, `hexedit -m`) are refused while Secure Boot is active. The **clock and the serial port stay allowed** — the user ruled they are not a security risk. |
 | **Light documentation only** | No dark themes, no dark-mode media queries, no theme toggle. The code blocks are dark: that comes with the common style of the manuals, and the owner confirmed it on 1 October 2026 together with the common style. |
-| **Apache 2.0 + Commons Clause** | Free to use and share, selling it needs a commercial licence, asked for by opening an issue. Not OSI open source, and the project says so up front. |
+| **Freeware, NESH Freeware Licence (2 October 2026, D21)** | From 0.3.0: free use, also as a tool in paid work; free redistribution of the unchanged file and in free collections; Secure Boot signing allowed; no sale, no inclusion in commercial products or services, no modification, no decompilation beyond the law. Commercial licences or the sale of the project through `nesh@nicfio.it`. Versions up to 0.2.1 keep Apache 2.0 + Commons Clause (`LICENSE-0.2.1-and-earlier`). The manuals and `docs/index.html` still name the old licence in their footer: they describe 0.2.1, and change with the 0.3.0 release. |
 
 ## The repository
 
@@ -46,9 +46,10 @@ user brings them up. The reasoning for each is in
 | `src/pal`, `src/platform` | The platform layer: `pal_efi.c` for firmware, `pal_host.c` for the Linux test build. |
 | `tools/` | `elf2efi.py` (ELF &rarr; PE32+), `gen-docs.py`, `check-doc-examples.py`, `run-qemu.sh`, `mkusb.sh`, `record-demo.py`, `setup-dev.sh`, `backup.sh`. |
 | `tests/` | Host tests, QEMU scripts (`tests/efi/*.nsb`) and binary fixtures (EDK2 applications, network drivers). |
-| `docs/` | The two HTML manuals, the start page, the decisions log, `assets/` (Mermaid, the demo GIF). Published with GitHub Pages. |
+| `docs/` | The two HTML manuals, the start page, the decisions log, `assets/` (Mermaid, the demo GIF). The manuals are published on the website by `site/publish.sh` (GitHub Pages was switched off on 2 October 2026, D21). |
 | `logos/` | `nesh-logo.png`, the logo (PNG, 2172×724, white background). Never edited: the manuals carry a transparent, cropped copy (700 px) on their cover. |
 | `examples/` | The `.nsb` scripts shipped with NESH and shown in the manual. |
+| `site/` | The website, `https://nesh.nicfio.it`, on the owner's VPS (D21). `landing/index.html`: the landing page (mockup 05 «Glass», chosen on 2 October 2026), with its preview and brief. `publish.sh` builds `site/public/` (landing, the two manuals, `licence.html` made from `LICENSE` by `licence-page.py`, `download/` with the release files and checksums, `og.png`, `robots.txt`, `sitemap.xml`) and copies it to the VPS as user `progetti`; `--build` only builds. Publish together with every change to the manuals or a release. The 20 mockups stay in `site/mockups/`, outside git. |
 | `build/` | Products only, never committed. |
 
 The repository follows the standard layout shared by the seven projects (AMS,
@@ -98,7 +99,7 @@ and new tables and figures with `<figcaption class="cap">Table 0.0 — ...` (or
 
 Releases: bump `NESH_VERSION` in `src/core/shell.h` **and** the version strings
 in `README.md`, `docs/index.html`, both manuals (cover, footer and the tested example
-output), then tag. The annotated tag message becomes the release notes; CI
+output), then tag. For 0.3.0 the footers also change licence: «Licence: NESH Freeware Licence». The annotated tag message becomes the release notes; CI
 builds `nesh.efi` and publishes it. `nesh-usb.img` is uploaded by hand
 (`make usb`, then `gh release upload`).
 
@@ -121,8 +122,8 @@ Posted to find testers on real hardware; check them for replies and reports.
 
 | Where | When | Link | Status |
 |---|---|---|---|
-| OSDev forum, Announcements | 2026-09-20 | https://forum.osdev.org/viewtopic.php?p=354826 | No replies; the user closed the subject. |
-| Win-Raid, BIOS Modding/Flashing Tools | 2026-09-23 | https://winraid.level1techs.com/t/119449 | Posted by Claude at the user's request. |
+| OSDev forum, Announcements | 2026-09-20 | https://forum.osdev.org/viewtopic.php?p=354826 | No replies. **Deleted by the user on 2026-10-02** (it promoted the Apache licence and the public source, see D21). |
+| Win-Raid, BIOS Modding/Flashing Tools | 2026-09-23 | https://winraid.level1techs.com/t/119449 | Posted by Claude at the user's request. No replies. The forum does not let the author delete it any more: **withdrawn on 2026-10-02**, title «[Withdrawn] NESH» and a one-line notice (D21). The old text is still in the post's edit history. |
 
 The user chose not to use Reddit. Other places considered, only if the user
 brings them up again: the edk2 mailing list, ServeTheHome, Hacker News (Show

@@ -320,6 +320,8 @@ From it came the working rules of the project:
 
 ### D20. License: Apache 2.0 with the Commons Clause
 
+*Superseded from version 0.3.0 by the NESH Freeware Licence (D21).*
+
 - **Context.** The repository was published with a provisional "all rights
   reserved" notice. The owner then asked for a real license.
 - **First requirements.** Free use, free redistribution, modification for one's
@@ -351,7 +353,40 @@ From it came the working rules of the project:
   interpreted case by case. Third-party components keep their own licenses
   (`NOTICE.md`).
 
+### D21. A website on nicfio.it, and a closed repository
+
+- **Context.** On 2 October 2026 the owner bought the domain `nicfio.it` (OVH)
+  for the sites of all his projects, one subdomain each, hosted on his OVH VPS.
+- **Decisions of the owner, the same day.**
+  - **Site:** `https://nesh.nicfio.it`, on the VPS. **GitHub Pages goes away**,
+    with no redirect pages: the site is published by hand, together with the
+    repository and the manuals, which are always updated together. Pages is
+    switched off only once the new site is online.
+  - **Manuals:** part of the site (they are HTML already).
+  - **Landing page: «Glass»**, mockup 05 among 20 with the same content and
+    twenty visual directions, made by four agents in parallel (the method used
+    for RootSpeak on 1 October): deep blue, gradients from the logo's blue to its
+    teal-green, frosted cards. Kept in `site/landing/`; the 20 mockups stay in
+    `site/mockups/`, outside git. The settled «light documentation only» rule is
+    about the manuals, not the site.
+  - **Closed source:** the repository becomes **private**, so that the code is
+    not copied. Order: site online with manuals and downloads, hardware reports
+    by e-mail to `nesh@nicfio.it`, new licence published; only then the
+    repository goes private. Copies of versions up to 0.2.1 keep their Apache 2.0
+    + Commons Clause licence, which cannot be withdrawn.
+  - **Licence:** NESH becomes freeware: free use, also as a tool at work; free
+    redistribution of the unchanged file; no sale, no inclusion in commercial
+    products or services («I would not want Microsoft to take NESH and put it
+    into Windows»), no modification (signing for Secure Boot allowed), no
+    decompilation beyond what the law allows; commercial licences or the sale of
+    the project through `nesh@nicfio.it`. Asked whether paid work is
+    "commercial use", the owner kept it allowed: the technician is paid for the
+    work, not for NESH. Free collections (rescue disks, distributions) allowed.
+    Approved by the owner on 2 October 2026: `LICENSE` (NESH Freeware Licence,
+    from 0.3.0); the old text is kept as `LICENSE-0.2.1-and-earlier`.
+
 ---
+
 
 ## 3. History
 
@@ -392,4 +427,4 @@ listing), `bootmgr scan`, and the language's `ON ERROR`.
 | `https` | Needs a TLS driver in the firmware; untested. Host names in `http` URLs (DNS) are untested. |
 | UEFI Shell options not supported | `time -tz/-d`; `-l LANG` of `devices`/`devtree` is accepted and ignored. |
 | Not implemented | See "The original plan" above. |
-| License | Settled: Apache 2.0 with the Commons Clause (see D20). Not "open source" by the OSI definition, so some distributions and catalogues will not accept the project. Commercial licences are granted on request. |
+| License | Settled: freeware, NESH Freeware Licence from 0.3.0 (D21); up to 0.2.1 Apache 2.0 with the Commons Clause (D20). Commercial licences on request at nesh@nicfio.it. Not reviewed by a lawyer: worth doing before signing a commercial licence. |
