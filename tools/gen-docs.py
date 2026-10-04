@@ -12,7 +12,8 @@ list of index terms shown as code (window.MANUAL_CODE_TERMS).
                               no chapter below, if a source file has no row in
                               the source map, if a BASIC function is not
                               documented in the manual, or if a link inside a
-                              manual points to an id that does not exist
+                              manual points to an id that does not exist,
+                              or if a page of docs/ contains Italian text
                               (run by 'make test')
 """
 import html
@@ -333,6 +334,37 @@ def cross_links(pages, problems):
                 problems.append("%s: link to %s#%s, which does not exist" % (man.name, o.name, target))
 
 
+# The manuals are entirely in English (owner's decision, 4 October 2026): text,
+# code, figures, diagrams and image captions. A sentence with two different words
+# from ITALIAN_WORDS, or any text with one from ITALIAN_ONLY, is reported.
+ITALIAN_WORDS = re.compile(
+    r"\b(il|lo|gli|della|delle|degli|dello|nella|nelle|negli|sono|questo|questa|quando|perché|anche|però|oppure|"
+    r"finché|ancora|sempre|niente|nessun|nessuna|dopo|ogni|tutti|tutte|viene|serve|deve|può|hanno|col|coi|dal|dai|"
+    r"sul|sui|alla|alle|allo|che|non|una|del|con|si|è)\b", re.I)
+ITALIAN_ONLY = re.compile(
+    r"\b(della|delle|degli|dello|nella|nelle|negli|sono|questo|questa|perché|anche|però|oppure|finché|ancora|"
+    r"niente|nessuna|può|è)\b", re.I)
+
+
+def italian_text(page):
+    """The pieces of a manual page that look Italian."""
+    page = re.sub(r"<style.*?</style>|<script.*?</script>", " ", page, flags=re.S)
+    attrs = " ".join(html.unescape(a) for a in re.findall(r'\b(?:alt|title|aria-label)="([^"]*)"', page))
+    text = html.unescape(re.sub(r"<[^>]+>", "\n", page)) + "\n" + attrs
+    found = []
+    for piece in re.split(r"(?<=[.;:!?])\s+|\n", text):
+        piece = piece.strip()
+        if ITALIAN_ONLY.search(piece) or len({w.lower() for w in ITALIAN_WORDS.findall(piece)}) >= 2:
+            found.append(piece)
+    return found
+
+
+def check_english(pages, problems):
+    for man in pages:
+        for piece in italian_text(man.read_text()):
+            problems.append("%s: Italian text: %s" % (man.relative_to(ROOT), piece[:120]))
+
+
 def main():
     load_macros()
     check = "--check" in sys.argv
@@ -380,6 +412,7 @@ def main():
         for man, before, after in ((MANUAL, text, new), (DEVMANUAL, devtext, devnew)):
             if before != after:
                 problems.append("%s is out of date: run 'make docs'" % man.relative_to(ROOT))
+        check_english((MANUAL, DEVMANUAL, ROOT / "docs" / "index.html"), problems)
         if problems:
             print("\n".join(problems), file=sys.stderr)
             return 1
