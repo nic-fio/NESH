@@ -425,6 +425,7 @@ From it came the working rules of the project:
     `SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0`. The BASIC
     scripts (`*.nsb`) are left without it: the tests compare their output.
   - **Commercial licences** by e-mail to `nesh@nicfio.it`.
+  - **Repository public again (10 October 2026):** decision of the owner, after the change of licence; the history (working notes included) is public.
 
 ---
 
