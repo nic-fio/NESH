@@ -110,7 +110,9 @@ Tested in QEMU with OVMF, including Secure Boot with generated test keys.
 **On real hardware, only a first smoke test** (September 2026, by the user): on a
 Chuwi tablet and a server with a Gigabyte motherboard the prompt came up, `dir`
 worked and NESH booted Linux — nothing else was tried, firmware vendor and
-Secure Boot state were not recorded. Broader hardware coverage is still the
+Secure Boot state were not recorded. In October 2026 the tablet showed two
+defects, both fixed and confirmed there: the efifb crash of Linux booted from
+NESH (D16e) and the missing cursor in `edit` (history, phase 14). Broader hardware coverage is still the
 main open item, and the reason for the announcement on the OSDev forum asking
 for reports. Also open:
 `find`, `crc32`, `sha256`, `efiinfo`, a `secureboot` key listing,

@@ -425,6 +425,7 @@ All work took place in one long working session (2026-09-19), in phases.
 | **11. Publication** | Repository published on GitHub as `NG-EFI_SHELL`, public (owner's request); provisional all-rights-reserved license; manuals online with GitHub Pages; GitHub Actions builds and tests every push and publishes a Release with `nesh.efi` for each version tag (binaries are distributed as Releases, not committed to the repository). |
 | **12. Readability** | NESH starts in a text mode of 100 columns when the firmware has one, and restores the previous mode on leaving (D16d). Withdrawn in October 2026 after a Linux crash on a tablet: NESH keeps the firmware's mode, as the UEFI Shell does (D16e). |
 | **13. Name** | Repository renamed from `NG-EFI_SHELL` to `NESH` (2026-09-28, owner's request), so that it carries the name of the program. GitHub redirects the old repository address; the manuals moved to https://nic-fio.github.io/NESH/, and the old Pages address no longer works. |
+| **14. Real hardware (October 2026)** | Two defects found on the owner's Chuwi tablet and fixed, both confirmed there: Linux booted from NESH crashed in `efifb` because of the switch to 100 columns at start (D16e); the cursor did not show in `edit`, because the firmware draws it by XOR with the current foreground colour and NESH left the colour of the last row drawn. `edit` and `hexedit` now set white on the cell's background before showing it (the `hexedit` cursor checked in QEMU). |
 
 ### The original plan and what came of it
 
@@ -440,7 +441,7 @@ listing), `bootmgr scan`, and the language's `ON ERROR`.
 
 | Topic | Status |
 |---|---|
-| Real hardware | The automatic tests run in QEMU/OVMF. NESH has been started on two real machines, a Chuwi tablet and a server with a Gigabyte motherboard: the prompt came up, `dir` listed the files, and NESH booted Linux. Nothing else was tried there, and the firmware vendor and Secure Boot state were not recorded; the other commands, and firmware from AMI, Insyde or Phoenix in general, remain unverified. |
+| Real hardware | The automatic tests run in QEMU/OVMF. NESH has been started on two real machines, a Chuwi tablet and a server with a Gigabyte motherboard: the prompt came up, `dir` listed the files, and NESH booted Linux. On the tablet `edit` was also tried, and two defects were fixed (history, phase 14). Nothing else was tried there, and the firmware vendor and Secure Boot state were not recorded; the other commands, and firmware from AMI, Insyde or Phoenix in general, remain unverified. |
 | Architectures | x86-64 only; AArch64 and IA32 builds are possible future work. |
 | `https` | Needs a TLS driver in the firmware; untested. Host names in `http` URLs (DNS) are untested. |
 | UEFI Shell options not supported | `time -tz/-d`; `-l LANG` of `devices`/`devtree` is accepted and ignored. |

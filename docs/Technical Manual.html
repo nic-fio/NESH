@@ -270,10 +270,10 @@ explained where they are needed, and the <a href="#glossary">glossary</a> summar
     <tr><td>Platform layer</td><td><code>src/pal</code></td><td>1,835</td><td>PAL interface, UEFI and Linux implementations</td></tr>
     <tr><td>Shell core</td><td><code>src/core</code></td><td>2,782</td><td>command execution, console, environment, aliases, line editor, menus</td></tr>
     <tr><td>BASIC</td><td><code>src/basic</code></td><td>4,019</td><td>lexer, parser, interpreter, built-in functions</td></tr>
-    <tr><td>Portable commands</td><td><code>src/cmd</code></td><td>3,336</td><td>files, text, utilities, editors</td></tr>
+    <tr><td>Portable commands</td><td><code>src/cmd</code></td><td>3,344</td><td>files, text, utilities, editors</td></tr>
     <tr><td>UEFI modules</td><td><code>src/platform/efi</code></td><td>10,219</td><td>shell protocol, variables, boot, drivers, disks, hardware, network</td></tr>
     <tr><td>UEFI definitions</td><td><code>include</code></td><td>724</td><td>UEFI types and protocols used by NESH</td></tr>
-    <tr><td>Tools and tests</td><td><code>tools</code>, <code>tests</code></td><td>3,242</td><td>ELF→PE converter, QEMU runner, doc generators, test scripts</td></tr>
+    <tr><td>Tools and tests</td><td><code>tools</code>, <code>tests</code></td><td>3,327</td><td>ELF→PE converter, QEMU runner, doc generators, test scripts</td></tr>
   </tbody>
 </table><figcaption class="cap">Table 1.2 — The project in numbers</figcaption></figure>
 <p>The resulting <code>nesh.efi</code> is about 360 KB. The line counts here and in the
@@ -592,7 +592,9 @@ Everything in it has two implementations: <code>pal_efi.c</code> and <code>pal_h
   <li><strong>Console</strong>: output converts UTF-8 to UCS-2 and calls <code>ConOut-&gt;OutputString</code> (turning
       <code>\n</code> into <code>\r\n</code>); input uses <code>SimpleTextInputEx</code> when available (modifier keys) and
       <code>WaitForEvent</code> with a timer for timeouts. <code>pal_con_ansi()</code> is false: the editor and the menus position
-      the cursor absolutely.</li>
+      the cursor absolutely. The firmware draws the cursor by XOR with the foreground colour set at that moment, so a
+      full-screen program must set a visible colour before showing it: <code>edit</code> and <code>hexedit</code> set white
+      on the background of the cell (<code>scr_cursor</code> in <code>cmd_edit.c</code>).</li>
   <li><strong>Volumes</strong>: every handle with <code>SimpleFileSystem</code> becomes a volume; they are sorted by device
       path text so that numbering is stable, and the one whose device matches the loaded image is the boot volume.</li>
   <li><strong>Files</strong>: <code>efi_open_path</code> opens the volume root and then the path through <code>EFI_FILE_PROTOCOL</code>.
@@ -1253,6 +1255,13 @@ arbitrary: there is usually a reason.</p>
     <tr><td>An image is refused with "access denied"</td><td>With Secure Boot active the firmware refuses unsigned images;
         <code>LoadImage</code> may return <code>EFI_ACCESS_DENIED</code> instead of <code>EFI_SECURITY_VIOLATION</code>
         (<code>efi_blocked_by_secure_boot</code> handles both).</td></tr>
+    <tr><td>The cursor does not show on the firmware console</td><td>The firmware draws it by XOR with the current
+        foreground colour: black text, or the colour of the last row drawn, gives no visible cursor. Set the colour before
+        <code>pal_con_show_cursor</code>, as <code>scr_cursor</code> in <code>cmd_edit.c</code> does.</td></tr>
+    <tr><td>A boot loader started from NESH crashes in its graphics code</td><td>The text mode was changed before the boot:
+        on some firmware this also changes the graphics mode, and the mode left behind is described wrongly (Linux
+        <code>efifb</code> on a Chuwi tablet). NESH no longer changes the mode at start (D16e); check whether a
+        <code>mode</code> or <code>gop</code> command ran before the boot.</td></tr>
     <tr><td>Memory errors in portable code</td><td>Run the failing script with <code>build/nesh-host</code>: AddressSanitizer reports the exact
         line.</td></tr>
   </tbody>
@@ -1275,7 +1284,7 @@ captured.</p>
     <tr><td><code>src/basic/lexer.c</code></td><td>295</td><td>NESH BASIC lexer: turns source text into tokens (numbers, strings, names, keywords, punctuation); skips comments and " _" line continuations</td></tr>
     <tr><td><code>src/basic/parser.c</code></td><td>1204</td><td>NESH BASIC parser: recursive descent from tokens to the AST (Program: main block + procedures); detects incomplete input for the interactive prompt</td></tr>
     <tr><td><code>src/cmd/cmd_core.c</code></td><td>374</td><td>Shell and session commands: help, ver, cls, exit, history, echo, pause, sleep, which</td></tr>
-    <tr><td><code>src/cmd/cmd_edit.c</code></td><td>1009</td><td>Full-screen editors: edit (text) and hexedit (files, disk blocks, memory)</td></tr>
+    <tr><td><code>src/cmd/cmd_edit.c</code></td><td>1017</td><td>Full-screen editors: edit (text) and hexedit (files, disk blocks, memory)</td></tr>
     <tr><td><code>src/cmd/cmd_fs.c</code></td><td>1372</td><td>File and volume commands</td></tr>
     <tr><td><code>src/cmd/cmd_text.c</code></td><td>390</td><td>Text and data commands, date/time</td></tr>
     <tr><td><code>src/cmd/cmd_util.c</code></td><td>191</td><td>Utilities: stall, parse, eficompress, efidecompress</td></tr>

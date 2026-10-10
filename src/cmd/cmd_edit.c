@@ -69,6 +69,17 @@ static void scr_row(Screen *s, int row, const char *text, int fg, int bg)
     s->cattr[row] = attr;
 }
 
+/* Shows the cursor at a cell whose background is BG. The firmware draws the
+ * cursor by XOR with the foreground colour set at that moment: left at that of
+ * the last row written it did not show, and black text (the status row) gives
+ * no cursor at all. White shows on every background. */
+static void scr_cursor(int col, int row, int bg)
+{
+    pal_con_set_color(C_WHITE, bg);
+    pal_con_set_cursor(col, row);
+    pal_con_show_cursor(true);
+}
+
 static void scr_invalidate(Screen *s)
 {
     for (int i = 0; i < s->rows; i++) {
@@ -90,8 +101,7 @@ static char *scr_prompt(Screen *s, const char *question, const char *def)
         scr_row(s, s->rows - 2, line, C_BLACK, C_LIGHTGRAY);
         int cw = (int)utf8_len(line, strlen(line));
         free(line);
-        pal_con_set_cursor(MIN(cw, s->cols - 1), s->rows - 2);
-        pal_con_show_cursor(true);
+        scr_cursor(MIN(cw, s->cols - 1), s->rows - 2, C_LIGHTGRAY);
         PalKey k;
         if (!con_get_key(&k, -1))
             continue;
@@ -371,8 +381,7 @@ static void ed_draw(Ed *e)
     free(st);
     scr_row(s, s->rows - 1, "F1 GoTo F2 Save F3 Exit F4 Find F5 Replace F6 Cut F7 Paste F9 Type  (Ctrl-E help)",
             C_WHITE, C_BLUE);
-    pal_con_set_cursor(vc - e->left, e->cy - e->top + 1);
-    pal_con_show_cursor(true);
+    scr_cursor(vc - e->left, e->cy - e->top + 1, C_BLACK);
 }
 
 static bool match_at(const Line *l, int at, const uint32_t *f, int fn)
@@ -780,8 +789,7 @@ static void hx_draw(Hex *h)
                                : "F1 GoTo F2 Save F3 Exit  Tab hex/ASCII",
             C_WHITE, C_BLUE);
     int col = h->ascii ? 12 + 16 * 3 + 2 + (int)(h->cur % 16) : 12 + (int)(h->cur % 16) * 3 + (h->cur % 16 >= 8) + h->nibble;
-    pal_con_set_cursor(col, (int)(row - h->top) + 1);
-    pal_con_show_cursor(true);
+    scr_cursor(col, (int)(row - h->top) + 1, C_BLACK);
 }
 
 static bool hx_save(Hex *h)

@@ -105,7 +105,9 @@ firmware boot menu, start it from another shell, or add a boot entry with
 
 NESH is tested in QEMU with OVMF. On real machines it has so far only been
 started on two — a Chuwi tablet and a server with a Gigabyte motherboard —
-where the prompt came up, `dir` listed the files and NESH booted Linux. What
+where the prompt came up, `dir` listed the files and NESH booted Linux. The
+tablet also brought two fixes: Linux no longer crashes when booted from NESH,
+and the cursor shows in `edit`. What
 AMI, Insyde or Phoenix firmware makes of the rest is the project's main open
 question, and the one thing that cannot be settled here. If you start NESH on a
 real machine, please say how it went — a machine where everything worked is as
