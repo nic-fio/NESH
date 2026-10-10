@@ -173,10 +173,11 @@ def source_files():
 
 def dir_lines(names):
     """Lines of a directory of the area table: the files it holds, and for the
-    'tools, tests' row everything below them except the binary fixtures."""
+    'tools, tests' row everything below them except the binary fixtures and
+    the bytecode Python leaves in __pycache__, which git ignores."""
     if names == ["tools", "tests"]:
         return sum(lines_of(p) for n in names for p in sorted((ROOT / n).rglob("*"))
-                   if p.is_file() and "fixtures" not in p.relative_to(ROOT).parts)
+                   if p.is_file() and not {"fixtures", "__pycache__"} & set(p.relative_to(ROOT).parts))
     return sum(lines_of(p) for n in names for p in sorted((ROOT / n).iterdir()) if p.is_file())
 
 

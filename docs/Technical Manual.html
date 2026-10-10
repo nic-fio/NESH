@@ -273,7 +273,7 @@ explained where they are needed, and the <a href="#glossary">glossary</a> summar
     <tr><td>Portable commands</td><td><code>src/cmd</code></td><td>3,344</td><td>files, text, utilities, editors</td></tr>
     <tr><td>UEFI modules</td><td><code>src/platform/efi</code></td><td>10,219</td><td>shell protocol, variables, boot, drivers, disks, hardware, network</td></tr>
     <tr><td>UEFI definitions</td><td><code>include</code></td><td>724</td><td>UEFI types and protocols used by NESH</td></tr>
-    <tr><td>Tools and tests</td><td><code>tools</code>, <code>tests</code></td><td>3,327</td><td>ELF→PE converter, QEMU runner, doc generators, test scripts</td></tr>
+    <tr><td>Tools and tests</td><td><code>tools</code>, <code>tests</code></td><td>3,243</td><td>ELF→PE converter, QEMU runner, doc generators, test scripts</td></tr>
   </tbody>
 </table><figcaption class="cap">Table 1.2 — The project in numbers</figcaption></figure>
 <p>The resulting <code>nesh.efi</code> is about 360 KB. The line counts here and in the
@@ -1325,7 +1325,7 @@ captured.</p>
     <tr><td><code>tools/check-doc-examples.py</code></td><td>76</td><td>Runs the NESH BASIC examples of the user manual with the host build and compares their output with the output printed in the manual</td></tr>
     <tr><td><code>tools/efi.lds</code></td><td>26</td><td>Linker script for NESH: ELF image at base 0, page-aligned sections</td></tr>
     <tr><td><code>tools/elf2efi.py</code></td><td>172</td><td>Convert an x86_64 ELF shared object (linked with tools/efi.lds) into a PE32+ EFI application with native base relocations</td></tr>
-    <tr><td><code>tools/gen-docs.py</code></td><td>433</td><td>Generates the command reference of the user manual from the command tables in the C sources, and the line counts of this manual from the files themselves, so that neither can disagree with the code; also numbers the chapters, sections, tables and figures of both manuals and writes their contents</td></tr>
+    <tr><td><code>tools/gen-docs.py</code></td><td>434</td><td>Generates the command reference of the user manual from the command tables in the C sources, and the line counts of this manual from the files themselves, so that neither can disagree with the code; also numbers the chapters, sections, tables and figures of both manuals and writes their contents</td></tr>
     <tr><td><code>tools/mkusb.sh</code></td><td>100</td><td>Builds build/nesh-usb.img, a bootable disk image (GPT + EFI system partition) with NESH, the examples, the licence (LICENSE.txt and NOTICE.txt) and a README on it</td></tr>
     <tr><td><code>tools/record-demo.py</code></td><td>188</td><td>Records the animation of the README: drives a QEMU session through the monitor (sendkey/screendump) and turns the frames into a GIF</td></tr>
     <tr><td><code>tools/backup.sh</code></td><td>32</td><td>Packs the repository into one git bundle, with every branch, tag and commit, for a restore without a network</td></tr>
