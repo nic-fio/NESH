@@ -266,14 +266,14 @@ explained where they are needed, and the <a href="#glossary">glossary</a> summar
 <figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>Area</th><th>Directory</th><th>Lines</th><th>Content</th></tr></thead>
   <tbody>
-    <tr><td>Runtime library</td><td><code>src/lib</code></td><td>1,523</td><td>libc subset, printf, string buffer, UTF-8, UEFI compression</td></tr>
-    <tr><td>Platform layer</td><td><code>src/pal</code></td><td>1,835</td><td>PAL interface, UEFI and Linux implementations</td></tr>
-    <tr><td>Shell core</td><td><code>src/core</code></td><td>2,782</td><td>command execution, console, environment, aliases, line editor, menus</td></tr>
-    <tr><td>BASIC</td><td><code>src/basic</code></td><td>4,019</td><td>lexer, parser, interpreter, built-in functions</td></tr>
-    <tr><td>Portable commands</td><td><code>src/cmd</code></td><td>3,344</td><td>files, text, utilities, editors</td></tr>
-    <tr><td>UEFI modules</td><td><code>src/platform/efi</code></td><td>10,219</td><td>shell protocol, variables, boot, drivers, disks, hardware, network</td></tr>
-    <tr><td>UEFI definitions</td><td><code>include</code></td><td>724</td><td>UEFI types and protocols used by NESH</td></tr>
-    <tr><td>Tools and tests</td><td><code>tools</code>, <code>tests</code></td><td>3,243</td><td>ELF→PE converter, QEMU runner, doc generators, test scripts</td></tr>
+    <tr><td>Runtime library</td><td><code>src/lib</code></td><td>1,541</td><td>libc subset, printf, string buffer, UTF-8, UEFI compression</td></tr>
+    <tr><td>Platform layer</td><td><code>src/pal</code></td><td>1,850</td><td>PAL interface, UEFI and Linux implementations</td></tr>
+    <tr><td>Shell core</td><td><code>src/core</code></td><td>2,806</td><td>command execution, console, environment, aliases, line editor, menus</td></tr>
+    <tr><td>BASIC</td><td><code>src/basic</code></td><td>4,037</td><td>lexer, parser, interpreter, built-in functions</td></tr>
+    <tr><td>Portable commands</td><td><code>src/cmd</code></td><td>3,359</td><td>files, text, utilities, editors</td></tr>
+    <tr><td>UEFI modules</td><td><code>src/platform/efi</code></td><td>10,255</td><td>shell protocol, variables, boot, drivers, disks, hardware, network</td></tr>
+    <tr><td>UEFI definitions</td><td><code>include</code></td><td>730</td><td>UEFI types and protocols used by NESH</td></tr>
+    <tr><td>Tools and tests</td><td><code>tools</code>, <code>tests</code></td><td>3,266</td><td>ELF→PE converter, QEMU runner, doc generators, test scripts</td></tr>
   </tbody>
 </table><figcaption class="cap">Table 1.2 — The project in numbers</figcaption></figure>
 <p>The resulting <code>nesh.efi</code> is about 360 KB. The line counts here and in the
@@ -1275,63 +1275,63 @@ captured.</p>
 <figure class="tbl-wrap"><table class="tbl">
   <thead><tr><th>File</th><th>Lines</th><th>Purpose</th></tr></thead>
   <tbody>
-    <tr><td><code>include/efi.h</code></td><td>569</td><td>Minimal UEFI definitions (UEFI Specification 2.10), written for NESH</td></tr>
-    <tr><td><code>include/efi_shell.h</code></td><td>155</td><td>UEFI Shell 2.2 protocols (from the UEFI Shell Specification), plus the few extra UEFI protocols the shell implementation needs</td></tr>
-    <tr><td><code>src/basic/basic.h</code></td><td>187</td><td>NESH BASIC: lexer, parser (AST) and tree-walking interpreter</td></tr>
-    <tr><td><code>src/basic/bfuncs.c</code></td><td>816</td><td>Core built-in functions of NESH BASIC (portable)</td></tr>
-    <tr><td><code>src/basic/interp.c</code></td><td>1432</td><td>NESH BASIC interpreter: values and variables, expression evaluation, statement execution (tree walking), procedures, RUN/RUN$ and the public API</td></tr>
-    <tr><td><code>src/basic/interp_int.h</code></td><td>85</td><td>Interpreter internals shared by interp.c and the built-in function modules</td></tr>
-    <tr><td><code>src/basic/lexer.c</code></td><td>295</td><td>NESH BASIC lexer: turns source text into tokens (numbers, strings, names, keywords, punctuation); skips comments and " _" line continuations</td></tr>
-    <tr><td><code>src/basic/parser.c</code></td><td>1204</td><td>NESH BASIC parser: recursive descent from tokens to the AST (Program: main block + procedures); detects incomplete input for the interactive prompt</td></tr>
-    <tr><td><code>src/cmd/cmd_core.c</code></td><td>374</td><td>Shell and session commands: help, ver, cls, exit, history, echo, pause, sleep, which</td></tr>
-    <tr><td><code>src/cmd/cmd_edit.c</code></td><td>1017</td><td>Full-screen editors: edit (text) and hexedit (files, disk blocks, memory)</td></tr>
-    <tr><td><code>src/cmd/cmd_fs.c</code></td><td>1372</td><td>File and volume commands</td></tr>
-    <tr><td><code>src/cmd/cmd_text.c</code></td><td>390</td><td>Text and data commands, date/time</td></tr>
-    <tr><td><code>src/cmd/cmd_util.c</code></td><td>191</td><td>Utilities: stall, parse, eficompress, efidecompress</td></tr>
-    <tr><td><code>src/core/alias.c</code></td><td>183</td><td>Command aliases: permanent (stored in UEFI variables like the UEFI Shell) and temporary</td></tr>
-    <tr><td><code>src/core/con.c</code></td><td>358</td><td>Console services: stack of output sinks (console, capture, file), -data record helpers, colors, keyboard with type-ahead buffer and Ctrl-C detection</td></tr>
-    <tr><td><code>src/core/con.h</code></td><td>50</td><td>Console services used by the whole shell: output sinks (console, capture buffer, file), colors, key input with type-ahead buffer, Ctrl-C handling</td></tr>
-    <tr><td><code>src/core/env.c</code></td><td>269</td><td>Shell environment variables (separate from BASIC variables)</td></tr>
-    <tr><td><code>src/core/lineedit.c</code></td><td>644</td><td>Line editor: cursor movement, history (persistent), Ctrl-R search, Tab completion</td></tr>
-    <tr><td><code>src/core/shell.c</code></td><td>1034</td><td>Shell core: command registry, option parsing, canonical paths and wildcards, file helpers, command-line splitting and execution, the prompt (REPL) and nesh_main, the portable entry point</td></tr>
-    <tr><td><code>src/core/shell.h</code></td><td>135</td><td>Shell core: command registry, execution, paths, file helpers</td></tr>
-    <tr><td><code>src/core/ui.c</code></td><td>109</td><td>Interactive selection menu (MENU function)</td></tr>
-    <tr><td><code>src/lib/eficomp.c</code></td><td>547</td><td>UEFI compression format (EFI 1.1 / "version 1"): LZ77 with an 8 KiB window and canonical Huffman codes, as decoded by EFI_DECOMPRESS_PROTOCOL</td></tr>
-    <tr><td><code>src/lib/eficomp.h</code></td><td>12</td><td>UEFI (EFI 1.1) compression format</td></tr>
-    <tr><td><code>src/lib/fmt.c</code></td><td>192</td><td>vsnprintf for the EFI build: %d %i %u %x %X %o %c %s %p %%, flags '-' '0' '+' ' ', width/precision (also '*'), length hh h l ll z j t</td></tr>
-    <tr><td><code>src/lib/libc.c</code></td><td>320</td><td>Freestanding C library subset for the EFI build</td></tr>
-    <tr><td><code>src/lib/rt.h</code></td><td>115</td><td>NESH runtime: standard C subset + shared helpers</td></tr>
-    <tr><td><code>src/lib/util.c</code></td><td>337</td><td>Shared helpers: allocation wrappers, string buffer, UTF-8, globbing</td></tr>
-    <tr><td><code>src/pal/efi_glue.h</code></td><td>38</td><td>Access to UEFI services for EFI-only modules</td></tr>
-    <tr><td><code>src/pal/pal.h</code></td><td>156</td><td>Platform abstraction layer: everything the portable core needs from the machine</td></tr>
-    <tr><td><code>src/pal/pal_common.c</code></td><td>25</td><td>Parts of the platform layer shared by the UEFI and Linux builds: error names</td></tr>
-    <tr><td><code>src/pal/pal_efi.c</code></td><td>1023</td><td>Platform layer for UEFI</td></tr>
-    <tr><td><code>src/pal/pal_host.c</code></td><td>593</td><td>Platform layer for Linux: used for fast development and automated tests</td></tr>
-    <tr><td><code>src/platform/efi/efi_boot.c</code></td><td>1572</td><td>Boot manager: Boot#### / BootOrder / BootNext / Timeout</td></tr>
-    <tr><td><code>src/platform/efi/efi_cmds.h</code></td><td>48</td><td>Shared declarations of the EFI-only command modules</td></tr>
-    <tr><td><code>src/platform/efi/efi_disk.c</code></td><td>449</td><td>Block devices and disk-level commands: blkN: names, dblk, timezone, getmtc</td></tr>
-    <tr><td><code>src/platform/efi/efi_drivers.c</code></td><td>1374</td><td>Drivers and devices: drivers, devices, devtree, dh, openinfo, connect, disconnect, reconnect, load, unload, drvdiag, drvcfg</td></tr>
-    <tr><td><code>src/platform/efi/efi_guids.c</code></td><td>136</td><td>Names of well-known GUIDs (protocols, tables, variable vendors), plus the names registered at run time through the shell protocol</td></tr>
-    <tr><td><code>src/platform/efi/efi_hw.c</code></td><td>1605</td><td>Memory and hardware: dmem, mm, pci, smbiosview, acpiview, mode, sermode, loadpcirom, gop, cpuid</td></tr>
-    <tr><td><code>src/platform/efi/efi_net.c</code></td><td>1025</td><td>Network commands on top of the firmware IPv4 stack: ifconfig, ping, tftp, http</td></tr>
-    <tr><td><code>src/platform/efi/efi_net.h</code></td><td>39</td><td>Shared by the IPv4 (efi_net.c) and IPv6 (efi_net6.c) network commands</td></tr>
-    <tr><td><code>src/platform/efi/efi_net6.c</code></td><td>791</td><td>IPv6 network commands on top of the firmware IPv6 stack: ifconfig6, ping6</td></tr>
-    <tr><td><code>src/platform/efi/efi_platform.c</code></td><td>595</td><td>EFI platform services: running images, Secure Boot state, system commands</td></tr>
-    <tr><td><code>src/platform/efi/efi_shellproto.c</code></td><td>1317</td><td>EFI_SHELL_PROTOCOL 2.2, implemented by NESH so that applications written for the UEFI Shell (ShellLib, ShellCEntryLib...) run under NESH</td></tr>
-    <tr><td><code>src/platform/efi/efi_var.c</code></td><td>1268</td><td>UEFI variables: the "var" command and the BASIC functions VAR$, VAREXISTS</td></tr>
-    <tr><td><code>src/platform/host.c</code></td><td>122</td><td>Platform-specific commands for the Linux test build: firmware features are not available, so only a minimal set is provided</td></tr>
-    <tr><td><code>tests/apps/shelltest.c</code></td><td>293</td><td>Test application for NESH's EFI_SHELL_PROTOCOL implementation</td></tr>
-    <tr><td><code>tests/run-host-tests.sh</code></td><td>25</td><td>Runs tests/host/*.nsb with the host build and compares the output with the .out files</td></tr>
-    <tr><td><code>tools/check-doc-examples.py</code></td><td>76</td><td>Runs the NESH BASIC examples of the user manual with the host build and compares their output with the output printed in the manual</td></tr>
-    <tr><td><code>tools/efi.lds</code></td><td>26</td><td>Linker script for NESH: ELF image at base 0, page-aligned sections</td></tr>
-    <tr><td><code>tools/elf2efi.py</code></td><td>172</td><td>Convert an x86_64 ELF shared object (linked with tools/efi.lds) into a PE32+ EFI application with native base relocations</td></tr>
-    <tr><td><code>tools/gen-docs.py</code></td><td>434</td><td>Generates the command reference of the user manual from the command tables in the C sources, and the line counts of this manual from the files themselves, so that neither can disagree with the code; also numbers the chapters, sections, tables and figures of both manuals and writes their contents</td></tr>
-    <tr><td><code>tools/mkusb.sh</code></td><td>100</td><td>Builds build/nesh-usb.img, a bootable disk image (GPT + EFI system partition) with NESH, the examples, the licence (LICENSE.txt and NOTICE.txt) and a README on it</td></tr>
-    <tr><td><code>tools/record-demo.py</code></td><td>188</td><td>Records the animation of the README: drives a QEMU session through the monitor (sendkey/screendump) and turns the frames into a GIF</td></tr>
-    <tr><td><code>tools/backup.sh</code></td><td>32</td><td>Packs the repository into one git bundle, with every branch, tag and commit, for a restore without a network</td></tr>
-    <tr><td><code>tools/setup-dev.sh</code></td><td>91</td><td>Checks (or installs) the packages a clone needs and sets the git identity of the working copy, which is not cloned</td></tr>
-    <tr><td><code>tools/run-qemu.sh</code></td><td>158</td><td>Boots nesh.efi in QEMU/OVMF: interactive, --test and --nettest modes</td></tr>
-    <tr><td><code>tools/make-previews.py</code></td><td>636</td><td>Builds docs-preview/: the ten design proposals the earlier look of the manuals was chosen from</td></tr>
+    <tr><td><code>include/efi.h</code></td><td>572</td><td>Minimal UEFI definitions (UEFI Specification 2.10), written for NESH</td></tr>
+    <tr><td><code>include/efi_shell.h</code></td><td>158</td><td>UEFI Shell 2.2 protocols (from the UEFI Shell Specification), plus the few extra UEFI protocols the shell implementation needs</td></tr>
+    <tr><td><code>src/basic/basic.h</code></td><td>190</td><td>NESH BASIC: lexer, parser (AST) and tree-walking interpreter</td></tr>
+    <tr><td><code>src/basic/bfuncs.c</code></td><td>819</td><td>Core built-in functions of NESH BASIC (portable)</td></tr>
+    <tr><td><code>src/basic/interp.c</code></td><td>1435</td><td>NESH BASIC interpreter: values and variables, expression evaluation, statement execution (tree walking), procedures, RUN/RUN$ and the public API</td></tr>
+    <tr><td><code>src/basic/interp_int.h</code></td><td>88</td><td>Interpreter internals shared by interp.c and the built-in function modules</td></tr>
+    <tr><td><code>src/basic/lexer.c</code></td><td>298</td><td>NESH BASIC lexer: turns source text into tokens (numbers, strings, names, keywords, punctuation); skips comments and " _" line continuations</td></tr>
+    <tr><td><code>src/basic/parser.c</code></td><td>1207</td><td>NESH BASIC parser: recursive descent from tokens to the AST (Program: main block + procedures); detects incomplete input for the interactive prompt</td></tr>
+    <tr><td><code>src/cmd/cmd_core.c</code></td><td>377</td><td>Shell and session commands: help, ver, cls, exit, history, echo, pause, sleep, which</td></tr>
+    <tr><td><code>src/cmd/cmd_edit.c</code></td><td>1020</td><td>Full-screen editors: edit (text) and hexedit (files, disk blocks, memory)</td></tr>
+    <tr><td><code>src/cmd/cmd_fs.c</code></td><td>1375</td><td>File and volume commands</td></tr>
+    <tr><td><code>src/cmd/cmd_text.c</code></td><td>393</td><td>Text and data commands, date/time</td></tr>
+    <tr><td><code>src/cmd/cmd_util.c</code></td><td>194</td><td>Utilities: stall, parse, eficompress, efidecompress</td></tr>
+    <tr><td><code>src/core/alias.c</code></td><td>186</td><td>Command aliases: permanent (stored in UEFI variables like the UEFI Shell) and temporary</td></tr>
+    <tr><td><code>src/core/con.c</code></td><td>361</td><td>Console services: stack of output sinks (console, capture, file), -data record helpers, colors, keyboard with type-ahead buffer and Ctrl-C detection</td></tr>
+    <tr><td><code>src/core/con.h</code></td><td>53</td><td>Console services used by the whole shell: output sinks (console, capture buffer, file), colors, key input with type-ahead buffer, Ctrl-C handling</td></tr>
+    <tr><td><code>src/core/env.c</code></td><td>272</td><td>Shell environment variables (separate from BASIC variables)</td></tr>
+    <tr><td><code>src/core/lineedit.c</code></td><td>647</td><td>Line editor: cursor movement, history (persistent), Ctrl-R search, Tab completion</td></tr>
+    <tr><td><code>src/core/shell.c</code></td><td>1037</td><td>Shell core: command registry, option parsing, canonical paths and wildcards, file helpers, command-line splitting and execution, the prompt (REPL) and nesh_main, the portable entry point</td></tr>
+    <tr><td><code>src/core/shell.h</code></td><td>138</td><td>Shell core: command registry, execution, paths, file helpers</td></tr>
+    <tr><td><code>src/core/ui.c</code></td><td>112</td><td>Interactive selection menu (MENU function)</td></tr>
+    <tr><td><code>src/lib/eficomp.c</code></td><td>550</td><td>UEFI compression format (EFI 1.1 / "version 1"): LZ77 with an 8 KiB window and canonical Huffman codes, as decoded by EFI_DECOMPRESS_PROTOCOL</td></tr>
+    <tr><td><code>src/lib/eficomp.h</code></td><td>15</td><td>UEFI (EFI 1.1) compression format</td></tr>
+    <tr><td><code>src/lib/fmt.c</code></td><td>195</td><td>vsnprintf for the EFI build: %d %i %u %x %X %o %c %s %p %%, flags '-' '0' '+' ' ', width/precision (also '*'), length hh h l ll z j t</td></tr>
+    <tr><td><code>src/lib/libc.c</code></td><td>323</td><td>Freestanding C library subset for the EFI build</td></tr>
+    <tr><td><code>src/lib/rt.h</code></td><td>118</td><td>NESH runtime: standard C subset + shared helpers</td></tr>
+    <tr><td><code>src/lib/util.c</code></td><td>340</td><td>Shared helpers: allocation wrappers, string buffer, UTF-8, globbing</td></tr>
+    <tr><td><code>src/pal/efi_glue.h</code></td><td>41</td><td>Access to UEFI services for EFI-only modules</td></tr>
+    <tr><td><code>src/pal/pal.h</code></td><td>159</td><td>Platform abstraction layer: everything the portable core needs from the machine</td></tr>
+    <tr><td><code>src/pal/pal_common.c</code></td><td>28</td><td>Parts of the platform layer shared by the UEFI and Linux builds: error names</td></tr>
+    <tr><td><code>src/pal/pal_efi.c</code></td><td>1026</td><td>Platform layer for UEFI</td></tr>
+    <tr><td><code>src/pal/pal_host.c</code></td><td>596</td><td>Platform layer for Linux: used for fast development and automated tests</td></tr>
+    <tr><td><code>src/platform/efi/efi_boot.c</code></td><td>1575</td><td>Boot manager: Boot#### / BootOrder / BootNext / Timeout</td></tr>
+    <tr><td><code>src/platform/efi/efi_cmds.h</code></td><td>51</td><td>Shared declarations of the EFI-only command modules</td></tr>
+    <tr><td><code>src/platform/efi/efi_disk.c</code></td><td>452</td><td>Block devices and disk-level commands: blkN: names, dblk, timezone, getmtc</td></tr>
+    <tr><td><code>src/platform/efi/efi_drivers.c</code></td><td>1377</td><td>Drivers and devices: drivers, devices, devtree, dh, openinfo, connect, disconnect, reconnect, load, unload, drvdiag, drvcfg</td></tr>
+    <tr><td><code>src/platform/efi/efi_guids.c</code></td><td>139</td><td>Names of well-known GUIDs (protocols, tables, variable vendors), plus the names registered at run time through the shell protocol</td></tr>
+    <tr><td><code>src/platform/efi/efi_hw.c</code></td><td>1608</td><td>Memory and hardware: dmem, mm, pci, smbiosview, acpiview, mode, sermode, loadpcirom, gop, cpuid</td></tr>
+    <tr><td><code>src/platform/efi/efi_net.c</code></td><td>1028</td><td>Network commands on top of the firmware IPv4 stack: ifconfig, ping, tftp, http</td></tr>
+    <tr><td><code>src/platform/efi/efi_net.h</code></td><td>42</td><td>Shared by the IPv4 (efi_net.c) and IPv6 (efi_net6.c) network commands</td></tr>
+    <tr><td><code>src/platform/efi/efi_net6.c</code></td><td>794</td><td>IPv6 network commands on top of the firmware IPv6 stack: ifconfig6, ping6</td></tr>
+    <tr><td><code>src/platform/efi/efi_platform.c</code></td><td>598</td><td>EFI platform services: running images, Secure Boot state, system commands</td></tr>
+    <tr><td><code>src/platform/efi/efi_shellproto.c</code></td><td>1320</td><td>EFI_SHELL_PROTOCOL 2.2, implemented by NESH so that applications written for the UEFI Shell (ShellLib, ShellCEntryLib...) run under NESH</td></tr>
+    <tr><td><code>src/platform/efi/efi_var.c</code></td><td>1271</td><td>UEFI variables: the "var" command and the BASIC functions VAR$, VAREXISTS</td></tr>
+    <tr><td><code>src/platform/host.c</code></td><td>125</td><td>Platform-specific commands for the Linux test build: firmware features are not available, so only a minimal set is provided</td></tr>
+    <tr><td><code>tests/apps/shelltest.c</code></td><td>296</td><td>Test application for NESH's EFI_SHELL_PROTOCOL implementation</td></tr>
+    <tr><td><code>tests/run-host-tests.sh</code></td><td>27</td><td>Runs tests/host/*.nsb with the host build and compares the output with the .out files</td></tr>
+    <tr><td><code>tools/check-doc-examples.py</code></td><td>78</td><td>Runs the NESH BASIC examples of the user manual with the host build and compares their output with the output printed in the manual</td></tr>
+    <tr><td><code>tools/efi.lds</code></td><td>29</td><td>Linker script for NESH: ELF image at base 0, page-aligned sections</td></tr>
+    <tr><td><code>tools/elf2efi.py</code></td><td>174</td><td>Convert an x86_64 ELF shared object (linked with tools/efi.lds) into a PE32+ EFI application with native base relocations</td></tr>
+    <tr><td><code>tools/gen-docs.py</code></td><td>436</td><td>Generates the command reference of the user manual from the command tables in the C sources, and the line counts of this manual from the files themselves, so that neither can disagree with the code; also numbers the chapters, sections, tables and figures of both manuals and writes their contents</td></tr>
+    <tr><td><code>tools/mkusb.sh</code></td><td>99</td><td>Builds build/nesh-usb.img, a bootable disk image (GPT + EFI system partition) with NESH, the examples, the licence (LICENSE.txt and NOTICE.txt) and a README on it</td></tr>
+    <tr><td><code>tools/record-demo.py</code></td><td>190</td><td>Records the animation of the README: drives a QEMU session through the monitor (sendkey/screendump) and turns the frames into a GIF</td></tr>
+    <tr><td><code>tools/backup.sh</code></td><td>34</td><td>Packs the repository into one git bundle, with every branch, tag and commit, for a restore without a network</td></tr>
+    <tr><td><code>tools/setup-dev.sh</code></td><td>93</td><td>Checks (or installs) the packages a clone needs and sets the git identity of the working copy, which is not cloned</td></tr>
+    <tr><td><code>tools/run-qemu.sh</code></td><td>160</td><td>Boots nesh.efi in QEMU/OVMF: interactive, --test and --nettest modes</td></tr>
+    <tr><td><code>tools/make-previews.py</code></td><td>638</td><td>Builds docs-preview/: the ten design proposals the earlier look of the manuals was chosen from</td></tr>
   </tbody>
 </table><figcaption class="cap">Table 13.1 — Source file map</figcaption></figure>
 </section>

@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Interpreter internals shared by interp.c and the built-in function modules. */
 #ifndef NESH_INTERP_INT_H
 #define NESH_INTERP_INT_H

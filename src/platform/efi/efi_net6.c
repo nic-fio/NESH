@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* IPv6 network commands on top of the firmware IPv6 stack: ifconfig6, ping6.
  * tftp, http and ping accept IPv6 addresses too (see efi_net.c). The firmware
  * must provide the IPv6 drivers (IP6, UDP6, DHCP6, MTFTP6); on machines where

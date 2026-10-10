@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Shared by the IPv4 (efi_net.c) and IPv6 (efi_net6.c) network commands. */
 #ifndef EFI_NET_H
 #define EFI_NET_H

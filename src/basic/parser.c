@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* NESH BASIC parser: recursive descent from tokens to the AST (Program:
  * main block + procedures); detects incomplete input for the interactive prompt. */
 #include "basic.h"

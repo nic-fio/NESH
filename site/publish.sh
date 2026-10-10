@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Nicola Fiorillo
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 # publish.sh - builds the site of NESH in site/public/ and publishes it to
 # https://nesh.nicfio.it (the owner's VPS, user "progetti", /srv/www/nesh.nicfio.it).
 #
@@ -25,7 +27,7 @@ mkdir -p "$OUT/download" "$OUT/assets/vendor"
 cp "$ROOT/site/landing/index.html" "$OUT/index.html"
 cp "$ROOT/docs/User Manual.html" "$ROOT/docs/Technical Manual.html" "$OUT/"
 cp "$ROOT/docs/assets/vendor/"* "$OUT/assets/vendor/"
-python3 "$ROOT/site/licence-page.py" "$ROOT/LICENSE" > "$OUT/licence.html"
+python3 "$ROOT/site/licence-page.py" "$ROOT/LICENSE.md" > "$OUT/licence.html"
 
 # canonical URL, link preview and a search-friendly title for each page
 SEO=$ROOT/site/seo-head.py
@@ -36,15 +38,15 @@ python3 "$SEO" "$OUT/Technical Manual.html" "$URL/Technical%20Manual.html" \
     "NESH Technical Manual — architecture and internals of the UEFI shell" \
     "How NESH, the New EFI Shell, is built: architecture, the BASIC interpreter, the UEFI platform layer, testing in QEMU and OVMF."
 python3 "$SEO" "$OUT/licence.html" "$URL/licence.html" \
-    "NESH Freeware Licence" \
-    "NESH is freeware: free to use, also at work, and to give away unchanged; not to sell, modify or include in commercial products."
+    "NESH licence: PolyForm Noncommercial 1.0.0" \
+    "NESH is free for any noncommercial use, under the PolyForm Noncommercial License 1.0.0; commercial use needs a licence from the author."
 
 # downloads of the current release
 DL=$OUT/download
 if [ -f "$ROOT/build/nesh.efi" ] && [ -f "$ROOT/build/nesh-usb.img" ] && [ "${NESH_FROM_BUILD:-}" = 1 ]; then
     cp "$ROOT/build/nesh.efi" "$ROOT/build/nesh-usb.img" "$DL/"
     (cd "$DL" && sha256sum nesh.efi nesh-usb.img > SHA256SUMS)
-    sed 's/$/\r/' "$ROOT/LICENSE" > "$DL/LICENSE.txt"
+    sed 's/$/\r/' "$ROOT/LICENSE.md" > "$DL/LICENSE.txt"
     sed 's/$/\r/' "$ROOT/NOTICE.md" > "$DL/NOTICE.txt"
 else
     CACHE=$ROOT/build/release-v$VERSION
@@ -54,7 +56,8 @@ else
     fi
     cp "$CACHE/nesh.efi" "$CACHE/nesh-usb.img" "$DL/"
     (cd "$DL" && sha256sum nesh.efi nesh-usb.img > SHA256SUMS)
-    sed 's/$/\r/' "$CACHE/LICENSE" > "$DL/LICENSE.txt"
+    LIC=$CACHE/LICENSE.md; [ -f "$LIC" ] || LIC=$CACHE/LICENSE
+    sed 's/$/\r/' "$LIC" > "$DL/LICENSE.txt"
     sed 's/$/\r/' "$CACHE/NOTICE.md" > "$DL/NOTICE.txt"
 fi
 

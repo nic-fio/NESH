@@ -1,7 +1,7 @@
 # NESH — New EFI Shell
 
 [![CI](https://github.com/nic-fio/NESH/actions/workflows/ci.yml/badge.svg)](https://github.com/nic-fio/NESH/actions/workflows/ci.yml)
-[![Licence: freeware](https://img.shields.io/badge/licence-freeware-blue)](LICENSE)
+[![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-blue)](LICENSE.md)
 [Website, documentation and download](https://nesh.nicfio.it/)
 
 A modern command shell for UEFI firmware, with a real scripting language.
@@ -130,19 +130,19 @@ only lists the boot entries until you ask it for a change), `edit` and
 
 ## License
 
-Copyright (c) 2026 Nicola Fiorillo. NESH is **freeware**, released under the
-[NESH Freeware Licence](LICENSE): use it for anything, at home or at work,
-free of charge, also as a tool in paid work; copy it and give it away
-unchanged; sign it for Secure Boot. What you may not do is **sell** it,
-include it in a product or service that is sold, modify it, or decompile it
-beyond what the law allows — that needs a written licence: write to
-**nesh@nicfio.it**. [NOTICE.md](NOTICE.md) has the summary and the
-third-party components.
+Copyright (c) 2026 Nicola Fiorillo. NESH is **free for any noncommercial
+use**: personal use, study, hobby projects, and use by noncommercial
+organisations such as schools, charities and public bodies. Its source code is
+published under the [PolyForm Noncommercial License 1.0.0](LICENSE.md). For
+**commercial use**, including use at work inside a company, write to
+**nesh@nicfio.it**. [NOTICE.md](NOTICE.md) has the required notice and the
+third-party components, which keep their own licences.
 
-Versions up to and including 0.2.1 were released under the Apache License 2.0
-with the Commons Clause ([LICENSE-0.2.1-and-earlier](LICENSE-0.2.1-and-earlier)),
-and copies of those versions keep that licence.
-
+Version 0.3.0 was released under the NESH Freeware Licence
+([LICENSE-0.3.0](LICENSE-0.3.0)); versions up to and including 0.2.1 under the
+Apache License 2.0 with the Commons Clause
+([LICENSE-0.2.1-and-earlier](LICENSE-0.2.1-and-earlier)). Copies of those
+versions keep their licence.
 ## Status
 
 Version 0.3.0. Tested in QEMU with OVMF, including Secure Boot with test keys.

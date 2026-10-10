@@ -37,7 +37,7 @@ user brings them up. The reasoning for each is in
 | **Secure Boot: reads yes, writes no** | Low-level hardware writes (`mm` on I/O and PCI config, `hexedit -m`) are refused while Secure Boot is active. The **clock and the serial port stay allowed** — the user ruled they are not a security risk. |
 | **Manuals entirely in English (4 October 2026)** | Every page of `docs/` is in English, everywhere: running text, code and its comments, figures, diagrams, image captions. No Italian label in parentheses, no Italian example text. `tools/gen-docs.py --check` (in `make test`) reports any Italian it finds. |
 | **Light documentation only** | No dark themes, no dark-mode media queries, no theme toggle. The code blocks are dark: that comes with the common style of the manuals, and the owner confirmed it on 1 October 2026 together with the common style. |
-| **Freeware, NESH Freeware Licence (2 October 2026, D21)** | From 0.3.0: free use, also as a tool in paid work; free redistribution of the unchanged file and in free collections; Secure Boot signing allowed; no sale, no inclusion in commercial products or services, no modification, no decompilation beyond the law. Commercial licences or the sale of the project through `nesh@nicfio.it`. Versions up to 0.2.1 keep Apache 2.0 + Commons Clause (`LICENSE-0.2.1-and-earlier`). |
+| **PolyForm Noncommercial (10 October 2026, D22)** | `LICENSE.md`: the PolyForm Noncommercial License 1.0.0, official text, unchanged, from the version after 0.3.0. Free for any noncommercial use; commercial use, also inside a company, needs a licence from `nesh@nicfio.it`. `NOTICE.md` starts with the `Required Notice:` line. Every source file written for the project starts with `Copyright (c) 2026 Nicola Fiorillo` and `SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0`: a new file gets them too. 0.3.0 keeps the NESH Freeware Licence (`LICENSE-0.3.0`), versions up to 0.2.1 Apache 2.0 + Commons Clause (`LICENSE-0.2.1-and-earlier`). |
 
 ## The repository
 
@@ -100,7 +100,7 @@ and new tables and figures with `<figcaption class="cap">Table 0.0 — ...` (or
 
 Releases: bump `NESH_VERSION` in `src/core/shell.h` **and** the version strings
 in `README.md`, `docs/index.html`, both manuals (cover, footer and the tested example
-output), and on the landing page (`site/landing/index.html`: version strings, the size of the `nesh.efi` built by CI (not the local build: the compilers differ), and a new card in the «Releases» section), then tag. From 0.3.0 the footers read «Licence: NESH Freeware Licence». The annotated tag message becomes the release notes; CI
+output), and on the landing page (`site/landing/index.html`: version strings, the size of the `nesh.efi` built by CI (not the local build: the compilers differ), and a new card in the «Releases» section), then tag. The footers of 0.3.0 read «Licence: NESH Freeware Licence»; from the next release they read «Licence: PolyForm Noncommercial 1.0.0». The annotated tag message becomes the release notes; CI
 builds `nesh.efi` and publishes it. `nesh-usb.img` is uploaded by hand
 (`make usb`, then `gh release upload`).
 

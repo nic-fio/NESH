@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Block devices and disk-level commands: blkN: names, dblk, timezone, getmtc. */
 #include "efi_cmds.h"
 

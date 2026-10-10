@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* UEFI compression format (EFI 1.1 / "version 1"): LZ77 with an 8 KiB window
  * and canonical Huffman codes, as decoded by EFI_DECOMPRESS_PROTOCOL.
  *

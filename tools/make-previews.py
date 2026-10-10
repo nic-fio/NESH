@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (c) 2026 Nicola Fiorillo
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 """Builds docs-preview/: ten design proposals for the manuals, with the same
 content, so that the look can be chosen by comparing them side by side.
 

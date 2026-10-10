@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Network commands on top of the firmware IPv4 stack: ifconfig, ping, tftp, http.
  * ping, tftp and http switch to the IPv6 stack (efi_net6.c) for IPv6 addresses.
  * The firmware must provide the network drivers (MNP, IP4, UDP4, DHCP4, MTFTP4,

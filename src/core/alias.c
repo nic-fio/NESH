@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Command aliases: short names for commands, e.g. "alias ll ls -l".
  * Permanent aliases are stored by the platform layer (UEFI variables with
  * the same GUID as the UEFI Shell), temporary ones only live in memory. */

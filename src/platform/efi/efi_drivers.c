@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Drivers and devices: drivers, devices, devtree, dh, openinfo, connect,
  * disconnect, reconnect, load, unload, drvdiag, drvcfg.
  *

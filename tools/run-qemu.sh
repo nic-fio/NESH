@@ -1,4 +1,6 @@
 #!/bin/sh
+# Copyright (c) 2026 Nicola Fiorillo
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 # Boots nesh.efi in QEMU with OVMF from a virtual FAT disk (build/esp).
 #   run-qemu.sh OVMF.fd nesh.efi           interactive, serial console
 #   run-qemu.sh --test OVMF.fd nesh.efi    runs tests/efi/run.nsb, prints the log, exits

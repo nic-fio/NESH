@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Nicola Fiorillo
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
+
 # NESH - New EFI Shell
 #
 #   make            build build/nesh.efi (UEFI x86_64) and build/nesh-host (Linux test build)

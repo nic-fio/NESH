@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Shell core: command registry, option parsing, canonical paths and wildcards,
  * file helpers, command-line splitting and execution, the prompt (REPL) and
  * nesh_main, the portable entry point. */

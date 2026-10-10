@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Memory and hardware: dmem, mm, pci, smbiosview, acpiview, mode, sermode,
  * loadpcirom, gop, cpuid. Writes are refused while Secure Boot is active. */
 #include "efi_cmds.h"

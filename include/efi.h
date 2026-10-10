@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Minimal UEFI definitions (UEFI Specification 2.10), written for NESH.
  * Only the types and protocols actually used by the shell are declared. */
 #ifndef NESH_EFI_H

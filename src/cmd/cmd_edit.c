@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Full-screen editors: edit (text) and hexedit (files, disk blocks, memory).
  * Keys follow the UEFI Shell editors: F1..F9 or the Ctrl equivalents. */
 #include "../core/shell.h"

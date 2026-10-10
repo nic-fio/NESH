@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* UEFI (EFI 1.1) compression format. */
 #ifndef NESH_EFICOMP_H
 #define NESH_EFICOMP_H

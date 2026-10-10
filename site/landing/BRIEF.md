@@ -215,10 +215,11 @@ Not yet: ARM64 and IA32 builds.
 
 ## Licence (free)
 
-**Free of charge.** Apache License 2.0 with the Commons Clause: use it for anything, at home
-or at work; copy it, modify it and share it, keeping the notices. Using NESH as a tool in
-paid work is fine; what you may not do is **sell** NESH, or a product or service whose value
-comes substantially from it — that needs a commercial licence (ask by opening an issue).
+**Free for noncommercial use.** PolyForm Noncommercial License 1.0.0 (from the version
+after 0.3.0): personal use, study, hobby projects, schools, charities and public bodies.
+Commercial use, including use at work inside a company, needs a written licence: write to
+nesh@nicfio.it. Version 0.3.0 keeps the NESH Freeware Licence, versions up to 0.2.1 keep
+Apache 2.0 with the Commons Clause.
 Say it plainly: not «open source» by the OSI definition (small print is enough).
 No prices, no «Buy» buttons, no «Pro» edition.
 

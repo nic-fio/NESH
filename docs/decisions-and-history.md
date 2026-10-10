@@ -403,6 +403,29 @@ From it came the working rules of the project:
     Approved by the owner on 2 October 2026: `LICENSE` (NESH Freeware Licence,
     from 0.3.0); the old text is kept as `LICENSE-0.2.1-and-earlier`.
 
+### D22. PolyForm Noncommercial License 1.0.0
+
+- **Context.** On 10 October 2026 the owner chose one licence for the source
+  code of the projects on his home page (NESH, EFI Partition Manager,
+  Phonestra, RootSpeak): the PolyForm Noncommercial License 1.0.0, to publish
+  the source while forbidding commercial use.
+- **Decisions of the owner.**
+  - **Licence:** `LICENSE.md` holds the official text, unchanged, taken from
+    `github.com/polyformproject/polyform-licenses`, from the version after
+    0.3.0. 0.3.0 was released under the NESH Freeware Licence of D21, now
+    `LICENSE-0.3.0`, and copies of it keep that licence; versions up to 0.2.1
+    keep Apache 2.0 + Commons Clause.
+  - **What changes from D21:** use at work inside a company, including the
+    technician's paid work that D21 allowed, is no longer granted; modifying
+    NESH for noncommercial purposes is now allowed. The owner accepted both.
+  - **Notices:** `NOTICE.md` starts with
+    `Required Notice: Copyright (c) 2026 Nicola Fiorillo (https://nicfio.it)`;
+    the third-party notices (Mermaid, test fixtures) stay as they were. Every
+    source file written for the project starts with the copyright line and
+    `SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0`. The BASIC
+    scripts (`*.nsb`) are left without it: the tests compare their output.
+  - **Commercial licences** by e-mail to `nesh@nicfio.it`.
+
 ---
 
 

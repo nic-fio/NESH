@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Platform-specific commands for the Linux test build: firmware features
  * are not available, so only a minimal set is provided. */
 #include "../core/shell.h"

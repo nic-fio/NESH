@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (c) 2026 Nicola Fiorillo
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 """Runs the NESH BASIC examples of the user manual with the host build and
 compares their output with the output printed in the manual.
 

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (c) 2026 Nicola Fiorillo
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 """Generates from the sources the parts of the manuals that describe them: the
 command reference of the user manual (from the command tables, so that the
 manual and the built-in 'help' never disagree) and the line counts of the

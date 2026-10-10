@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (c) 2026 Nicola Fiorillo
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 """Record the animation shown in the README: boot the disk image in QEMU,
 type a short session with the QEMU monitor, grab one screendump per frame
 and turn the frames into a GIF.

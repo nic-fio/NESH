@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* NESH BASIC interpreter: values and variables, expression evaluation,
  * statement execution (tree walking), procedures, RUN/RUN$ and the public API. */
 #include "interp_int.h"

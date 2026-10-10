@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Test application for NESH's EFI_SHELL_PROTOCOL implementation.
  * Started by the QEMU tests as: shelltest.efi alpha "beta gamma"
  * Prints one "PASS name" / "FAIL name" line per check and "SHELLTEST DONE n" at the end.

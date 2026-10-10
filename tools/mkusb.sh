@@ -1,4 +1,6 @@
 #!/bin/sh
+# Copyright (c) 2026 Nicola Fiorillo
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 # Build a bootable disk image with NESH on it: GPT + one EFI system
 # partition (FAT32) holding \EFI\BOOT\BOOTX64.EFI, the examples, the
 # licence and a README. Write it to a USB stick with
@@ -45,12 +47,12 @@ mcopy -i "$M" "$ROOT"/examples/*.nsb ::/examples/
 TMP=$(mktemp)
 trap 'rm -f "$TMP"' EXIT
 
-# the licence travels with the binary: the NESH Freeware Licence lets the
-# image be given away only together with it.
+# the licence travels with the binary: the PolyForm Noncommercial License
+# asks that whoever gets a copy also gets its terms and the required notice.
 # Everything on the stick is CRLF, so a text editor on any system reads it.
-sed 's/$/\r/' "$ROOT"/LICENSE > "$TMP"
+sed 's/$/\r/' "$ROOT"/LICENSE.md > "$TMP"
 mcopy -i "$M" "$TMP" ::/LICENSE.txt
-sed -e 's/\[LICENSE\](LICENSE)/LICENSE.txt/' -e 's/$/\r/' "$ROOT"/NOTICE.md > "$TMP"
+sed -e 's/\[LICENSE.md\](LICENSE.md)/LICENSE.txt/' -e 's/$/\r/' "$ROOT"/NOTICE.md > "$TMP"
 mcopy -i "$M" "$TMP" ::/NOTICE.txt
 
 sed 's/$/\r/' > "$TMP" <<'EOF'
@@ -86,13 +88,10 @@ Documentation: https://nesh.nicfio.it/
 Licence
 -------
 
-Copyright (c) 2026 Nicola Fiorillo. NESH is freeware: use it for
-anything, at home or at work, free of charge, also as a tool in paid
-work; copy it and give it away unchanged, with this licence. What you
-may not do is sell it, include it in a product or service that is sold,
-modify it, or decompile it beyond what the law allows - that needs a
-written licence: write to nesh@nicfio.it. The full text is in
-LICENSE.txt, the summary in NOTICE.txt.
+Copyright (c) 2026 Nicola Fiorillo. NESH is free for any noncommercial
+use, under the PolyForm Noncommercial License 1.0.0. For commercial use,
+including use at work inside a company, write to nesh@nicfio.it. The
+full text is in LICENSE.txt, the required notice in NOTICE.txt.
 EOF
 mcopy -i "$M" "$TMP" ::/README.txt
 

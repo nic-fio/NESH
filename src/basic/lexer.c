@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* NESH BASIC lexer: turns source text into tokens (numbers, strings, names,
  * keywords, punctuation); skips comments and " _" line continuations. */
 #include "basic.h"

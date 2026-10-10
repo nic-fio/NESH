@@ -1,4 +1,6 @@
 #!/bin/sh
+# Copyright (c) 2026 Nicola Fiorillo
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 # Runs every tests/host/*.nsb with the host build and compares the output
 # (stdout + stderr) with the matching .out file. UPDATE=1 rewrites the .out files.
 NESH=$(realpath "$1")

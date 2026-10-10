@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Names of well-known GUIDs (protocols, tables, variable vendors), plus the
  * names registered at run time through the shell protocol. */
 #include "efi_cmds.h"

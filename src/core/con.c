@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Console services: stack of output sinks (console, capture, file), -data
  * record helpers, colors, keyboard with type-ahead buffer and Ctrl-C detection. */
 #include "con.h"

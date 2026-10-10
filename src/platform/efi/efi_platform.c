@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* EFI platform services: running images, Secure Boot state, system commands. */
 #include "efi_cmds.h"
 

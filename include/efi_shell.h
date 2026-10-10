@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* UEFI Shell 2.2 protocols (from the UEFI Shell Specification), plus the
  * few extra UEFI protocols the shell implementation needs. */
 #ifndef NESH_EFI_SHELL_H

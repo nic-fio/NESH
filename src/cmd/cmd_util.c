@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Utilities: stall, parse, eficompress, efidecompress. */
 #include "../core/shell.h"
 #include "../lib/eficomp.h"

@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* EFI_SHELL_PROTOCOL 2.2, implemented by NESH so that applications written
  * for the UEFI Shell (ShellLib, ShellCEntryLib...) run under NESH.
  *

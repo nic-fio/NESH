@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* NESH BASIC: lexer, parser (AST) and tree-walking interpreter. */
 #ifndef NESH_BASIC_H
 #define NESH_BASIC_H

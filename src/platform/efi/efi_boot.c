@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Boot manager: Boot#### / BootOrder / BootNext / Timeout.
  *
  * Every change is first collected in a plan of variable writes; the plan is

@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nicola Fiorillo
+ * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 */
+
 /* Core built-in functions of NESH BASIC (portable). */
 #include "interp_int.h"
 #include "../core/shell.h"

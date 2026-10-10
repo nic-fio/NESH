@@ -99,12 +99,12 @@ jobs:
           **Secure Boot:** the file is not signed. Sign it with your own key or
           disable Secure Boot (see the user manual).
 
-          **Licence:** freeware, the NESH Freeware Licence, attached here as
-          \`LICENSE\` and \`NOTICE.md\`: free to use and to give away
-          unchanged, not to sell, modify or include in commercial products.
+          **Licence:** PolyForm Noncommercial License 1.0.0, attached here as
+          \`LICENSE.md\` and \`NOTICE.md\`: free for any noncommercial use;
+          for commercial use write to nesh@nicfio.it.
 
           Documentation: https://nesh.nicfio.it/
           EOF
           gh release create "$GITHUB_REF_NAME" dist/nesh.efi dist/SHA256SUMS \
-            LICENSE NOTICE.md \
+            LICENSE.md NOTICE.md \
             --title "NESH $GITHUB_REF_NAME" --notes-file notes.md --verify-tag
