@@ -28,6 +28,11 @@ cp "$ROOT/site/landing/index.html" "$OUT/index.html"
 cp "$ROOT/docs/User Manual.html" "$ROOT/docs/Technical Manual.html" "$OUT/"
 cp "$ROOT/docs/assets/vendor/"* "$OUT/assets/vendor/"
 python3 "$ROOT/site/licence-page.py" "$ROOT/LICENSE.md" > "$OUT/licence.html"
+# the earlier licences, linked from licence.html: their versions may still be
+# used under them, at the user's choice
+mkdir -p "$OUT/licences"
+cp "$ROOT/LICENSE-0.3.0" "$OUT/licences/LICENSE-0.3.0.txt"
+cp "$ROOT/LICENSE-0.2.1-and-earlier" "$OUT/licences/LICENSE-0.2.1-and-earlier.txt"
 
 # canonical URL, link preview and a search-friendly title for each page
 SEO=$ROOT/site/seo-head.py
@@ -46,8 +51,6 @@ DL=$OUT/download
 if [ -f "$ROOT/build/nesh.efi" ] && [ -f "$ROOT/build/nesh-usb.img" ] && [ "${NESH_FROM_BUILD:-}" = 1 ]; then
     cp "$ROOT/build/nesh.efi" "$ROOT/build/nesh-usb.img" "$DL/"
     (cd "$DL" && sha256sum nesh.efi nesh-usb.img > SHA256SUMS)
-    sed 's/$/\r/' "$ROOT/LICENSE.md" > "$DL/LICENSE.txt"
-    sed 's/$/\r/' "$ROOT/NOTICE.md" > "$DL/NOTICE.txt"
 else
     CACHE=$ROOT/build/release-v$VERSION
     if [ ! -f "$CACHE/nesh-usb.img" ]; then
@@ -56,10 +59,11 @@ else
     fi
     cp "$CACHE/nesh.efi" "$CACHE/nesh-usb.img" "$DL/"
     (cd "$DL" && sha256sum nesh.efi nesh-usb.img > SHA256SUMS)
-    LIC=$CACHE/LICENSE.md; [ -f "$LIC" ] || LIC=$CACHE/LICENSE
-    sed 's/$/\r/' "$LIC" > "$DL/LICENSE.txt"
-    sed 's/$/\r/' "$CACHE/NOTICE.md" > "$DL/NOTICE.txt"
 fi
+# the licence of the download: the current one, which covers the published
+# version too (decision of 10 October 2026)
+sed 's/$/\r/' "$ROOT/LICENSE.md" > "$DL/LICENSE.txt"
+sed 's/$/\r/' "$ROOT/NOTICE.md" > "$DL/NOTICE.txt"
 
 # search engines and link previews
 cp "$ROOT/site/og.png" "$OUT/og.png"

@@ -52,8 +52,15 @@ trap 'rm -f "$TMP"' EXIT
 # Everything on the stick is CRLF, so a text editor on any system reads it.
 sed 's/$/\r/' "$ROOT"/LICENSE.md > "$TMP"
 mcopy -i "$M" "$TMP" ::/LICENSE.txt
-sed -e 's/\[LICENSE.md\](LICENSE.md)/LICENSE.txt/' -e 's/$/\r/' "$ROOT"/NOTICE.md > "$TMP"
+sed -e 's/\[LICENSE.md\](LICENSE.md)/LICENSE.txt/' -e 's/\[\(LICENSE-[^]]*\)\](LICENSE-[^)]*)/\1.txt/g' \
+    -e 's/$/\r/' "$ROOT"/NOTICE.md > "$TMP"
 mcopy -i "$M" "$TMP" ::/NOTICE.txt
+# the earlier licences named in NOTICE.txt: the versions they cover may still
+# be used under them, at the user's choice
+for f in "$ROOT"/LICENSE-*; do
+    sed 's/$/\r/' "$f" > "$TMP"
+    mcopy -i "$M" "$TMP" "::/$(basename "$f").txt"
+done
 
 sed 's/$/\r/' > "$TMP" <<'EOF'
 NESH - New EFI Shell
