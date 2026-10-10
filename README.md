@@ -145,7 +145,7 @@ and copies of those versions keep that licence.
 
 ## Status
 
-Version 0.2.1. Tested in QEMU with OVMF, including Secure Boot with test keys.
+Version 0.3.0. Tested in QEMU with OVMF, including Secure Boot with test keys.
 Started on two real machines, a Chuwi tablet and a server with a Gigabyte
 motherboard: the prompt came up, `dir` listed the files, and NESH booted Linux.
 Only those steps were tried; the rest of the commands are still verified only

@@ -37,7 +37,7 @@ user brings them up. The reasoning for each is in
 | **Secure Boot: reads yes, writes no** | Low-level hardware writes (`mm` on I/O and PCI config, `hexedit -m`) are refused while Secure Boot is active. The **clock and the serial port stay allowed** — the user ruled they are not a security risk. |
 | **Manuals entirely in English (4 October 2026)** | Every page of `docs/` is in English, everywhere: running text, code and its comments, figures, diagrams, image captions. No Italian label in parentheses, no Italian example text. `tools/gen-docs.py --check` (in `make test`) reports any Italian it finds. |
 | **Light documentation only** | No dark themes, no dark-mode media queries, no theme toggle. The code blocks are dark: that comes with the common style of the manuals, and the owner confirmed it on 1 October 2026 together with the common style. |
-| **Freeware, NESH Freeware Licence (2 October 2026, D21)** | From 0.3.0: free use, also as a tool in paid work; free redistribution of the unchanged file and in free collections; Secure Boot signing allowed; no sale, no inclusion in commercial products or services, no modification, no decompilation beyond the law. Commercial licences or the sale of the project through `nesh@nicfio.it`. Versions up to 0.2.1 keep Apache 2.0 + Commons Clause (`LICENSE-0.2.1-and-earlier`). The manuals and `docs/index.html` still name the old licence in their footer: they describe 0.2.1, and change with the 0.3.0 release. |
+| **Freeware, NESH Freeware Licence (2 October 2026, D21)** | From 0.3.0: free use, also as a tool in paid work; free redistribution of the unchanged file and in free collections; Secure Boot signing allowed; no sale, no inclusion in commercial products or services, no modification, no decompilation beyond the law. Commercial licences or the sale of the project through `nesh@nicfio.it`. Versions up to 0.2.1 keep Apache 2.0 + Commons Clause (`LICENSE-0.2.1-and-earlier`). |
 
 ## The repository
 
@@ -100,7 +100,7 @@ and new tables and figures with `<figcaption class="cap">Table 0.0 — ...` (or
 
 Releases: bump `NESH_VERSION` in `src/core/shell.h` **and** the version strings
 in `README.md`, `docs/index.html`, both manuals (cover, footer and the tested example
-output), then tag. For 0.3.0 the footers also change licence: «Licence: NESH Freeware Licence». The annotated tag message becomes the release notes; CI
+output), and on the landing page (`site/landing/index.html`: version strings, file size, and a new card in the «Releases» section), then tag. From 0.3.0 the footers read «Licence: NESH Freeware Licence». The annotated tag message becomes the release notes; CI
 builds `nesh.efi` and publishes it. `nesh-usb.img` is uploaded by hand
 (`make usb`, then `gh release upload`).
 
