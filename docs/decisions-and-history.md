@@ -272,7 +272,7 @@ From it came the working rules of the project:
   themselves (`exit -b`, and `echo`, which prints its words as they are):
   they carry the flag `CMD_ARG_B`.
 
-### D16d. 100 columns at start
+### D16d. 100 columns at start (withdrawn, see D16e)
 
 - **Context.** Owner, after seeing a 100-column screen: "le 100 colonne sono
   molto piu' leggibili", and asked that NESH start in that mode.
@@ -285,6 +285,24 @@ From it came the working rules of the project:
 - **Verified** with a QEMU screendump at 1920x1080: the firmware starts at
   80x50, NESH at 100x31; a second NESH started after `mode 80 50` also switches
   to 100x31 and, on `exit`, the first one is back at 80x50.
+
+### D16e. The firmware's text mode at start (replaces D16d)
+
+- **Context.** On a Chuwi tablet (October 2026) Linux started from NESH
+  crashed in `efifb`, while it started from the UEFI Shell. Diagnostic builds
+  showed the firmware handing over graphics mode 0 as 800x1280 with 800 pixels
+  per scan line; switching the text mode to 100 columns moved the screen to
+  graphics mode 2 (800x600), and mode 0 came back described as 1280x800 with
+  800 pixels per scan line, which `efifb` read past the frame buffer. A build
+  without the switch booted Linux.
+- **Reference.** The EDK2 UEFI Shell never changes the text or the graphics
+  mode by itself: only its `mode` command does, on request; `edit` and
+  `hexedit` put back the mode they found.
+- **Decision.** NESH does the same: it starts in the text mode the firmware
+  set, and changes it only on `mode` or `gop`. A prediction of which firmware
+  can switch safely was considered and rejected: it rested on a single odd
+  firmware, and the others cannot be tried. Who wants 100 columns puts a
+  `mode` command in `startup.nsb`.
 
 ### D17. English for the product, Italian for the discussion
 
@@ -405,7 +423,7 @@ All work took place in one long working session (2026-09-19), in phases.
 | **9. Console** | Paging of long output (D16c), after the owner noticed that a long `help` scrolls away and cannot be read back. |
 | **10. Secure Boot** | Tested for real in QEMU with own test keys enrolled in OVMF (`make qemu-sbtest`, part of CI): unsigned images refused by the firmware, hardware writes refused, clock/serial allowed, keys unchangeable. One defect found and fixed: refusals were reported as a bare "access denied". |
 | **11. Publication** | Repository published on GitHub as `NG-EFI_SHELL`, public (owner's request); provisional all-rights-reserved license; manuals online with GitHub Pages; GitHub Actions builds and tests every push and publishes a Release with `nesh.efi` for each version tag (binaries are distributed as Releases, not committed to the repository). |
-| **12. Readability** | NESH starts in a text mode of 100 columns when the firmware has one, and restores the previous mode on leaving (D16d). |
+| **12. Readability** | NESH starts in a text mode of 100 columns when the firmware has one, and restores the previous mode on leaving (D16d). Withdrawn in October 2026 after a Linux crash on a tablet: NESH keeps the firmware's mode, as the UEFI Shell does (D16e). |
 | **13. Name** | Repository renamed from `NG-EFI_SHELL` to `NESH` (2026-09-28, owner's request), so that it carries the name of the program. GitHub redirects the old repository address; the manuals moved to https://nic-fio.github.io/NESH/, and the old Pages address no longer works. |
 
 ### The original plan and what came of it

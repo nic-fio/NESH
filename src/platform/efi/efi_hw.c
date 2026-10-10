@@ -1554,9 +1554,10 @@ static const Cmd hw_cmds[] = {
       "back to the firmware default and the consoles are disconnected for a\n"
       "moment (on a serial console you may lose some output). To keep a chosen\n"
       "resolution instead, gop -fit lowers it until the text fills the screen.\n"
-      "At start NESH switches to the narrowest mode of at least 100 columns\n"
-      "and 25 rows, when the console has one and is narrower, and puts the\n"
-      "mode it found back when it ends.\n"
+      "NESH starts in the mode the firmware set, as the UEFI Shell does: on\n"
+      "some firmware a new text mode also changes the graphics mode and can\n"
+      "upset the next boot loader. To always start in another size, put a\n"
+      "mode command in startup.nsb.\n"
       "Example: mode -fill\n" },
     { "sermode", cmd_sermode, "sermode [HANDLE [BAUD PARITY DATABITS STOPBITS]]",
       "Show or set serial port settings (parity n|e|o|m|s, stop bits 0|1|1.5|2)",
