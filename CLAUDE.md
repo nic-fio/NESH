@@ -100,7 +100,7 @@ and new tables and figures with `<figcaption class="cap">Table 0.0 — ...` (or
 
 Releases: bump `NESH_VERSION` in `src/core/shell.h` **and** the version strings
 in `README.md`, `docs/index.html`, both manuals (cover, footer and the tested example
-output), and on the landing page (`site/landing/index.html`: version strings, file size, and a new card in the «Releases» section), then tag. From 0.3.0 the footers read «Licence: NESH Freeware Licence». The annotated tag message becomes the release notes; CI
+output), and on the landing page (`site/landing/index.html`: version strings, the size of the `nesh.efi` built by CI (not the local build: the compilers differ), and a new card in the «Releases» section), then tag. From 0.3.0 the footers read «Licence: NESH Freeware Licence». The annotated tag message becomes the release notes; CI
 builds `nesh.efi` and publishes it. `nesh-usb.img` is uploaded by hand
 (`make usb`, then `gh release upload`).
 
