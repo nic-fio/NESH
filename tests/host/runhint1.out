@@ -1,0 +1,2 @@
+fs0:\test.nsb:2: syntax error: unexpected character '.' (to run a shell command use RUN "vmlinuz.efi ...")
+[exit 1]

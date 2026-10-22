@@ -1145,6 +1145,10 @@ second line</pre>
 </table><figcaption class="cap">Table 8.4 — Running commands from a script</figcaption></figure>
 <p>Scripts and <code>.efi</code> programs are run the same way: <code>RUN "backup fs1:"</code>. Each script has its own
 variables; values are passed with arguments, files or environment variables.</p>
+<div class="callout c-warn"><div class="callout-i">!</div><div><b>Note.</b> A command typed on its own line works only at the prompt. In a script it needs <code>RUN</code>: the line
+<code>vmlinuz.efi initrd=initrd.img boot=live</code> stops with
+<code>syntax error: unexpected character '.' (to run a shell command use RUN "vmlinuz.efi ...")</code>. Write it as
+<code>RUN "vmlinuz.efi initrd=initrd.img boot=live"</code>.</div></div>
 </section>
 
 <section class="sec" id="script-args" data-index="ARGC;ARG$;END"><h3 class="h-sec">8.10 · Arguments and exit code</h3>

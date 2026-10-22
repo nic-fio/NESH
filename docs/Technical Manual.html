@@ -269,11 +269,11 @@ explained where they are needed, and the <a href="#glossary">glossary</a> summar
     <tr><td>Runtime library</td><td><code>src/lib</code></td><td>1,541</td><td>libc subset, printf, string buffer, UTF-8, UEFI compression</td></tr>
     <tr><td>Platform layer</td><td><code>src/pal</code></td><td>1,850</td><td>PAL interface, UEFI and Linux implementations</td></tr>
     <tr><td>Shell core</td><td><code>src/core</code></td><td>2,806</td><td>command execution, console, environment, aliases, line editor, menus</td></tr>
-    <tr><td>BASIC</td><td><code>src/basic</code></td><td>4,037</td><td>lexer, parser, interpreter, built-in functions</td></tr>
+    <tr><td>BASIC</td><td><code>src/basic</code></td><td>4,085</td><td>lexer, parser, interpreter, built-in functions</td></tr>
     <tr><td>Portable commands</td><td><code>src/cmd</code></td><td>3,359</td><td>files, text, utilities, editors</td></tr>
     <tr><td>UEFI modules</td><td><code>src/platform/efi</code></td><td>10,255</td><td>shell protocol, variables, boot, drivers, disks, hardware, network</td></tr>
     <tr><td>UEFI definitions</td><td><code>include</code></td><td>730</td><td>UEFI types and protocols used by NESH</td></tr>
-    <tr><td>Tools and tests</td><td><code>tools</code>, <code>tests</code></td><td>3,273</td><td>ELF→PE converter, QEMU runner, doc generators, test scripts</td></tr>
+    <tr><td>Tools and tests</td><td><code>tools</code>, <code>tests</code></td><td>3,293</td><td>ELF→PE converter, QEMU runner, doc generators, test scripts</td></tr>
   </tbody>
 </table><figcaption class="cap">Table 1.2 — The project in numbers</figcaption></figure>
 <p>The resulting <code>nesh.efi</code> is about 360 KB. The line counts here and in the
@@ -1282,7 +1282,7 @@ captured.</p>
     <tr><td><code>src/basic/interp.c</code></td><td>1435</td><td>NESH BASIC interpreter: values and variables, expression evaluation, statement execution (tree walking), procedures, RUN/RUN$ and the public API</td></tr>
     <tr><td><code>src/basic/interp_int.h</code></td><td>88</td><td>Interpreter internals shared by interp.c and the built-in function modules</td></tr>
     <tr><td><code>src/basic/lexer.c</code></td><td>298</td><td>NESH BASIC lexer: turns source text into tokens (numbers, strings, names, keywords, punctuation); skips comments and " _" line continuations</td></tr>
-    <tr><td><code>src/basic/parser.c</code></td><td>1207</td><td>NESH BASIC parser: recursive descent from tokens to the AST (Program: main block + procedures); detects incomplete input for the interactive prompt</td></tr>
+    <tr><td><code>src/basic/parser.c</code></td><td>1255</td><td>NESH BASIC parser: recursive descent from tokens to the AST (Program: main block + procedures); detects incomplete input for the interactive prompt</td></tr>
     <tr><td><code>src/cmd/cmd_core.c</code></td><td>377</td><td>Shell and session commands: help, ver, cls, exit, history, echo, pause, sleep, which</td></tr>
     <tr><td><code>src/cmd/cmd_edit.c</code></td><td>1020</td><td>Full-screen editors: edit (text) and hexedit (files, disk blocks, memory)</td></tr>
     <tr><td><code>src/cmd/cmd_fs.c</code></td><td>1375</td><td>File and volume commands</td></tr>

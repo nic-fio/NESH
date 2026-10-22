@@ -1,0 +1,2 @@
+FOR i = 1 TO 3
+  mysub 1

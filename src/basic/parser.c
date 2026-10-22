@@ -59,6 +59,53 @@ static Token *peek(Parser *p)
     return &p->pk;
 }
 
+/* A script line such as "vmlinuz.efi initrd=initrd.img" is a shell command
+ * without RUN: when the line of a syntax error starts with a word that is not a
+ * keyword, a variable, an assignment or a label, append the hint that the
+ * runtime error "unknown statement or SUB" already gives. */
+static void shell_hint(Parser *p)
+{
+    const char *src = p->lx.src;
+    size_t len = p->lx.len, i = 0;
+    if (p->tok.t == T_EOF)
+        return; /* structural error (FOR without NEXT...): the line is not the culprit */
+    for (int ln = 1; ln < p->prog->err_line; ln++) {
+        while (i < len && src[i] != '\n')
+            i++;
+        if (i >= len)
+            return;
+        i++;
+    }
+    while (i < len && (src[i] == ' ' || src[i] == '\t'))
+        i++;
+    size_t w = i;
+    while (i < len && (isalnum((unsigned char)src[i]) || (src[i] && strchr("_.-\\:", src[i]))))
+        i++;
+    size_t wl = i - w;
+    if (wl == 0 || wl >= 64)
+        return;
+    if (i < len && (src[i] == '$' || src[i] == '%' || src[i] == '('))
+        return;
+    char word[64];
+    memcpy(word, src + w, wl);
+    word[wl] = 0;
+    size_t j = i;
+    while (j < len && (src[j] == ' ' || src[j] == '\t'))
+        j++;
+    if (j < len && src[j] == '=')
+        return;
+    if (word[wl - 1] == ':' && (j >= len || src[j] == '\n' || src[j] == '\r' || src[j] == '\''))
+        return;
+    if (basic_is_keyword(word))
+        return;
+    /* "label: stmt" and "CLS: stmt": a colon not part of a path (fs0:\...) is a separator */
+    for (size_t k = 0; k < wl; k++)
+        if (word[k] == ':' && word[k + 1] != '\\')
+            return;
+    size_t n = strlen(p->prog->err);
+    snprintf(p->prog->err + n, sizeof(p->prog->err) - n, " (to run a shell command use RUN \"%s ...\")", word);
+}
+
 static void perr(Parser *p, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
 static void perr(Parser *p, const char *fmt, ...)
 {
@@ -70,6 +117,7 @@ static void perr(Parser *p, const char *fmt, ...)
     vsnprintf(p->prog->err, sizeof(p->prog->err), fmt, ap);
     va_end(ap);
     p->prog->err_line = p->tok.line;
+    shell_hint(p);
 }
 
 static void err_unexpected(Parser *p, const char *expected)

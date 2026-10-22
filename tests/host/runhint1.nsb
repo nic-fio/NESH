@@ -1,0 +1,2 @@
+PRINT "ok"
+vmlinuz.efi initrd=initrd.img boot=live
