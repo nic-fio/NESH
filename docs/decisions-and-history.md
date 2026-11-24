@@ -407,7 +407,7 @@ From it came the working rules of the project:
 
 - **Context.** On 10 October 2026 the owner chose one licence for the source
   code of the projects on his home page (NESH, EFI Partition Manager,
-  Phonestra, RootSpeak): the PolyForm Noncommercial License 1.0.0, to publish
+  RootSpeak): the PolyForm Noncommercial License 1.0.0, to publish
   the source while forbidding commercial use.
 - **Decisions of the owner.**
   - **Licence:** `LICENSE.md` holds the official text, unchanged, taken from

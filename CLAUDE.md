@@ -53,8 +53,8 @@ user brings them up. The reasoning for each is in
 | `site/` | The website, `https://nesh.nicfio.it`, on the owner's VPS (D21). `landing/index.html`: the landing page (mockup 05 «Glass», chosen on 2 October 2026), with its preview and brief. `publish.sh` builds `site/public/` (landing, the two manuals, `licence.html` made from `LICENSE` by `licence-page.py`, `download/` with the release files and checksums, `og.png`, `robots.txt`, `sitemap.xml`) and copies it to the VPS as user `progetti`; `--build` only builds. Publish together with every change to the manuals or a release. The 20 mockups stay in `site/mockups/`, outside git. |
 | `build/` | Products only, never committed. |
 
-The repository follows the standard layout shared by the seven projects (AMS,
-EFI_PARTITION_MANAGER, HOSTER, MTERM, NESH, PHONESTRA, SCRAPER): `src/`,
+The repository follows the standard layout shared by the six projects (AMS,
+EFI_PARTITION_MANAGER, HOSTER, MTERM, NESH, SCRAPER): `src/`,
 `tests/`, `tools/`, `docs/` (with `index.html`, the two manuals, `README.md`,
 `decisions-and-history.md`), `NOTICE.md`, and the common `make` targets
 `all`, `test`, `docs-check`, `clean`.
